@@ -1,6 +1,6 @@
 # Pushok - Architecture Documentation
 
-**Event Sourcing & Event Modeling for Life Goal Tracking**
+**Way Finder - Event Sourcing & Event Modeling for Meaningful Living**
 
 ---
 
@@ -21,9 +21,9 @@
 
 ## Overview
 
-Pushok implements **Event Sourcing** and **Event Modeling** as described in "Understanding Eventsourcing" by Martin Dilger. Instead of storing current state, we store the complete history of events that led to that state.
+Pushok - Way Finder implements **Event Sourcing** and **Event Modeling** as described in "Understanding Eventsourcing" by Martin Dilger. Instead of storing current state, we store the complete history of events that led to that state.
 
-### Why Event Sourcing for a Goal-Tracking App?
+### Why Event Sourcing for a Way Finder App?
 
 1. **Complete Audit Trail**: Know exactly when goals changed and why
 2. **Time Travel**: See your progress at any point in history

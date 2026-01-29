@@ -1,10 +1,10 @@
 # Pushok 🐱
 
-**A Life Compass Application - In Memory of Stela**
+**Way Finder - In Memory of Stela**
 
 > *"The best time to plant a tree was 20 years ago. The second best time is now."*
 
-Pushok is a meaningful goal-tracking and life-reminder application that helps you focus on what truly matters: relationships, nature, self-improvement, and living with intention.
+Pushok is a way finder for meaningful living - helping you discover and navigate toward what truly matters: relationships, nature, self-improvement, and living with intention.
 
 Built with **GitHub Copilot CLI** for the **Build with GitHub Copilot** challenge.
 
@@ -12,7 +12,7 @@ Built with **GitHub Copilot CLI** for the **Build with GitHub Copilot** challeng
 
 ## 🌟 Why Pushok?
 
-We spend hours chasing virtual rewards in games while neglecting the real rewards in life - time with loved ones, moments in nature, personal growth, and meaningful connections. Pushok (named after our beloved cat Stela) reminds us to:
+We spend hours chasing virtual rewards in games while neglecting the real rewards in life - time with loved ones, moments in nature, personal growth, and meaningful connections. Pushok - your way finder (named after our beloved cat Stela) - helps you discover and navigate toward:
 
 - **Connect**: Talk to parents, spend time with kids and pets
 - **Experience**: Look outside, enjoy nature, be present

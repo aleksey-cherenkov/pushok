@@ -1,12 +1,13 @@
 # Pushok - Project Implementation Guide
 
-**GitHub Copilot CLI Challenge - Development Tracker**
+**GitHub Copilot CLI Challenge - Way Finder for Meaningful Living**
 
 ---
 
 ## Project Information
 
-- **Name**: Pushok (In memory of Stela)
+- **Name**: Pushok - Way Finder
+- **Tagline**: Find your way to what matters
 - **Domain**: pushok.life
 - **Repository**: https://github.com/yourusername/pushok
 - **Live Demo**: https://pushok.life (Azure Static Web Apps)
