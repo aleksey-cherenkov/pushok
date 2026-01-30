@@ -27,7 +27,7 @@ We spend hours chasing virtual rewards in games while neglecting the real reward
 - Struggle to articulate goals? AI helps you refine and structure them
 - Claude/Copilot CLI style: shows suggestions, allows clarify & regenerate
 - You always have final control over your goals
-- Cost-optimized with GPT-4o mini
+- Cost-optimized with GPT-5-nano (with prompt caching)
 
 ### 📸 Photo Timeline & Memories
 - Connect memorable photos to your life goals and activities
@@ -60,12 +60,12 @@ We spend hours chasing virtual rewards in games while neglecting the real reward
 
 - **Framework**: Next.js 16 (App Router, React Server Components, Turbopack)
 - **Database**: IndexedDB (Dexie.js) - local-first, single-user, ~50 photos capacity
-- **AI**: Azure OpenAI (GPT-4o mini primary, Phi 3.5 for simpler tasks)
+- **AI**: Azure OpenAI (GPT-5-nano with prompt caching)
 - **State**: Zustand with event sourcing
 - **UI**: Tailwind CSS + shadcn/ui
 - **Hosting**: Azure Static Web Apps
 - **CI/CD**: GitHub Actions
-- **Budget**: $5-20/month for AI + hosting
+- **Budget**: $1-5/month for AI + hosting
 
 ### Why Event Sourcing?
 - **Complete History**: Every goal change, activity logged as immutable facts
@@ -162,19 +162,27 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed event model.
 
 ### Azure Static Web Apps
 
-1. **Create Azure Static Web App** (Free tier available)
-2. **Connect GitHub repository**
-3. **Configure build settings:**
-   - Build command: `npm run build`
-   - Output folder: `.next`
-4. **Push to main branch** - auto-deploys via GitHub Actions
+**Resource Details:**
+- **Resource Group**: `rg-pushok`
+- **Static Web App**: `pushok-app`
+- **Plan**: Free tier
+- **Domain**: pushok.life
+- **Output Location**: `.next` (SSR mode)
+
+**Deployment Steps:**
+1. Create Azure Static Web App (see [DEPLOYMENT.md](./DEPLOYMENT.md))
+2. Connect GitHub repository
+3. Configure build settings (auto-configured)
+4. Push to main branch - auto-deploys via GitHub Actions
 
 ### Environment Variables
 ```env
 AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
 AZURE_OPENAI_API_KEY=your-api-key
-AZURE_OPENAI_DEPLOYMENT=gpt-4
+AZURE_OPENAI_DEPLOYMENT=gpt-5-nano
 ```
+
+**Detailed deployment guide**: See [DEPLOYMENT.md](./DEPLOYMENT.md)
 
 ---
 
@@ -230,12 +238,15 @@ npm run type-check   # TypeScript check
 ### Phase 1: Foundation ✅
 - [x] Project setup with Next.js 16
 - [x] Project documentation
+- [x] Azure Static Web Apps deployment configured
+- [x] Azure OpenAI resource and GPT-5-nano model deployed
+- [x] Custom domain (pushok.life) configured
 - [ ] Event store implementation
 - [ ] Core goal management
 - [ ] Basic UI components
 
 ### Phase 2: Core Features (Current - GitHub Copilot CLI Challenge)
-- [ ] AI goal refinement (GPT-4o mini)
+- [ ] AI goal refinement (GPT-5-nano with prompt caching)
 - [ ] Activity tracking (quick + detailed logging)
 - [ ] Photo timeline (projects, family, nature)
 - [ ] Gentle reminder system (daily digest)

@@ -708,9 +708,16 @@ class TimelineProjection {
 ### Azure OpenAI for Goal Refinement
 
 **Model Strategy (Cost-Optimized):**
-- **Primary**: GPT-4o mini - Best balance of capability and cost
-- **Alternative**: Phi 3.5 - For simpler suggestions, even lower cost
-- **Budget**: $5-20/month for personal use
+- **Primary**: GPT-5-nano - Lowest cost with 90% prompt caching discount
+- **Alternative**: GPT-4.1-nano - Fallback option if GPT-5-nano unavailable
+- **Budget**: $1-5/month for personal use
+
+**Why GPT-5-nano:**
+- Input: $0.05 per 1M tokens (67% cheaper than GPT-4o-mini)
+- Cached input: $0.01 per 1M tokens (90% discount for system prompts)
+- Output: $0.40 per 1M tokens
+- Released: Aug 2025
+- Perfect for goal refinement with consistent system prompts
 
 **Interaction Pattern (Claude/Copilot CLI style):**
 - Show multiple suggestions for user to choose
@@ -726,24 +733,24 @@ const client = new OpenAIClient(
   new AzureKeyCredential(process.env.AZURE_OPENAI_API_KEY!)
 );
 
-async function refineGoalWithAI(roughIdea: string): Promise<GoalSuggestion[]> {
-  const prompt = `
-You are a thoughtful life coach helping someone define meaningful goals.
+// System prompt - will be cached for 90% cost savings on subsequent calls
+const SYSTEM_PROMPT = `You are a thoughtful life coach helping someone define meaningful goals.
 
-The person said: "${roughIdea}"
-
-Suggest 3 clear, actionable goals based on this. For each goal:
+For each goal suggestion:
 - Make it specific and measurable (SMART framework)
 - Suggest a category (family, nature, health, learning, home)
 - Suggest if it's a positive goal (do something) or avoidance goal (stop doing something)
 - Include a realistic target (daily, weekly, etc.)
 
-Return JSON array of goals.
-`;
+Return JSON array of 3 goals.`;
 
+async function refineGoalWithAI(roughIdea: string): Promise<GoalSuggestion[]> {
   const response = await client.getChatCompletions(
-    process.env.AZURE_OPENAI_DEPLOYMENT!, // gpt-4o-mini recommended
-    [{ role: 'user', content: prompt }],
+    process.env.AZURE_OPENAI_DEPLOYMENT!, // gpt-5-nano recommended
+    [
+      { role: 'system', content: SYSTEM_PROMPT }, // Cached after first call
+      { role: 'user', content: `The person said: "${roughIdea}"` }
+    ],
     { maxTokens: 500, temperature: 0.7 }
   );
 
@@ -765,11 +772,18 @@ Once enough user data exists:
 
 ### Event Sync Architecture (Flutter App)
 
+**Azure Resources (Future):**
+- **Resource Group**: `rg-pushok` (same as web app)
+- **Cosmos DB**: `pushok-cosmos` (event store)
+- **Azure Functions**: `pushok-sync` (sync service)
+- **SignalR Service**: `pushok-signalr` (real-time updates)
+- **Blob Storage**: `pushokstorage` (photo storage)
+
 ```
 ┌─────────────────┐         ┌──────────────────┐         ┌─────────────────┐
 │  Mobile App     │         │  Azure Functions │         │   Cosmos DB     │
 │  (Flutter)      │◄────────┤  (Sync Service)  │────────►│  (Event Store)  │
-│                 │  SignalR│                  │         │                 │
+│                 │  SignalR│  pushok-sync     │         │  pushok-cosmos  │
 │  Local Events   │         │  Conflict Res.   │         │  Global Events  │
 │  (Drift SQLite) │         │  Auth (JWT)      │         │  (Partitioned)  │
 └─────────────────┘         └──────────────────┘         └─────────────────┘

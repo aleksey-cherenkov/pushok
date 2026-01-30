@@ -29,10 +29,10 @@
 - **Architecture**: Event Sourcing + Event Modeling
 
 ### AI & Cloud
-- **AI**: Azure OpenAI (GPT-4o mini primary, Phi 3.5 for simpler tasks)
+- **AI**: Azure OpenAI (GPT-5-nano primary - with prompt caching)
 - **Hosting**: Azure Static Web Apps
 - **CI/CD**: GitHub Actions
-- **Budget**: $5-20/month for AI + hosting
+- **Budget**: $1-5/month for AI + hosting
 
 ### Development
 - **Package Manager**: npm
@@ -58,14 +58,14 @@
 - [x] Configure VS Code settings for Copilot (`.vscode/settings.json`)
 - [ ] Add shadcn/ui components
 - [x] Configure GitHub repository
-- [ ] Set up Azure Static Web Apps resource
-- [ ] Configure GitHub Actions workflows
+- [x] Set up Azure Static Web Apps resource
+- [x] Configure GitHub Actions workflows
 
 **Next Steps:**
 1. Initialize shadcn/ui
-2. Create GitHub repository
-3. Set up Azure resources
-4. Configure CI/CD
+2. Push code to GitHub
+3. Test first deployment
+4. Begin Phase 2: Event Store Implementation
 
 ---
 
@@ -228,21 +228,27 @@
 - User always has final control
 
 **Model Strategy (Cost-Optimized):**
-- Primary: GPT-4o mini (best balance of capability/cost)
-- Alternative: Phi 3.5 (for simpler suggestions)
-- Budget: $5-20/month
+- Primary: GPT-5-nano (lowest cost with 90% prompt caching discount)
+- Alternative: GPT-4.1-nano (if GPT-5-nano unavailable)
+- Budget: $1-5/month
 
 **API Routes:**
 - `POST /api/ai/refine-goal` - Refine user's rough goal idea
 - `POST /api/ai/suggest-reminders` - Suggest optimal reminder times
 - `POST /api/ai/analyze-patterns` - Analyze user's goal patterns (future)
 
-**Environment Variables:**
+**Environment Variables (Azure Portal Configuration):**
 ```env
-AZURE_OPENAI_ENDPOINT=
-AZURE_OPENAI_API_KEY=
-AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
+AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
+AZURE_OPENAI_API_KEY=your-api-key
+AZURE_OPENAI_DEPLOYMENT=gpt-5-nano
 ```
+
+**GitHub Secrets Required:**
+- `AZURE_STATIC_WEB_APPS_API_TOKEN` (deployment token from Azure)
+- `AZURE_OPENAI_ENDPOINT` (optional, if using client-side)
+- `AZURE_OPENAI_API_KEY` (optional, if using client-side)
+- `AZURE_OPENAI_DEPLOYMENT` (optional, if using client-side)
 
 ---
 
@@ -308,19 +314,27 @@ AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
 ### 🚀 Phase 10: Deployment & Demo
 
 **Tasks:**
-- [ ] Create Azure Static Web App resource
-- [ ] Configure custom domain (pushok.life)
-- [ ] Set up GitHub Actions deployment workflow
-- [ ] Configure environment variables in Azure
+- [x] Create Azure Static Web App resource
+- [x] Configure custom domain (pushok.life)
+- [x] Set up GitHub Actions deployment workflow
+- [x] Configure environment variables in Azure
 - [ ] Test production build
 - [ ] Create demo data generator
 - [ ] Record demo video for GitHub Copilot CLI Challenge
-- [ ] Write deployment documentation
+- [x] Write deployment documentation (DEPLOYMENT.md)
 - [ ] Test on multiple browsers
 - [ ] Performance audit (Lighthouse)
 - [ ] Create project submission for challenge
 
 **Dependencies:** All phases
+
+**Azure Resources:**
+- **Resource Group**: `rg-pushok`
+- **Static Web App**: `pushok-app`
+- **Plan**: Free tier
+- **Region**: Choose closest (e.g., East US, West US 2)
+- **Domain**: pushok.life
+- **Deployment Mode**: SSR (`.next` output)
 
 **Deployment Strategy:**
 - **Phase 1 (Challenge)**: Public demo on pushok.life, public GitHub repo
@@ -329,12 +343,21 @@ AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
 **Deployment Checklist:**
 - [x] Next.js production build works
 - [x] Domain owned: pushok.life
-- [ ] Azure Static Web App created
-- [ ] Custom domain configured (pushok.life)
-- [ ] SSL certificate active
-- [ ] Environment variables set
-- [ ] GitHub Actions workflow running
+- [x] Deployment documentation created (DEPLOYMENT.md)
+- [x] SSR mode selected (API routes support)
+- [x] Azure Static Web App created (pushok-app)
+- [x] Azure OpenAI resource created (pushok-openai)
+- [x] GPT-5-nano model deployed
+- [x] Custom domain configured (pushok.life)
+- [x] DNS records configured (Cloudflare)
+- [x] TXT validation completed
+- [ ] SSL certificate active (provisioning in progress)
+- [x] Environment variables set (Azure portal)
+- [x] GitHub Actions workflow auto-created
+- [ ] First deployment successful
 - [ ] Demo mode available (pre-populated data)
+
+**See DEPLOYMENT.md for complete step-by-step guide.**
 
 **Challenge Submission Requirements:**
 - Build with GitHub Copilot CLI
@@ -473,18 +496,20 @@ MIT License - See LICENSE file
 
 ## Status Summary
 
-**Current Phase**: Phase 2 (Event Store Implementation)
-**Completion**: ~10% (Foundation complete)
-**Next Milestone**: Working event store with goal creation
+**Current Phase**: Phase 1 Complete → Phase 2 (Event Store Implementation)
+**Completion**: ~15% (Foundation + deployment infrastructure complete)
+**Next Milestone**: First deployment test, then working event store with goal creation
 **Timeline**: ~1 week for GitHub Copilot CLI Challenge, then ongoing if useful
 **Approach**: Journal/diary for meaningful living, not task manager
 
 **Key Decisions Made:**
 - Single user (no auth) for MVP
 - No unit tests (event sourcing philosophy)
-- GPT-4o mini for AI (cost-optimized)
+- GPT-5-nano for AI (cost-optimized with prompt caching)
 - No streaks (milestones instead)
 - Gentle reminders like Stela
+- SSR mode for Azure Static Web Apps (API routes support)
+- Cloudflare DNS for pushok.life domain
 
 ---
 

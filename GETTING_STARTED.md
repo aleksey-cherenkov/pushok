@@ -46,7 +46,7 @@ Create `.env.local` in project root:
 # Azure OpenAI Configuration
 AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
 AZURE_OPENAI_API_KEY=your-api-key-here
-AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
+AZURE_OPENAI_DEPLOYMENT=gpt-5-nano
 
 # App Configuration
 NEXT_PUBLIC_APP_NAME=Way Finder

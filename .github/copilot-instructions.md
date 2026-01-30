@@ -37,7 +37,7 @@ Before writing any code, **always consult these project documents**:
 
 ### AI Integration
 - **@azure/openai 2+** for AI features
-- Models: GPT-4o mini (primary), Phi 3.5 (simple tasks)
+- Models: GPT-5-nano (primary with prompt caching), GPT-4.1-nano (fallback)
 
 ### UI Components
 - **shadcn/ui** components (when needed)
