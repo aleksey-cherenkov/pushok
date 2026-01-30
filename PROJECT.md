@@ -54,6 +54,8 @@
 - [x] Create README.md
 - [x] Create ARCHITECTURE.md
 - [x] Create PROJECT.md
+- [x] Create GitHub Copilot instructions (`.github/copilot-instructions.md`)
+- [x] Configure VS Code settings for Copilot (`.vscode/settings.json`)
 - [ ] Add shadcn/ui components
 - [x] Configure GitHub repository
 - [ ] Set up Azure Static Web Apps resource
@@ -350,6 +352,15 @@ AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
 - Used Copilot CLI to scaffold Next.js project with optimal config
 - Generated comprehensive README and ARCHITECTURE docs
 - Created project structure with proper TypeScript setup
+- **Created `.github/copilot-instructions.md`** - Custom instructions for Copilot Chat & CLI:
+  - Project context and architecture patterns
+  - Coding standards (TypeScript strict, event sourcing rules)
+  - Documentation references and update guidelines
+  - Tech stack versions and best practices
+- **Configured VS Code settings** for optimal Copilot experience:
+  - Enabled instruction file usage
+  - Set up code formatting and linting on save
+  - Recommended extensions for team consistency
 
 **Phase 2: Event Store** (upcoming)
 - Plan to use Copilot to generate event type definitions

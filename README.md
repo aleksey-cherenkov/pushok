@@ -180,6 +180,24 @@ AZURE_OPENAI_DEPLOYMENT=gpt-4
 
 ## 🧪 Development Workflow
 
+### GitHub Copilot Configuration
+
+This project includes custom Copilot instructions for consistent, high-quality code:
+
+```
+.github/
+  └── copilot-instructions.md   # Project context, coding standards, patterns
+.vscode/
+  ├── settings.json             # Copilot & editor settings
+  └── extensions.json           # Recommended extensions
+```
+
+**Copilot instructions include:**
+- Project architecture (event sourcing, CQRS patterns)
+- Coding standards (TypeScript strict, naming conventions)
+- Documentation references (README, ARCHITECTURE, PROJECT, GETTING_STARTED)
+- Guidelines for keeping documentation updated
+
 ### GitHub Copilot CLI Integration
 
 This project showcases **GitHub Copilot CLI** throughout development:
