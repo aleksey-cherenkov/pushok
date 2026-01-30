@@ -6,10 +6,10 @@
 
 ## Project Information
 
-- **Name**: Pushok - Way Finder
+- **Name**: Way Finder (codename: Pushok)
 - **Tagline**: Find your way to what matters
-- **Domain**: pushok.life
-- **Repository**: https://github.com/yourusername/pushok
+- **Domain**: pushok.life ✓ (owned)
+- **Repository**: https://github.com/aleksey-cherenkov/pushok
 - **Live Demo**: https://pushok.life (Azure Static Web Apps)
 - **Challenge**: Build with GitHub Copilot CLI
 
@@ -29,14 +29,15 @@
 - **Architecture**: Event Sourcing + Event Modeling
 
 ### AI & Cloud
-- **AI**: Azure OpenAI (GPT-4)
+- **AI**: Azure OpenAI (GPT-4o mini primary, Phi 3.5 for simpler tasks)
 - **Hosting**: Azure Static Web Apps
 - **CI/CD**: GitHub Actions
+- **Budget**: $5-20/month for AI + hosting
 
 ### Development
 - **Package Manager**: npm
 - **Linting**: ESLint
-- **Testing**: Vitest + React Testing Library (to be added)
+- **Testing**: Integration tests only (event sourcing philosophy - no unit tests needed)
 
 ---
 
@@ -54,7 +55,7 @@
 - [x] Create ARCHITECTURE.md
 - [x] Create PROJECT.md
 - [ ] Add shadcn/ui components
-- [ ] Configure GitHub repository
+- [x] Configure GitHub repository
 - [ ] Set up Azure Static Web Apps resource
 - [ ] Configure GitHub Actions workflows
 
@@ -74,16 +75,16 @@
 - [ ] Build event store API (append, load, query)
 - [ ] Create base aggregate class (`lib/aggregates/base-aggregate.ts`)
 - [ ] Implement snapshot store (optional, for performance)
-- [ ] Add event store unit tests
 - [ ] Create Zustand store integration
 - [ ] Add event replay capability
 
 **Dependencies:** None (can start immediately)
 
+**Testing Approach:** Manual verification through UI; delete IndexedDB and restart when schemas change during development.
+
 **Copilot CLI Usage:**
 - Generate event type interfaces
 - Scaffold Dexie schema
-- Create test fixtures for events
 
 ---
 
@@ -97,18 +98,19 @@
 - [ ] Create goal dashboard page (`app/goals/page.tsx`)
 - [ ] Add goal creation form with AI refinement
 - [ ] Implement goal progress tracking
-- [ ] Add streak calculation logic
+- [ ] Add milestone tracking (not streaks - no stress mechanics)
 - [ ] Create goal category management
-- [ ] Add goal tests
 
 **Dependencies:** Phase 2 (Event Store)
+
+**Design Decision:** No streaks - focus on milestones and reflection instead.
 
 **UI Components Needed:**
 - GoalCard
 - GoalForm
 - GoalProgressBar
 - GoalCategoryBadge
-- StreakCounter
+- MilestoneList
 
 ---
 
@@ -116,26 +118,34 @@
 
 **Tasks:**
 - [ ] Define photo aggregate (`lib/aggregates/photo.aggregate.ts`)
-- [ ] Implement photo blob storage in IndexedDB
+- [ ] Implement photo blob storage in IndexedDB (25-50 photos sufficient for web)
 - [ ] Create photo upload component (`components/photos/PhotoUpload.tsx`)
 - [ ] Build photo gallery component (`components/photos/PhotoGallery.tsx`)
 - [ ] Implement photo timeline projection (`lib/projections/timeline.projection.ts`)
 - [ ] Create timeline page (`app/timeline/page.tsx`)
 - [ ] Add photo tagging (people, pets, activities)
 - [ ] Implement photo-goal linking
-- [ ] Create "Memory" feature (special photos)
+- [ ] Add before/during/after phases for project photos
+- [ ] Create special "Stela Memorial" gallery (couple clicks from settings)
 - [ ] Add thumbnail generation
 - [ ] Build photo detail view
-- [ ] Add photo tests
 
 **Dependencies:** Phase 2 (Event Store), Phase 3 (Goals for linking)
+
+**Photo Categories:**
+- Projects (before/during/after)
+- Family & pets
+- Nature (birds, squirrels - Stela's favorites)
+- Health/lifestyle
+- User-defined categories
 
 **UI Components Needed:**
 - PhotoUploader
 - PhotoCard
 - PhotoTimeline
 - PhotoTagger
-- MemoryGallery
+- ProjectPhotoViewer (before/during/after)
+- StelaMemorialGallery
 
 ---
 
@@ -151,12 +161,13 @@
 - [ ] Create activity analytics projection
 - [ ] Add activity categories & tags
 - [ ] Build activity edit/delete
-- [ ] Add activity tests
 
 **Dependencies:** Phase 2 (Event Store), Phase 3 (Goals)
 
+**Logging Philosophy:** Quick to log, but with optional details for better reminiscence. Default is simple checkmark + auto timestamp; expand for notes/photos/duration.
+
 **UI Components Needed:**
-- ActivityLogger
+- ActivityLogger (expandable - quick or detailed)
 - ActivityCard
 - ActivityTimeline
 - TimeTracker
@@ -170,22 +181,28 @@
 - [ ] Define reminder aggregate (`lib/aggregates/reminder.aggregate.ts`)
 - [ ] Implement reminder scheduling logic
 - [ ] Create reminder UI (`components/reminders/`)
-- [ ] Integrate browser Notification API
-- [ ] Build gentle reminder UX (non-intrusive)
+- [ ] Integrate browser Notification API (limited on web)
+- [ ] Build gentle reminder UX (daily digest, not individual pings)
 - [ ] Add reminder effectiveness tracking
 - [ ] Create reminder settings page
 - [ ] Implement smart reminder timing (AI suggestions)
-- [ ] Add reminder tests
 
 **Dependencies:** Phase 3 (Goals), Phase 5 (Activities)
 
+**Gentle Reminder Principles (Like Stela):**
+- Daily digest instead of constant notifications
+- Calm dashboard with soft suggestions
+- Nature imagery (birds, squirrels, sunshine)
+- "Stela would be proud" style encouragement
+- No guilt-tripping, no FOMO mechanics
+
 **UI Components Needed:**
 - ReminderForm
-- ReminderList
-- ReminderNotification
+- DailyDigest
+- GentleNotification
 - ReminderSettings
 
-**Note:** This is a prototype. Full reminder system will be in Flutter mobile app.
+**Note:** This is a prototype. Full reminder system will shine in Flutter mobile app with native notifications.
 
 ---
 
@@ -194,14 +211,24 @@
 **Tasks:**
 - [ ] Create Azure OpenAI client wrapper (`lib/ai/openai-client.ts`)
 - [ ] Implement goal refinement API route (`app/api/ai/refine-goal/route.ts`)
-- [ ] Build AI chat UI for goal definition
+- [ ] Build AI suggestion UI (Claude/Copilot CLI style - show options, clarify, regenerate)
 - [ ] Add AI suggestion UI components
 - [ ] Implement prompt engineering for goal refinement
 - [ ] Create AI analytics suggestions (future)
 - [ ] Add error handling & rate limiting
-- [ ] Add AI integration tests
 
 **Dependencies:** Phase 3 (Goals)
+
+**AI Interaction Pattern (Like Claude/Copilot CLI):**
+- Show multiple suggestions for user to choose
+- Allow "clarify" to ask follow-up questions
+- Allow "regenerate" for new suggestions
+- User always has final control
+
+**Model Strategy (Cost-Optimized):**
+- Primary: GPT-4o mini (best balance of capability/cost)
+- Alternative: Phi 3.5 (for simpler suggestions)
+- Budget: $5-20/month
 
 **API Routes:**
 - `POST /api/ai/refine-goal` - Refine user's rough goal idea
@@ -212,7 +239,7 @@
 ```env
 AZURE_OPENAI_ENDPOINT=
 AZURE_OPENAI_API_KEY=
-AZURE_OPENAI_DEPLOYMENT=
+AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
 ```
 
 ---
@@ -223,23 +250,29 @@ AZURE_OPENAI_DEPLOYMENT=
 - [ ] Create main dashboard page (`app/page.tsx`)
 - [ ] Build analytics projection (`lib/projections/analytics.projection.ts`)
 - [ ] Implement progress charts (Chart.js or Recharts)
-- [ ] Create habit streak visualizations
+- [ ] Create milestone visualizations (not streaks)
 - [ ] Build time distribution charts
-- [ ] Add gamification elements (points, badges)
-- [ ] Create "Good vs Bad" goals tracking
-- [ ] Implement weekly/monthly reports
+- [ ] Add reflection features (weekly, monthly, yearly wins)
+- [ ] Create positive vs avoidance goals tracking
+- [ ] Implement weekly/monthly/yearly reports
 - [ ] Add export data feature
-- [ ] Build settings page
-- [ ] Add analytics tests
+- [ ] Build settings page with Stela memorial link
 
 **Dependencies:** All previous phases
 
+**Journal/Diary Approach:**
+- Weekly wins reflection
+- Monthly progress summary
+- Yearly review with photo highlights
+- No daily pressure or streak stress
+
 **Charts & Visualizations:**
 - Goal progress over time
-- Activity heatmap
+- Activity calendar (not heatmap pressure)
 - Category distribution
-- Streak calendar
-- Time saved from avoiding bad habits
+- Milestone achievements
+- Time invested in meaningful activities
+- Photo memories timeline
 
 ---
 
@@ -279,23 +312,33 @@ AZURE_OPENAI_DEPLOYMENT=
 - [ ] Configure environment variables in Azure
 - [ ] Test production build
 - [ ] Create demo data generator
-- [ ] Record demo video for GitHub Challenge
+- [ ] Record demo video for GitHub Copilot CLI Challenge
 - [ ] Write deployment documentation
 - [ ] Test on multiple browsers
 - [ ] Performance audit (Lighthouse)
-- [ ] Security audit
 - [ ] Create project submission for challenge
 
 **Dependencies:** All phases
 
+**Deployment Strategy:**
+- **Phase 1 (Challenge)**: Public demo on pushok.life, public GitHub repo
+- **Phase 2 (Post-Challenge)**: Private repo, public mobile app later
+
 **Deployment Checklist:**
 - [x] Next.js production build works
+- [x] Domain owned: pushok.life
 - [ ] Azure Static Web App created
 - [ ] Custom domain configured (pushok.life)
 - [ ] SSL certificate active
 - [ ] Environment variables set
 - [ ] GitHub Actions workflow running
 - [ ] Demo mode available (pre-populated data)
+
+**Challenge Submission Requirements:**
+- Build with GitHub Copilot CLI
+- Show what you built and why it matters
+- Demo video walkthrough
+- Document Copilot CLI experience
 
 ---
 
@@ -317,27 +360,28 @@ AZURE_OPENAI_DEPLOYMENT=
 
 ---
 
-## Testing Strategy
+## Testing Philosophy
 
-### Unit Tests
-- **Event Store**: Append, load, query, snapshots
-- **Aggregates**: Event application, state reconstruction, business rules
-- **Projections**: Rebuild, queries, event handling
-- **Commands**: Validation, event generation
+**Decision: Minimal Testing for Event Sourcing**
 
-### Integration Tests
+Based on event sourcing best practices (Martin Dilger, Adam Dymitruk), properly designed event sourcing systems don't need extensive unit tests:
+- Events are immutable facts - if stored correctly, the system is correct
+- Projections are deterministic - same events always produce same state
+- Business rules live in focused aggregates - easy to verify manually
+
+### During Development
+- Delete IndexedDB and restart fresh when schemas change
+- Manual verification through the UI
+- No migration scripts needed for MVP
+
+### Integration Testing (If Needed)
 - **Full Flow**: Command → Aggregate → Events → Projection → UI
 - **AI Pipeline**: Goal input → AI refinement → Event generation
 - **Photo Upload**: File → Blob → IndexedDB → Retrieval
 
-### E2E Tests (Optional)
-- **User Flows**: Create goal → Log activity → View timeline
-- **AI Refinement**: Draft goal → Get suggestions → Activate goal
-
-### Tools
-- **Unit**: Vitest
-- **React**: React Testing Library
-- **E2E**: Playwright (optional)
+### Tools (Optional, for future)
+- **Integration**: Vitest for critical flows
+- **E2E**: Playwright for user journeys (mobile app phase)
 
 ---
 
@@ -402,11 +446,11 @@ AZURE_OPENAI_DEPLOYMENT=
 
 ## Team & Credits
 
-- **Developer**: [Your Name]
+- **Developer**: Aleksey Cherenkov
 - **In Memory Of**: Stela (Pushok) 🐱
 - **Built With**: GitHub Copilot CLI
 - **Hosting**: Azure Static Web Apps
-- **Domain**: pushok.life
+- **Domain**: pushok.life ✓
 
 ---
 
@@ -418,11 +462,19 @@ MIT License - See LICENSE file
 
 ## Status Summary
 
-**Current Phase**: Phase 2 (Event Store Implementation)  
-**Completion**: ~10% (Foundation complete)  
-**Next Milestone**: Working event store with goal creation  
-**Target Demo Date**: [Set based on challenge deadline]
+**Current Phase**: Phase 2 (Event Store Implementation)
+**Completion**: ~10% (Foundation complete)
+**Next Milestone**: Working event store with goal creation
+**Timeline**: ~1 week for GitHub Copilot CLI Challenge, then ongoing if useful
+**Approach**: Journal/diary for meaningful living, not task manager
+
+**Key Decisions Made:**
+- Single user (no auth) for MVP
+- No unit tests (event sourcing philosophy)
+- GPT-4o mini for AI (cost-optimized)
+- No streaks (milestones instead)
+- Gentle reminders like Stela
 
 ---
 
-**Last Updated**: 2026-01-29
+**Last Updated**: 2026-01-30

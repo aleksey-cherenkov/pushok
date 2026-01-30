@@ -25,48 +25,55 @@ We spend hours chasing virtual rewards in games while neglecting the real reward
 
 ### 🎯 AI-Powered Goal Definition
 - Struggle to articulate goals? AI helps you refine and structure them
-- Converts rough ideas into clear, actionable goals
-- Suggests categories and milestones
+- Claude/Copilot CLI style: shows suggestions, allows clarify & regenerate
+- You always have final control over your goals
+- Cost-optimized with GPT-4o mini
 
-### 📸 Photo Timeline
+### 📸 Photo Timeline & Memories
 - Connect memorable photos to your life goals and activities
-- Visual journey of your progress
-- Tag photos with people, pets, moments that matter
+- Project photos: before/during/after for home improvement, creative work
+- Family & pets, nature moments (Stela's favorites: birds, squirrels, sunshine)
+- Special memorial gallery for Stela
 
-### 🎮 Gamification Done Right
-- Track positive goals AND avoidance of time-wasting activities
-- Earn progress through meaningful actions, not virtual busywork
-- Gentle reminders, not nagging notifications
+### 📓 Journal/Diary Approach
+- Weekly, monthly, yearly reflection on your wins
+- Milestones instead of streaks (no stress from broken chains)
+- Quick logging with optional details for better reminiscence
+- Focus on meaningful moments, not productivity metrics
 
 ### 🔄 Event Sourcing Architecture
 - Complete audit trail of your journey
-- Time-travel through your progress
-- Rich analytics and insights
+- Time-travel through your progress at any point
+- Rich analytics and pattern insights
 - Foundation for future mobile app with offline-first sync
+- No unit tests needed - events are the source of truth
 
-### 🌿 Mindful Design
-- Calming interface focused on reflection
-- No stressful productivity pressure
-- Gentle nudges to live intentionally
+### 🌿 Mindful Design (Like Stela)
+- Calming interface with nature imagery
+- Daily digest instead of constant notifications
+- "Stela would be proud" style encouragement
+- No guilt-tripping, no FOMO, no artificial urgency
 
 ---
 
 ## 🛠️ Technology Stack
 
 - **Framework**: Next.js 16 (App Router, React Server Components, Turbopack)
-- **Database**: IndexedDB (Dexie.js) - local-first, browser-based event store
-- **AI**: Azure OpenAI (GPT-4) for goal refinement
+- **Database**: IndexedDB (Dexie.js) - local-first, single-user, ~50 photos capacity
+- **AI**: Azure OpenAI (GPT-4o mini primary, Phi 3.5 for simpler tasks)
 - **State**: Zustand with event sourcing
 - **UI**: Tailwind CSS + shadcn/ui
 - **Hosting**: Azure Static Web Apps
 - **CI/CD**: GitHub Actions
+- **Budget**: $5-20/month for AI + hosting
 
 ### Why Event Sourcing?
-- **Complete History**: Every goal change, activity logged
-- **Time Travel**: Replay events to see patterns
+- **Complete History**: Every goal change, activity logged as immutable facts
+- **Time Travel**: Replay events to see patterns at any point in time
 - **Flexible Views**: Multiple projections from same data
 - **Future-Proof**: Perfect foundation for mobile sync
-- **Debugging**: Easy to understand state changes
+- **No Unit Tests Needed**: Events are the source of truth - if they're correct, state is correct
+- **Simple Development**: Delete IndexedDB and restart fresh during development
 
 ---
 
@@ -80,7 +87,7 @@ We spend hours chasing virtual rewards in games while neglecting the real reward
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/pushok.git
+git clone https://github.com/aleksey-cherenkov/pushok.git
 cd pushok
 
 # Install dependencies
@@ -132,19 +139,19 @@ pushok/
 
 ## 🎯 Event Model Overview
 
-Pushok uses **Event Sourcing** - all state changes are stored as events in an append-only log.
+Pushok uses **Event Sourcing** - all state changes are stored as immutable events in an append-only log.
 
 ### Key Aggregates
-- **Goal**: User goals (positive, negative, avoidance)
-- **Activity**: Logged activities linked to goals
-- **Photo**: Photos with metadata and goal links
-- **Reminder**: Scheduled reminders
+- **Goal**: User goals (positive or avoidance), milestones, progress
+- **Activity**: Logged activities linked to goals (quick or detailed)
+- **Photo**: Photos with phases (before/during/after), tags, goal links
+- **Reminder**: Gentle scheduled reminders (daily digest style)
 
 ### Sample Events
 ```typescript
-GoalDefined → GoalRefined (AI) → GoalActivated → GoalProgressRecorded
+GoalDefined → AIRefinementReceived → GoalActivated → GoalMilestoneCompleted
 ActivityLogged → PhotoAttached → ActivityTagged
-PhotoUploaded → PhotoTagged → PhotoLinkedToGoal
+PhotoUploaded → PhotoPhaseSet → PhotoLinkedToGoal
 ```
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed event model.
@@ -180,8 +187,15 @@ This project showcases **GitHub Copilot CLI** throughout development:
 - **Scaffolding**: Generated project structure with Copilot CLI
 - **Event Store**: Built IndexedDB wrapper with AI assistance
 - **Components**: Rapid UI development with Copilot suggestions
-- **Testing**: Generated test cases and fixtures
 - **Documentation**: This README and architecture docs
+- **Problem Solving**: Debug assistance and code explanations
+
+### Testing Philosophy
+
+Event sourcing with proper design doesn't need extensive unit tests:
+- Events are immutable facts - if stored correctly, the system is correct
+- Manual verification through the UI during development
+- Delete IndexedDB and restart fresh when schemas change
 
 ### Scripts
 ```bash
@@ -196,29 +210,30 @@ npm run type-check   # TypeScript check
 ## 🗺️ Roadmap
 
 ### Phase 1: Foundation ✅
-- [x] Project setup
-- [x] Event store implementation
+- [x] Project setup with Next.js 16
+- [x] Project documentation
+- [ ] Event store implementation
 - [ ] Core goal management
 - [ ] Basic UI components
 
-### Phase 2: Core Features (Current)
-- [ ] AI goal refinement
-- [ ] Activity tracking
-- [ ] Photo timeline
-- [ ] Reminder system
+### Phase 2: Core Features (Current - GitHub Copilot CLI Challenge)
+- [ ] AI goal refinement (GPT-4o mini)
+- [ ] Activity tracking (quick + detailed logging)
+- [ ] Photo timeline (projects, family, nature)
+- [ ] Gentle reminder system (daily digest)
 
-### Phase 3: Polish
-- [ ] Dashboard & analytics
-- [ ] Gamification elements
-- [ ] Responsive design
-- [ ] Performance optimization
+### Phase 3: Polish & Submit
+- [ ] Dashboard with weekly/monthly/yearly reflection
+- [ ] Milestone tracking (no streaks)
+- [ ] Stela memorial gallery
+- [ ] Demo video for challenge submission
 
-### Phase 4: Future (Mobile App)
-- [ ] Flutter mobile app
-- [ ] Native notifications
+### Phase 4: Future (Post-Challenge)
+- [ ] Flutter mobile app (where photos really shine)
+- [ ] Native notifications (proper gentle reminders)
 - [ ] Cloud sync (Azure Functions + SignalR)
 - [ ] Camera integration
-- [ ] Health app integration
+- [ ] Private repo with public mobile app
 
 ---
 
@@ -236,15 +251,18 @@ MIT License - See [LICENSE](./LICENSE) for details
 
 ## 💭 Dedication
 
-> **In memory of Stela (Pushok)** 🐱  
-> *Who taught us that the best moments in life are simple:*  
-> *sunshine, nature, presence, and love.*
+> **In memory of Stela (Pushok)** 🐱
+> *Who taught us that the best moments in life are simple:*
+> *sunshine, nature, birds and squirrels, presence, and love.*
+>
+> *This app is a journal for meaningful living - gentle like Stela,*
+> *reminding us to focus on what truly matters.*
 
 ---
 
 ## 🔗 Links
 
-- **Live Demo**: https://pushok.life *(coming soon)*
+- **Live Demo**: https://pushok.life
 - **Documentation**: [ARCHITECTURE.md](./ARCHITECTURE.md)
 - **GitHub Copilot CLI**: [Learn more](https://github.com/features/copilot)
 - **Next.js 16**: [Documentation](https://nextjs.org/docs)

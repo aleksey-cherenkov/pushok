@@ -32,6 +32,20 @@ Pushok - Way Finder implements **Event Sourcing** and **Event Modeling** as desc
 5. **Flexibility**: Add new projections without database migrations
 6. **Offline-First**: Perfect foundation for mobile sync (future)
 
+### Design Philosophy: Journal/Diary Approach
+
+Pushok is **not a task manager** or productivity tool. It's a **reflective journal** that helps you:
+- Record meaningful moments with photos
+- Track progress toward life goals (not work tasks)
+- Reflect weekly, monthly, and yearly on your journey
+- Remember why you started (In memory of Stela)
+
+**Single User Design (MVP):**
+- No authentication required
+- All data stored locally in IndexedDB
+- Privacy by default - your data never leaves your device
+- Future: Cloud sync for mobile app with optional family sharing
+
 ---
 
 ## Event Sourcing Fundamentals
@@ -137,6 +151,13 @@ class GoalAggregate {
 
 ### Photo Aggregate
 
+**Photo Categories (User-Defined):**
+- **Project Photos**: Before/during/after shots for home improvement, creative work
+- **Family & Pets**: Kids, pets, meaningful moments together
+- **Nature**: Birds, squirrels, outdoor moments (Stela's favorites)
+- **Health/Lifestyle**: Food, exercise, wellness activities
+- **Custom**: User decides what matters to them
+
 **Events:**
 - `PhotoUploaded` - Upload photo (blob to IndexedDB)
 - `PhotoMetadataExtracted` - EXIF data (date, location)
@@ -144,12 +165,13 @@ class GoalAggregate {
 - `PhotoMemoryCreated` - Mark as memorable moment
 - `PhotoLinkedToGoal` - Connect to goal/activity
 - `PhotoCaptionAdded` - Add description
-- `PhotoPrivacySet` - Set visibility
+- `PhotoPhaseSet` - Before/During/After for project tracking
 
-**Special: In Memory of Stela**
-- Photos tagged with "Stela" get special treatment
-- Memory gallery for cherished moments
-- Timeline of meaningful experiences
+**Special: In Memory of Stela Gallery**
+- Dedicated gallery accessible from settings/about (couple clicks away)
+- Photos tagged with "Stela" appear here
+- Story of why this app exists
+- Memorial, not sad - celebrating her life and lessons
 
 ### Reminder Aggregate
 
@@ -162,10 +184,13 @@ class GoalAggregate {
 - `ReminderSnoozed` - Delay reminder
 - `ReminderDisabled` / `ReminderEnabled`
 
-**Gentle Reminder Philosophy:**
-- No nagging, just gentle nudges
-- Learn from user behavior (dismiss patterns)
-- Suggest optimal times based on completion history
+**Gentle Reminder Philosophy (Like Stela):**
+- **Not intrusive**: Daily digest instead of individual pop-ups
+- **Calm dashboard**: Suggestions appear softly, not demanding
+- **Nature imagery**: Birds, squirrels, grass, sunshine throughout
+- **Encouraging messages**: "Stela would be proud" style, never guilt-tripping
+- **No stress mechanics**: No streaks, no FOMO, no artificial urgency
+- **Learn from behavior**: Suggest optimal times based on when user is receptive
 
 ---
 
@@ -565,6 +590,13 @@ class GoalAggregate extends BaseAggregate {
 
 ### Goals Dashboard Projection
 
+**Design Decision: No Streaks**
+
+Streaks create stress when broken. Instead, we focus on:
+- **Milestones** - Celebrate achievements, not consecutive days
+- **Progress over time** - Weekly, monthly, yearly reflection
+- **Photo memories** - Visual proof of meaningful moments
+
 ```typescript
 interface GoalDashboardItem {
   id: string;
@@ -572,9 +604,10 @@ interface GoalDashboardItem {
   category: string;
   progress: number;
   target: number;
-  streak: number;
   lastActivity: number;
   status: string;
+  milestones: Milestone[];
+  photoCount: number;
 }
 
 class GoalsDashboardProjection {
@@ -582,7 +615,7 @@ class GoalsDashboardProjection {
 
   async rebuild(): Promise<void> {
     this.goals.clear();
-    
+
     const events = await db.events
       .where('aggregateType')
       .equals('goal')
@@ -605,7 +638,10 @@ class GoalsDashboardProjection {
       case 'GoalProgressRecorded':
         goal.progress += event.payload.amount;
         goal.lastActivity = event.payload.recordedAt;
-        goal.streak = this.calculateStreak(goalId);
+        break;
+
+      case 'GoalMilestoneCompleted':
+        goal.milestones.push(event.payload.milestone);
         break;
 
       case 'GoalCompleted':
@@ -671,6 +707,17 @@ class TimelineProjection {
 
 ### Azure OpenAI for Goal Refinement
 
+**Model Strategy (Cost-Optimized):**
+- **Primary**: GPT-4o mini - Best balance of capability and cost
+- **Alternative**: Phi 3.5 - For simpler suggestions, even lower cost
+- **Budget**: $5-20/month for personal use
+
+**Interaction Pattern (Claude/Copilot CLI style):**
+- Show multiple suggestions for user to choose
+- Allow "clarify" to ask follow-up questions
+- Allow "regenerate" for new suggestions
+- User always has final control
+
 ```typescript
 import { OpenAIClient, AzureKeyCredential } from '@azure/openai';
 
@@ -695,7 +742,7 @@ Return JSON array of goals.
 `;
 
   const response = await client.getChatCompletions(
-    process.env.AZURE_OPENAI_DEPLOYMENT!,
+    process.env.AZURE_OPENAI_DEPLOYMENT!, // gpt-4o-mini recommended
     [{ role: 'user', content: prompt }],
     { maxTokens: 500, temperature: 0.7 }
   );
@@ -769,29 +816,35 @@ For aggregates with many events (100+), create snapshots:
 
 ---
 
-## Testing Strategy
+## Testing Philosophy
 
-### Event Store Tests
-- Append events
-- Load aggregates
-- Replay events
-- Snapshot creation & loading
+**Decision: Minimal Testing for Event Sourcing**
 
-### Aggregate Tests
-- Command validation
-- Event generation
-- State reconstruction
-- Business rules
+Based on guidance from Martin Dilger and Adam Dymitruk (event sourcing experts), properly designed event sourcing systems don't require extensive unit tests because:
 
-### Projection Tests
-- Rebuild from events
-- Query results
-- Event handling
+1. **Events are the tests** - Events are immutable facts; if events are stored correctly, the system is correct
+2. **Projections are deterministic** - Given the same events, you always get the same state
+3. **Business rules live in aggregates** - Simple, focused logic that's easy to verify manually
 
-### Integration Tests
+### What We Test (Integration Only)
+
+**Manual/Integration Testing:**
 - Full flow: Command → Events → Projection → UI
-- AI refinement pipeline
+- AI refinement pipeline (GPT-4o mini responses)
 - Photo upload & retrieval
+- Event replay and state reconstruction
+
+**During Development:**
+- Delete IndexedDB and restart fresh when schemas change
+- No migration scripts needed for MVP
+- Visual verification through the UI
+
+### Future Considerations
+
+For production/mobile app:
+- Consider integration tests for sync logic
+- E2E tests for critical user flows
+- But still no unit tests for aggregates/projections
 
 ---
 

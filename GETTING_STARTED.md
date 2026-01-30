@@ -1,4 +1,6 @@
-# Getting Started with Pushok Development
+# Getting Started with Way Finder Development
+
+> **Way Finder** (codenamed Pushok) - Find your way to what matters
 
 ## Quick Start
 
@@ -27,13 +29,15 @@ echo "*.log" >> .gitignore
 
 # Initial commit
 git add .
-git commit -m "feat: initial Pushok setup with event sourcing architecture"
+git commit -m "feat: initial Way Finder setup with event sourcing architecture"
 
 # Create GitHub repo and push
-git remote add origin https://github.com/yourusername/pushok.git
+git remote add origin https://github.com/aleksey-cherenkov/pushok.git
 git branch -M main
 git push -u origin main
 ```
+
+> **Note:** Repository name remains `pushok` (codename), but the app is branded as "Way Finder".
 
 ### 2. Environment Variables
 Create `.env.local` in project root:
@@ -42,12 +46,14 @@ Create `.env.local` in project root:
 # Azure OpenAI Configuration
 AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
 AZURE_OPENAI_API_KEY=your-api-key-here
-AZURE_OPENAI_DEPLOYMENT=gpt-4
+AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
 
 # App Configuration
-NEXT_PUBLIC_APP_NAME=Pushok
+NEXT_PUBLIC_APP_NAME=Way Finder
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
+
+> **Note:** GPT-4o mini is the recommended model for cost optimization ($5-20/month budget).
 
 ### 3. Install shadcn/ui (Recommended)
 ```bash
@@ -117,11 +123,15 @@ import { BaseEvent } from './event-types';
 
 class EventStoreDB extends Dexie {
   events!: Table<BaseEvent>;
-  
+  snapshots!: Table<Snapshot>;  // Optional: for performance with 100+ events
+  photos!: Table<PhotoBlob>;    // Photo blob storage
+
   constructor() {
-    super('PushokEventStore');
+    super('WayFinderEventStore');
     this.version(1).stores({
-      events: 'id, [aggregateType+aggregateId], timestamp, [metadata.userId]'
+      events: 'id, [aggregateType+aggregateId], timestamp, [metadata.userId]',
+      snapshots: '[aggregateId+aggregateType], version',
+      photos: 'id, uploadedAt'
     });
   }
 }
@@ -133,10 +143,10 @@ export async function appendEvent(event: BaseEvent): Promise<void> {
   await db.events.add(event);
 }
 
-export async function loadEvents(aggregateId: string): Promise<BaseEvent[]> {
+export async function loadEvents(aggregateId: string, aggregateType: string = 'goal'): Promise<BaseEvent[]> {
   return db.events
     .where('[aggregateType+aggregateId]')
-    .equals(['goal', aggregateId])
+    .equals([aggregateType, aggregateId])
     .toArray();
 }
 ```
@@ -211,10 +221,26 @@ copilot "Generate unit tests for event store using Vitest"
 
 ## Testing Strategy
 
-### Set Up Testing (After Event Store)
+### Philosophy: Minimal Testing for Event Sourcing
+
+Based on event sourcing best practices (Martin Dilger, Adam Dymitruk):
+- **Events are the tests** - If events are stored correctly, the system is correct
+- **Projections are deterministic** - Same events always produce same state
+- **No unit tests needed for MVP** - Delete IndexedDB and restart fresh during development
+
+### During Development
+```bash
+# Clear IndexedDB when schemas change (Chrome DevTools)
+# Application → IndexedDB → Delete "WayFinderEventStore"
+
+# Or in browser console:
+indexedDB.deleteDatabase('WayFinderEventStore');
+```
+
+### Optional: Integration Testing (Future)
 
 ```bash
-# Install testing dependencies
+# Install testing dependencies (if needed later)
 npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom
 
 # Add test script to package.json
@@ -222,17 +248,6 @@ npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom
   "test": "vitest",
   "test:ui": "vitest --ui"
 }
-```
-
-### Test Structure
-```
-lib/
-  event-store/
-    event-store.ts
-    event-store.test.ts  ← Test here
-  aggregates/
-    goal.aggregate.ts
-    goal.aggregate.test.ts  ← Test here
 ```
 
 ---
@@ -244,12 +259,12 @@ lib/
 1. Open DevTools (F12)
 2. Go to "Application" tab
 3. Expand "IndexedDB"
-4. See "PushokEventStore" database
+4. See "WayFinderEventStore" database
 
 **View Events:**
 ```typescript
 // In browser console
-const db = await new Dexie('PushokEventStore').open();
+const db = await new Dexie('WayFinderEventStore').open();
 const events = await db.table('events').toArray();
 console.table(events);
 ```
@@ -317,13 +332,13 @@ console.log('Final state:', goal);
 az login
 
 # Create resource group
-az group create --name pushok-rg --location eastus
+az group create --name wayfinder-rg --location eastus
 
 # Create Static Web App
 az staticwebapp create \
-  --name pushok-app \
-  --resource-group pushok-rg \
-  --source https://github.com/yourusername/pushok \
+  --name wayfinder-app \
+  --resource-group wayfinder-rg \
+  --source https://github.com/aleksey-cherenkov/pushok \
   --location eastus \
   --branch main \
   --app-location "/" \
@@ -332,18 +347,25 @@ az staticwebapp create \
 
 ### 2. Configure Custom Domain
 ```bash
-# Add custom domain
+# Add custom domain (keeping pushok.life domain)
 az staticwebapp hostname set \
-  --name pushok-app \
-  --resource-group pushok-rg \
+  --name wayfinder-app \
+  --resource-group wayfinder-rg \
   --hostname pushok.life
 ```
 
 ### 3. Set Environment Variables
 In Azure Portal:
-- Go to Static Web App
-- Settings → Environment variables
-- Add production variables
+- Go to Static Web App → Settings → Environment variables
+- Add production variables:
+
+```env
+AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
+AZURE_OPENAI_API_KEY=your-production-key
+AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
+NEXT_PUBLIC_APP_NAME=Way Finder
+NEXT_PUBLIC_APP_URL=https://pushok.life
+```
 
 ---
 
@@ -361,10 +383,10 @@ In Azure Portal:
 - Book: "Understanding Eventsourcing" by Martin Dilger
 
 ### Project Docs
-- `README.md` - Project overview
-- `ARCHITECTURE.md` - Technical architecture
-- `PROJECT.md` - Implementation roadmap
-- `.copilot/session-state/.../plan.md` - Development plan
+- `README.md` - Project overview & features
+- `ARCHITECTURE.md` - Event sourcing & technical architecture
+- `PROJECT.md` - Implementation roadmap & phase tracking
+- `GETTING_STARTED.md` - This file (developer onboarding)
 
 ---
 
@@ -401,4 +423,17 @@ When you return to development:
 
 Happy coding! 🚀
 
-**Remember:** You're building something meaningful in memory of Stela. Take your time, enjoy the process, and create something beautiful.
+**Remember:** You're building Way Finder - a way finder for meaningful living, in memory of Stela. Take your time, enjoy the process, and create something beautiful.
+
+---
+
+## Key Decisions Summary
+
+| Decision | Choice | Rationale |
+|----------|--------|-----------|
+| **Branding** | Way Finder (codename: Pushok) | More unique, describes purpose |
+| **AI Model** | GPT-4o mini | Cost-optimized ($5-20/month) |
+| **Testing** | No unit tests | Event sourcing philosophy |
+| **Streaks** | No streaks | Milestones instead (no stress) |
+| **Auth** | None (single user) | MVP simplicity |
+| **Database** | IndexedDB (Dexie) | Local-first, privacy by default |
