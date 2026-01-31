@@ -1,63 +1,150 @@
-import Image from "next/image";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-sky-50 dark:from-zinc-900 dark:to-zinc-800">
+      <main className="container mx-auto px-4 py-16">
+        {/* Hero Section */}
+        <div className="max-w-4xl mx-auto text-center mb-16">
+          <h1 className="text-5xl font-bold text-zinc-900 dark:text-zinc-50 mb-4">
+            Way Finder
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-2">
+            Find your way to what matters
+          </p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-500 italic">
+            In memory of Stela (Pushok) 🐱
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Purpose Cards */}
+        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-16">
+          <Card className="border-emerald-200 dark:border-emerald-900">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                🌿 Gentle, Not Stressful
+              </CardTitle>
+              <CardDescription>
+                No streaks, no pressure, no guilt
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-sm text-zinc-600 dark:text-zinc-400">
+              Focus on milestones and meaningful moments. Like Stela taught us—
+              life's best moments are simple: sunshine, birds, squirrels, and presence.
+            </CardContent>
+          </Card>
+
+          <Card className="border-sky-200 dark:border-sky-900">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                📓 Journal, Not Task Manager
+              </CardTitle>
+              <CardDescription>
+                Reflect on your journey, not productivity
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-sm text-zinc-600 dark:text-zinc-400">
+              Weekly, monthly, and yearly reflection. Capture photos and memories
+              of what truly matters in your life.
+            </CardContent>
+          </Card>
+
+          <Card className="border-violet-200 dark:border-violet-900">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                🎯 AI-Powered Goals
+              </CardTitle>
+              <CardDescription>
+                Turn rough ideas into meaningful goals
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-sm text-zinc-600 dark:text-zinc-400">
+              Struggle to articulate what you want? AI helps refine your goals
+              while you keep full control. Powered by Azure OpenAI (GPT-5-nano).
+            </CardContent>
+          </Card>
+
+          <Card className="border-amber-200 dark:border-amber-900">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                📸 Photo Memories
+              </CardTitle>
+              <CardDescription>
+                Connect moments to your journey
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-sm text-zinc-600 dark:text-zinc-400">
+              Before/during/after photos for projects. Family moments, nature,
+              pets—capture what makes life meaningful.
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Stela's Memory Section */}
+        <Card className="max-w-2xl mx-auto mb-16 border-2 border-pink-200 dark:border-pink-900 bg-pink-50/30 dark:bg-pink-950/10">
+          <CardHeader>
+            <CardTitle className="text-center">
+              In Memory of Stela 💙
+            </CardTitle>
+            <CardDescription className="text-center">
+              January 24, 2026 • 9 years and 9 months
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-center text-zinc-700 dark:text-zinc-300">
+            <p className="mb-3">
+              Three weeks before she left us, Stela was playful and cheerful—
+              watching birds and squirrels, enjoying the fireplace, Christmas tree,
+              and wrapping paper.
+            </p>
+            <p className="mb-3">
+              For her final 60 hours, she fought bravely on oxygen, putting her
+              head into the mask herself.
+            </p>
+            <p className="text-sm italic">
+              This app honors her memory by helping us focus on simple, meaningful
+              moments—just like she taught us.
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Status Section */}
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50 mb-4">
+            Project Status
+          </h2>
+          <div className="bg-white dark:bg-zinc-800 rounded-lg p-6 mb-6">
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-zinc-600 dark:text-zinc-400">Phase 1: Foundation</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">✅ Complete</span>
+            </div>
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-zinc-600 dark:text-zinc-400">Phase 2: Event Store</span>
+              <span className="text-sky-600 dark:text-sky-400 font-semibold">🔄 Next</span>
+            </div>
+            <div className="text-sm text-zinc-500 dark:text-zinc-500 mt-4">
+              Overall Progress: ~20%
+            </div>
+          </div>
+
+          <div className="flex gap-4 justify-center">
+            <Button variant="default" size="lg" asChild>
+              <a
+                href="https://github.com/aleksey-cherenkov/pushok"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on GitHub
+              </a>
+            </Button>
+            <Button variant="outline" size="lg" disabled>
+              Coming Soon
+            </Button>
+          </div>
+
+          <p className="mt-8 text-sm text-zinc-500 dark:text-zinc-500">
+            Built with ❤️ using GitHub Copilot CLI • Deployed on Azure Static Web Apps
+          </p>
         </div>
       </main>
     </div>
