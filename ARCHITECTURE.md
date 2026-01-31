@@ -32,13 +32,22 @@ Pushok - Way Finder implements **Event Sourcing** and **Event Modeling** as desc
 5. **Flexibility**: Add new projections without database migrations
 6. **Offline-First**: Perfect foundation for mobile sync (future)
 
-### Design Philosophy: Journal/Diary Approach
+### Design Philosophy: Gentle Habit Tracking & Reflection
 
-Pushok is **not a task manager** or productivity tool. It's a **reflective journal** that helps you:
-- Record meaningful moments with photos
-- Track progress toward life goals (not work tasks)
-- Reflect weekly, monthly, and yearly on your journey
-- Remember why you started (In memory of Stela)
+Pushok is **not a task manager** or productivity tool with streaks. It's a **gentle companion** that helps you:
+- **Nurture good habits** without pressure or guilt
+- **Track meaningful moments** with photos and notes
+- **Reflect on progress** through aggregated views (weekly, monthly, yearly)
+- **Celebrate wins** without broken streaks or FOMO
+- **Remember what matters** (In memory of Stela - simple joys: birds, nature, presence)
+
+**Core Principles:**
+- ✅ **Aggregation without guilt**: "You walked 18 times this month!" (not "You broke a 3-day streak!")
+- ✅ **Gentle nudging**: Daily reminders without pressure
+- ✅ **Celebrate milestones**: 10 walks, 30 walks, 100 walks - feel good!
+- ✅ **Remove procrastination**: Quick check-ins make it easy to log wins
+- ❌ **No broken streaks**: Missing a day? Just keep going, no guilt
+- ❌ **No FOMO mechanics**: No countdown timers, no "losing progress"
 
 **Single User Design (MVP):**
 - No authentication required
@@ -90,64 +99,67 @@ Command → Aggregate → Events → Event Store → Projections → UI
 
 ## Event Model
 
-### Goal Aggregate
+### Habit (formerly Goal) Aggregate
 
 **Events:**
-- `GoalDraftCreated` - User starts defining a goal
-- `AIRefinementRequested` - User asks AI for help
-- `AIRefinementReceived` - AI suggests improvements
-- `AIRefinementAccepted` / `AIRefinementRejected`
-- `GoalDefined` - Final goal definition
-- `GoalCategorized` - Assign category (family, nature, health, learning, home)
-- `GoalTypeSet` - positive / negative / avoidance
-- `GoalActivated` - Start tracking
-- `GoalPaused` / `GoalResumed`
-- `GoalCompleted` - Goal achieved
-- `GoalArchived` - Remove from active list
-- `GoalProgressRecorded` - Log progress
-- `GoalMilestoneAdded` - Break into smaller milestones
-- `GoalMilestoneCompleted`
+- `HabitCreated` - User defines a habit to nurture
+- `HabitUpdated` - Modify habit details
+- `HabitCategorized` - Assign category (nature, mindfulness, connection, health, etc.)
+- `HabitRecurringSet` - Set recurrence (daily, weekly, custom)
+- `NudgeScheduleSet` - Set gentle reminder time (optional)
+- `HabitPaused` / `HabitResumed` - Temporarily pause without guilt
+- `HabitArchived` - Move to archived (no longer active)
 
-**State Reconstruction:**
+**Commands:**
+- `CreateHabit(title, description, category, recurring, nudgeTime)`
+- `UpdateHabit(habitId, updates)`
+- `SetNudgeSchedule(habitId, time)`
+- `PauseHabit(habitId)` / `ResumeHabit(habitId)`
+- `ArchiveHabit(habitId)`
+
+**Example:**
 ```typescript
-class GoalAggregate {
-  apply(event: GoalEvent): void {
-    switch (event.type) {
-      case 'GoalDefined':
-        this.title = event.payload.title;
-        this.description = event.payload.description;
-        break;
-      case 'GoalActivated':
-        this.status = 'active';
-        this.activatedAt = event.payload.activatedAt;
-        break;
-      case 'GoalProgressRecorded':
-        this.progress += event.payload.amount;
-        this.lastProgressAt = event.payload.recordedAt;
-        break;
-      // ... more cases
-    }
-  }
+habit = {
+  id: "habit_123",
+  title: "Go for daily walks",
+  description: "Connect with nature like Stela loved",
+  category: "nature",
+  recurring: "daily",
+  nudgeTime: "16:00", // 4pm gentle reminder
+  status: "active"
 }
 ```
 
-### Activity Aggregate
+### Activity Aggregate (The Check-ins)
 
 **Events:**
-- `ActivityLogged` - User logs an activity
-- `ActivityTagged` - Add tags (goal, category, people, location)
-- `ActivityDurationSet` - Set time spent
-- `ActivityNotesAdded` - Add reflection/notes
-- `ActivityPhotoAttached` - Link photos
-- `ActivityGoalLinked` - Connect to goal
+- `ActivityLogged` - User logs "I did it!" (quick check-in)
+- `ActivityNotesAdded` - Optional: Add reflection/notes
+- `ActivityPhotoAttached` - Optional: Link photos
+- `ActivityDurationSet` - Optional: Set time spent
+- `ActivityMoodSet` - Optional: How did it feel?
 - `ActivityEdited` - Modify activity
 - `ActivityDeleted` - Soft delete
 
+**Commands:**
+- `LogActivity(habitId, timestamp, note?, photo?, duration?, mood?)`
+- `AddActivityNote(activityId, note)`
+- `AttachPhoto(activityId, photoId)`
+
 **Use Cases:**
-- Log "Spent 30min with kids in park"
-- Tag with: goal="Quality time with family", category="family", people=["Emma", "Noah"]
-- Attach photos from the park
-- AI analyzes patterns: "You're most active on weekends"
+- Quick: Tap "✓ Walked today" (2 seconds, saved)
+- Detailed: "Walked 30min, saw 2 cardinals and a squirrel 🐿️ [photo attached]"
+
+**No Streaks - Just Facts:**
+```
+ActivityLogged: Jan 29 - Walked
+ActivityLogged: Jan 30 - Walked
+(Jan 31 - no event, no guilt)
+ActivityLogged: Feb 1 - Walked
+
+Aggregation shows: "3 walks this week" ✓
+NOT: "You broke a streak!" ✗
+```
 
 ### Photo Aggregate
 
@@ -248,27 +260,23 @@ class GoalAggregate {
 
 ```
 lib/
-├── event-store/
-│   ├── event-store.ts           # IndexedDB wrapper, append events
-│   ├── event-types.ts           # Event type definitions
-│   └── snapshot-store.ts        # Optional: snapshots for performance
+├── events/
+│   ├── store.ts                     # Dexie.js IndexedDB event store
+│   ├── types.ts                     # Event type definitions
+│   └── aggregate.ts                 # Base aggregate with event replay
 ├── aggregates/
-│   ├── base-aggregate.ts        # Abstract aggregate with event replay
-│   ├── goal.aggregate.ts        # Goal domain logic
-│   ├── activity.aggregate.ts    # Activity domain logic
-│   ├── photo.aggregate.ts       # Photo domain logic
-│   └── reminder.aggregate.ts    # Reminder domain logic
-├── commands/
-│   ├── goal.commands.ts         # Goal command handlers
-│   ├── activity.commands.ts     # Activity command handlers
-│   └── photo.commands.ts        # Photo command handlers
+│   ├── habit.ts                     # Habit domain logic (formerly goal)
+│   ├── activity.ts                  # Activity check-in logic
+│   ├── photo.ts                     # Photo domain logic
+│   └── reminder.ts                  # Nudge/reminder domain logic
 ├── projections/
-│   ├── goals-dashboard.projection.ts    # Active goals view
-│   ├── timeline.projection.ts           # Activity timeline
-│   ├── analytics.projection.ts          # Charts & insights
-│   └── photo-gallery.projection.ts      # Photo views
+│   ├── habits-dashboard.ts          # Active habits view
+│   ├── activity-aggregation.ts      # Weekly/monthly aggregations
+│   ├── timeline.ts                  # Activity timeline
+│   ├── analytics.ts                 # Charts & insights (NO STREAKS!)
+│   └── photo-gallery.ts             # Photo views
 └── ai/
-    ├── goal-refiner.ts          # AI goal refinement logic
+    ├── habit-refiner.ts             # AI habit refinement logic
     └── openai-client.ts         # Azure OpenAI wrapper
 ```
 
@@ -276,85 +284,63 @@ lib/
 
 ## Data Flow
 
-### Example: User Creates a Goal with AI Assistance
+### Example: User Creates a Habit & Logs Activities
 
-**Step 1: User Input**
+**Step 1: User Creates Habit**
 ```typescript
-// User types: "I want to be healthier"
-const draftGoal = { roughIdea: "I want to be healthier" };
+// User: "I want to go for daily walks"
+const habitCommand = {
+  title: "Go for daily walks",
+  description: "Connect with nature, like Stela loved",
+  category: "nature",
+  recurring: "daily",
+  nudgeTime: "16:00" // gentle 4pm reminder
+};
+
+// Create habit aggregate
+const habit = new Habit();
+habit.create(habitCommand);
+await habit.save();
+
+// Events stored:
+// - HabitCreated
+// - HabitRecurringSet
+// - NudgeScheduleSet
 ```
 
-**Step 2: Command → Aggregate**
+**Step 2: User Logs Activity (Quick Check-in)**
 ```typescript
-// Command handler
-async function createGoalDraft(draft: GoalDraft) {
-  const goalId = generateId();
-  const event = {
-    type: 'GoalDraftCreated',
-    aggregateId: goalId,
-    aggregateType: 'goal',
-    payload: draft,
-    metadata: { userId, timestamp: Date.now(), version: 1 }
-  };
-  
-  await eventStore.append(event);
-  return goalId;
-}
+// Day 1: User taps "✓ Walked today"
+const activity1 = new Activity();
+activity1.log({
+  habitId: habit.getId(),
+  timestamp: Date.now(),
+  note: "Saw cardinals at the park"
+});
+await activity1.save();
+
+// Event stored: ActivityLogged { habitId, timestamp, note }
 ```
 
-**Step 3: User Requests AI Refinement**
+**Step 3: Aggregation (Weekly Reflection)**
 ```typescript
-const aiEvent = {
-  type: 'AIRefinementRequested',
-  aggregateId: goalId,
-  payload: { roughIdea: "I want to be healthier" },
-  metadata: { userId, timestamp: Date.now(), version: 2 }
-};
+// Projection builds view from events
+const activityEvents = await eventStore.getEventsByType('ActivityLogged');
+const thisWeekActivities = activityEvents.filter(e => 
+  e.data.habitId === habit.getId() &&
+  isThisWeek(e.timestamp)
+);
 
-await eventStore.append(aiEvent);
-
-// Call Azure OpenAI
-const refinement = await refineGoalWithAI(roughIdea);
-
-const aiResultEvent = {
-  type: 'AIRefinementReceived',
-  aggregateId: goalId,
-  payload: {
-    suggestions: [
-      { title: "Exercise 30 minutes daily", category: "health", type: "positive" },
-      { title: "Eat 5 servings of vegetables daily", category: "nutrition", type: "positive" },
-      { title: "Sleep 8 hours nightly", category: "health", type: "positive" }
-    ]
-  },
-  metadata: { userId, timestamp: Date.now(), version: 3 }
-};
-
-await eventStore.append(aiResultEvent);
+// Display: "You walked 5 times this week! 🌿"
+// NOT: "You broke a streak on Tuesday" ✗
 ```
 
-**Step 4: User Selects & Activates Goal**
-```typescript
-const definedEvent = {
-  type: 'GoalDefined',
-  aggregateId: goalId,
-  payload: {
-    title: "Exercise 30 minutes daily",
-    description: "Walk, jog, or gym - 30min of movement each day",
-    category: "health",
-    type: "positive",
-    target: { value: 30, unit: "minutes", frequency: "daily" }
-  },
-  metadata: { userId, timestamp: Date.now(), version: 4 }
-};
-
-await eventStore.append(definedEvent);
-
-const activatedEvent = {
-  type: 'GoalActivated',
-  aggregateId: goalId,
-  payload: { activatedAt: Date.now() },
-  metadata: { userId, timestamp: Date.now(), version: 5 }
-};
+**The Difference:**
+- ✅ **No Streaks**: Missing Tuesday doesn't "break" anything
+- ✅ **Aggregation**: "5 times this week" feels good
+- ✅ **Gentle**: Just facts, no guilt
+- ✅ **Milestones**: 10 walks → 20 walks → 50 walks (celebrate!)
+```
 
 await eventStore.append(activatedEvent);
 ```

@@ -101,25 +101,35 @@
 
 ---
 
-### 🔄 Phase 3: Goal Management (IN PROGRESS)
+### 🔄 Phase 3: Habit Tracking & Quick Check-ins (IN PROGRESS - PIVOTED)
 
-**Status:** Building UI components for goal creation and management
+**Status:** Rebuilding for gentle habit tracking with aggregation, no streaks
 
-**Tasks:**
-- [ ] Create GoalForm component (create/edit goals)
-- [ ] Create GoalList component (display active goals)
-- [ ] Create GoalCard component (individual goal display)
-- [ ] Build goals page (`app/goals/page.tsx`)
-- [ ] Add Zustand store for UI state
-- [ ] Implement goal creation flow
-- [ ] Implement goal editing flow
-- [ ] Implement goal archival flow
-- [ ] Add goal filtering (active/archived)
-- [ ] Add goal categorization
+**Architecture Pivot:**
+- **Was:** Aspirational goals (vague directions)
+- **Now:** Habits you want to nurture + quick activity check-ins + aggregated reflections
+
+**New Tasks:**
+- [ ] Rename Goal → Habit throughout codebase
+- [ ] Add `recurring` and `nudgeTime` fields to Habit
+- [ ] Create Activity aggregate for check-ins
+- [ ] Build ActivityLogged event type
+- [ ] Create quick check-in UI ("✓ Did it today")
+- [ ] Build activity aggregation projection (weekly/monthly counts)
+- [ ] Create reflection views (no streaks, just facts)
+- [ ] Add navigation bar (Home | Habits | Timeline | Settings)
+- [ ] Update habit form for recurring options
+
+**Core Principle Changes:**
+- ✅ Track activities → aggregate → reflect
+- ✅ "You walked 18 times this month!" (good)
+- ❌ "You broke a 3-day streak!" (never say this)
+
+**Dependencies:** Phase 2 (Event Store) ✓
 
 ---
 
-### 📋 Phase 4: Journal & Reflections (Formerly Phase 3)
+### 📋 Phase 4: Journal & Reflections
 
 **Tasks:**
 - [ ] Define goal aggregate (`lib/aggregates/goal.aggregate.ts`)

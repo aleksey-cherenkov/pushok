@@ -4,7 +4,7 @@
 
 ---
 
-## Stela (La-La-La) (Belij Parahod) (Darth Vader when sick and heavy breathing) (Pushok)
+## Stela (La-La-La) (Belij Parahod) (Pushistik) (Medvezhonok) (Princessa) (Darth Vader when sick and heavy breathing) (Pushok)
 
 **Born**: ~April 7, 2016
 **Passed**: January 23, 2026  

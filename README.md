@@ -12,34 +12,42 @@ Built with **GitHub Copilot CLI** for the **Build with GitHub Copilot** challeng
 
 ## 🌟 Why Pushok?
 
-We spend hours chasing virtual rewards in games while neglecting the real rewards in life - time with loved ones, moments in nature, personal growth, and meaningful connections. Pushok - your way finder (named after our beloved cat Stela) - helps you discover and navigate toward:
+We spend hours chasing virtual rewards in games while neglecting the real rewards in life - time with loved ones, moments in nature, personal growth, and meaningful connections. Pushok - your way finder (named after our beloved cat Stela) - helps you nurture good habits with:
 
+- **No Guilt**: Miss a day? No problem. No broken streaks, no pressure.
+- **Aggregation**: "You walked 18 times this month!" - celebrate wins!
+- **Gentle Nudging**: Daily reminders without stress or FOMO
+- **Meaningful Reflection**: Weekly/monthly views show progress over time
+- **Remove Procrastination**: Quick 2-second check-ins make logging easy
+
+**What matters:**
 - **Connect**: Talk to parents, spend time with kids and pets
-- **Experience**: Look outside, enjoy nature, be present
-- **Grow**: Self-study, home improvement, healthy lifestyle
-- **Reflect**: Track progress, celebrate wins, learn from patterns
+- **Experience**: Walk in nature, watch birds, be present
+- **Grow**: Self-improvement, healthy habits, creativity
+- **Reflect**: Celebrate progress without productivity pressure
 
 ---
 
 ## ✨ Core Features
 
-### 🎯 AI-Powered Goal Definition
-- Struggle to articulate goals? AI helps you refine and structure them
-- Claude/Copilot CLI style: shows suggestions, allows clarify & regenerate
-- You always have final control over your goals
-- Cost-optimized with GPT-5-nano (with prompt caching)
+### 🌿 Gentle Habit Tracking
+- Create habits you want to nurture (daily walks, time with family, etc.)
+- Quick check-ins: "✓ Did it today" (2 seconds, no friction)
+- Optional details: Add notes, photos, mood, duration
+- **Aggregated reflections**: "5 walks this week" - feel good!
+- **NO STREAKS**: Missing a day doesn't break anything
 
-### 📸 Photo Timeline & Memories
-- Connect memorable photos to your life goals and activities
-- Project photos: before/during/after for home improvement, creative work
-- Family & pets, nature moments (Stela's favorites: birds, squirrels, sunshine)
-- Special memorial gallery for Stela
+### 🔔 Gentle Reminders (No Guilt)
+- Optional daily nudges at your preferred time
+- "Hey, want to go for a walk?" - suggestion, not pressure
+- No countdown timers, no "you're about to lose your streak!"
+- Learn from your patterns: suggest optimal times
 
-### 📓 Journal/Diary Approach
-- Weekly, monthly, yearly reflection on your wins
-- Milestones instead of streaks (no stress from broken chains)
-- Quick logging with optional details for better reminiscence
-- Focus on meaningful moments, not productivity metrics
+### 📊 Reflection Views (Not Productivity Metrics)
+- Weekly/monthly/yearly aggregations
+- Milestone celebrations: 10 walks → 50 walks → 100 walks
+- Charts show trends without guilt
+- Focus on what you **did** accomplish, not what you missed
 
 ### 🔄 Event Sourcing Architecture
 - Complete audit trail of your journey
