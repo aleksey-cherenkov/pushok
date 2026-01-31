@@ -59,18 +59,19 @@
 - [x] Create DEPLOYMENT.md
 - [x] Create GitHub Copilot instructions (`.github/copilot-instructions.md`)
 - [x] Configure VS Code settings for Copilot (`.vscode/settings.json`)
-- [ ] Add shadcn/ui components (moved to Phase 3)
+- [x] Add shadcn/ui components
 - [x] Configure GitHub repository
 - [x] Set up Azure Static Web Apps resource
 - [x] Set up Azure OpenAI resource with GPT-5-nano
 - [x] Configure GitHub Actions workflows
 - [x] Configure custom domain (pushok.life)
 - [x] Test successful deployment
+- [x] Create homepage with Stela's memorial
 
-**Achievement Unlocked:** Full production deployment pipeline! 🚀
+**Achievement Unlocked:** Full production deployment pipeline + First UI! 🚀
 
 **Next Steps:**
-1. Initialize shadcn/ui when building UI
+1. ✅ shadcn/ui initialized with first components
 2. Begin Phase 2: Event Store Implementation
 
 ---
@@ -506,13 +507,13 @@ MIT License - See LICENSE file
 
 ## Status Summary
 
-**Current Phase**: Phase 1 Complete ✅ → Phase 2 Starting (Event Store Implementation)
-**Completion**: ~20% (Foundation + full deployment infrastructure complete)
+**Current Phase**: Phase 1 Complete ✅ → UI Added ✅ → Phase 2 Starting (Event Store Implementation)
+**Completion**: ~25% (Foundation + deployment + first UI complete)
 **Next Milestone**: Working event store with goal creation
 **Timeline**: ~1 week for GitHub Copilot CLI Challenge, then ongoing if useful
 **Approach**: Journal/diary for meaningful living, not task manager
 
-**Deployment Status:** 🎉 LIVE at https://pushok.life
+**Deployment Status:** 🎉 LIVE at https://pushok.life with beautiful homepage
 
 **Key Decisions Made:**
 - Single user (no auth) for MVP
@@ -522,6 +523,7 @@ MIT License - See LICENSE file
 - Gentle reminders like Stela
 - SSR mode for Azure Static Web Apps (API routes support)
 - Cloudflare DNS for pushok.life domain
+- shadcn/ui with Neutral color scheme and calming nature colors
 
 **Infrastructure Complete:**
 - ✅ Next.js 16 with SSR mode
@@ -531,6 +533,8 @@ MIT License - See LICENSE file
 - ✅ GitHub Actions CI/CD pipeline
 - ✅ Environment variables configured
 - ✅ Auto-deployment on every push to main
+- ✅ shadcn/ui components (Button, Card)
+- ✅ Beautiful homepage with Stela's memorial
 
 ---
 
