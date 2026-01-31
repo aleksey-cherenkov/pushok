@@ -57,5 +57,8 @@
   },
 
   // Recommended Extensions Trigger
-  "extensions.ignoreRecommendations": false
+  "extensions.ignoreRecommendations": false,
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  }
 }

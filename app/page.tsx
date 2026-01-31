@@ -19,9 +19,18 @@ export default function Home() {
           <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-2">
             Find your way to what matters
           </p>
-          <p className="text-sm text-zinc-500 dark:text-zinc-500 italic">
+          <p className="text-sm text-zinc-500 dark:text-zinc-500 italic mb-8">
             In memory of Stela (Pushok) 🐱
           </p>
+
+          <div className="flex gap-4 justify-center">
+            <Button size="lg" asChild>
+              <a href="/goals">View Goals</a>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <a href="/goals">+ Create Goal</a>
+            </Button>
+          </div>
         </div>
 
         {/* Purpose Cards */}
