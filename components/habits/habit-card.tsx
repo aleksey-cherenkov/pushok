@@ -6,6 +6,7 @@ import type { HabitState } from '@/lib/aggregates/habit';
 
 interface HabitCardProps {
   habit: HabitState;
+  activityCount?: number;
   onEdit?: (habitId: string) => void;
   onArchive?: (habitId: string) => void;
   onLogActivity?: (habitId: string) => void;
@@ -21,7 +22,7 @@ const categoryEmojis: Record<string, string> = {
   home: '🏠',
 };
 
-export function HabitCard({ habit, onEdit, onArchive, onLogActivity }: HabitCardProps) {
+export function HabitCard({ habit, activityCount = 0, onEdit, onArchive, onLogActivity }: HabitCardProps) {
   const categoryEmoji = habit.category ? categoryEmojis[habit.category] : '✨';
   
   const formatDate = (timestamp: number) => {
@@ -83,6 +84,11 @@ export function HabitCard({ habit, onEdit, onArchive, onLogActivity }: HabitCard
 
         <div className="flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
           <span>Started {formatDate(habit.createdAt)}</span>
+          {activityCount > 0 && (
+            <span className="text-emerald-600 dark:text-emerald-400 font-medium">
+              • {activityCount} {activityCount === 1 ? 'time' : 'times'} logged ✨
+            </span>
+          )}
         </div>
 
         {!habit.archived && (

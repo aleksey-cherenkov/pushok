@@ -9,6 +9,7 @@ import { eventStore } from '@/lib/events/store';
 
 export default function HabitsPage() {
   const [habits, setHabits] = useState<HabitState[]>([]);
+  const [activityCounts, setActivityCounts] = useState<Record<string, number>>({});
   const [showForm, setShowForm] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -37,6 +38,15 @@ export default function HabitsPage() {
       // Sort by created date (newest first)
       loadedHabits.sort((a, b) => b.createdAt - a.createdAt);
       setHabits(loadedHabits);
+
+      // Calculate activity counts
+      const activityEvents = events.filter((e) => e.type === 'ActivityLogged');
+      const counts: Record<string, number> = {};
+      for (const event of activityEvents) {
+        const habitId = event.data.habitId;
+        counts[habitId] = (counts[habitId] || 0) + 1;
+      }
+      setActivityCounts(counts);
     } catch (error) {
       console.error('Failed to load habits:', error);
     } finally {
@@ -66,9 +76,24 @@ export default function HabitsPage() {
   };
 
   const handleLogActivity = async (habitId: string) => {
-    // TODO: Implement activity logging with modal or quick log
-    console.log('Log activity for habit:', habitId);
-    alert('Activity logging coming soon! 🎯');
+    try {
+      const { Activity } = await import('@/lib/aggregates/activity');
+      const activity = new Activity();
+      activity.log({
+        habitId,
+        completed: true,
+      });
+      await activity.save();
+      
+      // Show success feedback
+      alert('✅ Logged! Great job!');
+      
+      // Reload to update counts
+      await loadHabits();
+    } catch (error) {
+      console.error('Failed to log activity:', error);
+      alert('Failed to log activity. Please try again.');
+    }
   };
 
   if (loading) {
@@ -126,6 +151,7 @@ export default function HabitsPage() {
         {/* Habit List */}
         <HabitList
           habits={habits}
+          activityCounts={activityCounts}
           onArchive={handleArchive}
           onLogActivity={handleLogActivity}
           showArchived={showArchived}

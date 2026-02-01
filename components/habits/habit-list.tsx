@@ -5,6 +5,7 @@ import type { HabitState } from '@/lib/aggregates/habit';
 
 interface HabitListProps {
   habits: HabitState[];
+  activityCounts?: Record<string, number>;
   onEdit?: (habitId: string) => void;
   onArchive?: (habitId: string) => void;
   onLogActivity?: (habitId: string) => void;
@@ -13,6 +14,7 @@ interface HabitListProps {
 
 export function HabitList({
   habits,
+  activityCounts = {},
   onEdit,
   onArchive,
   onLogActivity,
@@ -70,6 +72,7 @@ export function HabitList({
             <HabitCard
               key={habit.id}
               habit={habit}
+              activityCount={activityCounts[habit.id] || 0}
               onEdit={onEdit}
               onArchive={onArchive}
               onLogActivity={onLogActivity}
