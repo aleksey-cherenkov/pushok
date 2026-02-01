@@ -114,9 +114,6 @@ export default function HabitsPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <a href="/" className="text-sm text-sky-600 dark:text-sky-400 hover:underline mb-2 inline-block">
-              ← Back to Home
-            </a>
             <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-50">
               Your Habits
             </h1>

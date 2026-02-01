@@ -219,16 +219,6 @@ export default function TodayPage() {
           )}
         </div>
 
-        {/* Quick Links */}
-        <div className="flex gap-3 justify-center pt-4">
-          <Button variant="outline" asChild>
-            <a href="/">← Home</a>
-          </Button>
-          <Button variant="outline" asChild>
-            <a href="/habits">Manage Habits</a>
-          </Button>
-        </div>
-
         {/* Motivational Footer */}
         {completedCount > 0 && (
           <div className="text-center py-6">
