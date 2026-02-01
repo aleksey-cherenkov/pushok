@@ -76,11 +76,10 @@ We spend hours chasing virtual rewards in games while neglecting the real reward
 - **Budget**: $1-5/month for AI + hosting
 
 ### Why Event Sourcing?
-- **Complete History**: Every goal change, activity logged as immutable facts
+- **Complete History**: Every habit change, activity logged as immutable facts
 - **Time Travel**: Replay events to see patterns at any point in time
 - **Flexible Views**: Multiple projections from same data
 - **Future-Proof**: Perfect foundation for mobile sync
-- **No Unit Tests Needed**: Events are the source of truth - if they're correct, state is correct
 - **Simple Development**: Delete IndexedDB and restart fresh during development
 
 ---
@@ -121,25 +120,16 @@ npm start
 ```
 pushok/
 ├── app/                    # Next.js App Router
-│   ├── (dashboard)/       # Main dashboard routes
-│   │   ├── goals/         # Goal management
-│   │   ├── timeline/      # Activity & photo timeline
-│   │   ├── analytics/     # Progress & insights
-│   │   └── settings/      # User preferences
-│   └── api/               # API routes
-│       ├── ai/            # Azure OpenAI integration
-│       └── events/        # Event store API
+│   ├── habits/            # Habit management
+│   ├── api/               # API routes (future)
+│   └── page.tsx           # Homepage
 ├── lib/                   # Core business logic
-│   ├── event-store/       # Event sourcing implementation
-│   ├── aggregates/        # Domain aggregates (Goal, Activity, Photo)
-│   ├── projections/       # Read models for UI
-│   ├── commands/          # Command handlers
-│   └── ai/                # AI integration helpers
+│   ├── events/            # Event sourcing (types, store, aggregate)
+│   ├── aggregates/        # Domain aggregates (Habit)
+│   └── ai/                # AI integration helpers (future)
 ├── components/            # React components
 │   ├── ui/                # shadcn/ui components
-│   ├── goals/             # Goal-specific components
-│   ├── timeline/          # Timeline components
-│   └── photos/            # Photo gallery components
+│   └── habits/            # Habit-specific components
 └── hooks/                 # Custom React hooks
 ```
 
@@ -150,16 +140,14 @@ pushok/
 Pushok uses **Event Sourcing** - all state changes are stored as immutable events in an append-only log.
 
 ### Key Aggregates
-- **Goal**: User goals (positive or avoidance), milestones, progress
-- **Activity**: Logged activities linked to goals (quick or detailed)
-- **Photo**: Photos with phases (before/during/after), tags, goal links
-- **Reminder**: Gentle scheduled reminders (daily digest style)
+- **Habit**: Activities you want to nurture (walks, time with family, etc.)
+- **Activity**: Logged check-ins with optional details
+- **Photo**: Photos with phases (before/during/after), tags (future)
+- **Reminder**: Gentle scheduled reminders (future)
 
 ### Sample Events
 ```typescript
-GoalDefined → AIRefinementReceived → GoalActivated → GoalMilestoneCompleted
-ActivityLogged → PhotoAttached → ActivityTagged
-PhotoUploaded → PhotoPhaseSet → PhotoLinkedToGoal
+HabitCreated → HabitUpdated → ActivityLogged → MilestoneReached
 ```
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed event model.
@@ -245,29 +233,26 @@ npm run type-check   # TypeScript check
 
 ### Phase 1: Foundation ✅ COMPLETE
 - [x] Project setup with Next.js 16
-- [x] Project documentation (README, ARCHITECTURE, PROJECT, DEPLOYMENT)
-- [x] Azure Static Web Apps deployment configured
-- [x] Azure OpenAI resource and GPT-5-nano model deployed
-- [x] Custom domain (pushok.life) configured with SSL
-- [x] GitHub Actions CI/CD pipeline working
-- [x] First successful deployment to production
-- [x] shadcn/ui initialized with Button and Card components
-- [x] Beautiful homepage created with Stela's memorial 💙
-- [ ] Event store implementation (Phase 2)
-- [ ] Core goal management (Phase 3)
+- [x] Project documentation
+- [x] Azure Static Web Apps deployment
+- [x] Custom domain (pushok.life) with SSL
+- [x] GitHub Actions CI/CD pipeline
+- [x] shadcn/ui components
+- [x] Homepage with Stela's memorial 💙
+- [x] Event store implementation
+- [x] Core habit management UI
 
-**🎉 Live at https://pushok.life** with UI!
+**🎉 Live at https://pushok.life**
 
-### Phase 2: Core Features (Current - GitHub Copilot CLI Challenge)
-- [ ] AI goal refinement (GPT-5-nano with prompt caching)
-- [ ] Activity tracking (quick + detailed logging)
-- [ ] Photo timeline (projects, family, nature)
-- [ ] Gentle reminder system (daily digest)
+### Phase 2: Core Features (Current)
+- [ ] Activity logging (quick check-ins)
+- [ ] Today's Focus dashboard
+- [ ] AI habit refinement (GPT-5-nano)
+- [ ] Weekly/monthly aggregations
 
 ### Phase 3: Polish & Submit
-- [ ] Dashboard with weekly/monthly/yearly reflection
-- [ ] Milestone tracking (no streaks)
-- [ ] Stela memorial gallery
+- [ ] Milestone celebrations
+- [ ] Reflection views
 - [ ] Demo video for challenge submission
 
 ### Phase 4: Future (Post-Challenge)

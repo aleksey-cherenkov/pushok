@@ -3,53 +3,57 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Goal } from '@/lib/aggregates/goal';
+import { Habit } from '@/lib/aggregates/habit';
 
-interface GoalFormProps {
-  onSubmit?: (goal: Goal) => void;
+interface HabitFormProps {
+  onSubmit?: (habit: Habit) => void;
   onCancel?: () => void;
   initialData?: {
     title: string;
     description?: string;
     category?: string;
-    targetDate?: string;
+    recurring?: 'daily' | 'weekly' | 'custom';
+    nudgeTime?: string;
   };
 }
 
-export function GoalForm({ onSubmit, onCancel, initialData }: GoalFormProps) {
+export function HabitForm({ onSubmit, onCancel, initialData }: HabitFormProps) {
   const [title, setTitle] = useState(initialData?.title || '');
   const [description, setDescription] = useState(initialData?.description || '');
   const [category, setCategory] = useState(initialData?.category || '');
-  const [targetDate, setTargetDate] = useState(initialData?.targetDate || '');
+  const [recurring, setRecurring] = useState<'daily' | 'weekly' | 'custom'>(initialData?.recurring || 'daily');
+  const [nudgeTime, setNudgeTime] = useState(initialData?.nudgeTime || '');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const goal = new Goal();
-    goal.create({
+    const habit = new Habit();
+    habit.create({
       title,
       description: description || undefined,
       category: category || undefined,
-      targetDate: targetDate || undefined,
+      recurring: recurring as 'daily' | 'weekly' | 'custom',
+      nudgeTime: nudgeTime || undefined,
     });
 
-    await goal.save();
+    await habit.save();
 
     if (onSubmit) {
-      onSubmit(goal);
+      onSubmit(habit);
     }
 
     // Reset form
     setTitle('');
     setDescription('');
     setCategory('');
-    setTargetDate('');
+    setRecurring('daily');
+    setNudgeTime('');
   };
 
   return (
     <Card className="w-full max-w-2xl">
       <CardHeader>
-        <CardTitle>Create a New Goal</CardTitle>
+        <CardTitle>Create a New Habit</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -59,7 +63,7 @@ export function GoalForm({ onSubmit, onCancel, initialData }: GoalFormProps) {
               htmlFor="title"
               className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2"
             >
-              What would you like to focus on? *
+              What habit would you like to nurture? *
             </label>
             <input
               type="text"
@@ -67,7 +71,7 @@ export function GoalForm({ onSubmit, onCancel, initialData }: GoalFormProps) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              placeholder="e.g., Watch birds for 10 minutes daily"
+              placeholder="e.g., Go for a walk, Do pushups, Read before bed"
               className="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md 
                          bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100
                          focus:ring-2 focus:ring-sky-500 focus:border-transparent"
@@ -94,6 +98,28 @@ export function GoalForm({ onSubmit, onCancel, initialData }: GoalFormProps) {
             />
           </div>
 
+          {/* Recurring */}
+          <div>
+            <label
+              htmlFor="recurring"
+              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2"
+            >
+              How often?
+            </label>
+            <select
+              id="recurring"
+              value={recurring}
+              onChange={(e) => setRecurring(e.target.value as 'daily' | 'weekly' | 'custom')}
+              className="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md 
+                         bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100
+                         focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+            >
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+
           {/* Category */}
           <div>
             <label
@@ -111,42 +137,42 @@ export function GoalForm({ onSubmit, onCancel, initialData }: GoalFormProps) {
                          focus:ring-2 focus:ring-sky-500 focus:border-transparent"
             >
               <option value="">Choose a category (optional)</option>
+              <option value="health">🌱 Health & Fitness</option>
               <option value="nature">🌿 Nature & Outdoors</option>
               <option value="mindfulness">🧘 Mindfulness & Presence</option>
-              <option value="creativity">🎨 Creativity & Expression</option>
-              <option value="connection">💚 Connection & Relationships</option>
+              <option value="family">👨‍👩‍👧 Family & Connection</option>
               <option value="learning">📚 Learning & Growth</option>
-              <option value="health">🌱 Health & Wellness</option>
-              <option value="simplicity">✨ Simplicity & Joy</option>
+              <option value="creativity">🎨 Creativity & Expression</option>
+              <option value="home">🏠 Home & Organization</option>
             </select>
           </div>
 
-          {/* Target Date */}
+          {/* Nudge Time */}
           <div>
             <label
-              htmlFor="targetDate"
+              htmlFor="nudgeTime"
               className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2"
             >
-              When would you like to explore this by?
+              Gentle reminder time (optional)
             </label>
             <input
-              type="date"
-              id="targetDate"
-              value={targetDate}
-              onChange={(e) => setTargetDate(e.target.value)}
+              type="time"
+              id="nudgeTime"
+              value={nudgeTime}
+              onChange={(e) => setNudgeTime(e.target.value)}
               className="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md 
                          bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100
                          focus:ring-2 focus:ring-sky-500 focus:border-transparent"
             />
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-              Optional - think of this as gentle guidance, not a deadline
+              A soft nudge, not pressure. Skip days guilt-free.
             </p>
           </div>
 
           {/* Actions */}
           <div className="flex gap-3 pt-4">
             <Button type="submit" className="flex-1">
-              Create Goal
+              Create Habit
             </Button>
             {onCancel && (
               <Button type="button" variant="outline" onClick={onCancel}>

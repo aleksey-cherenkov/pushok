@@ -1,7 +1,16 @@
 // Comprehensive Activity Data Model
 // Flexible structure for aspirations, habits, projects, tasks, and time blocks
 
-import type { BaseEvent } from './types';
+// Local base event type for this model (not yet integrated with main event store)
+interface ModelBaseEvent {
+  id: string;
+  aggregateId: string;
+  aggregateType: string;
+  type: string;
+  timestamp: number;
+  version: number;
+  metadata?: Record<string, unknown>;
+}
 
 // ============================================================================
 // LAYER 1: ASPIRATIONS - Long-term life directions
@@ -21,7 +30,7 @@ export interface Aspiration {
 }
 
 // Aspiration Events
-export interface AspirationCreatedEvent extends BaseEvent {
+export interface AspirationCreatedEvent extends ModelBaseEvent {
   type: 'AspirationCreated';
   data: {
     title: string;
@@ -30,12 +39,12 @@ export interface AspirationCreatedEvent extends BaseEvent {
   };
 }
 
-export interface AspirationUpdatedEvent extends BaseEvent {
+export interface AspirationUpdatedEvent extends ModelBaseEvent {
   type: 'AspirationUpdated';
   data: Partial<Aspiration>;
 }
 
-export interface AspirationReviewedEvent extends BaseEvent {
+export interface AspirationReviewedEvent extends ModelBaseEvent {
   type: 'AspirationReviewed';
   data: {
     reviewedAt: number;
@@ -45,14 +54,14 @@ export interface AspirationReviewedEvent extends BaseEvent {
   };
 }
 
-export interface AspirationRetiredEvent extends BaseEvent {
+export interface AspirationRetiredEvent extends ModelBaseEvent {
   type: 'AspirationRetired';
   data: {
     reason?: string;              // "Achieved", "No longer relevant", etc.
   };
 }
 
-export interface ActivityLinkedToAspirationEvent extends BaseEvent {
+export interface ActivityLinkedToAspirationEvent extends ModelBaseEvent {
   type: 'ActivityLinkedToAspiration';
   data: {
     activityId: string;
@@ -193,7 +202,7 @@ export interface ActivityLog {
 // ============================================================================
 
 // Activity Lifecycle Events
-export interface ActivityCreatedEvent extends BaseEvent {
+export interface ActivityCreatedEvent extends ModelBaseEvent {
   type: 'ActivityCreated';
   data: {
     activityType: ActivityType;
@@ -205,31 +214,31 @@ export interface ActivityCreatedEvent extends BaseEvent {
   };
 }
 
-export interface ActivityUpdatedEvent extends BaseEvent {
+export interface ActivityUpdatedEvent extends ModelBaseEvent {
   type: 'ActivityUpdated';
   data: Partial<ActivityState>;
 }
 
-export interface ActivityPausedEvent extends BaseEvent {
+export interface ActivityPausedEvent extends ModelBaseEvent {
   type: 'ActivityPaused';
   data: {
     reason?: string;
   };
 }
 
-export interface ActivityResumedEvent extends BaseEvent {
+export interface ActivityResumedEvent extends ModelBaseEvent {
   type: 'ActivityResumed';
   data: Record<string, never>;
 }
 
-export interface ActivityCompletedEvent extends BaseEvent {
+export interface ActivityCompletedEvent extends ModelBaseEvent {
   type: 'ActivityCompleted';
   data: {
     completedAt: number;
   };
 }
 
-export interface ActivityArchivedEvent extends BaseEvent {
+export interface ActivityArchivedEvent extends ModelBaseEvent {
   type: 'ActivityArchived';
   data: {
     reason?: string;
@@ -237,14 +246,14 @@ export interface ActivityArchivedEvent extends BaseEvent {
 }
 
 // LLM-Generated Breakdown Events
-export interface LLMBreakdownRequestedEvent extends BaseEvent {
+export interface LLMBreakdownRequestedEvent extends ModelBaseEvent {
   type: 'LLMBreakdownRequested';
   data: {
     prompt: string;           // User's description
   };
 }
 
-export interface LLMBreakdownReceivedEvent extends BaseEvent {
+export interface LLMBreakdownReceivedEvent extends ModelBaseEvent {
   type: 'LLMBreakdownReceived';
   data: {
     subtasks: SubTask[];
@@ -254,7 +263,7 @@ export interface LLMBreakdownReceivedEvent extends BaseEvent {
   };
 }
 
-export interface LLMBreakdownAcceptedEvent extends BaseEvent {
+export interface LLMBreakdownAcceptedEvent extends ModelBaseEvent {
   type: 'LLMBreakdownAccepted';
   data: {
     subtaskIds: string[];
@@ -262,7 +271,7 @@ export interface LLMBreakdownAcceptedEvent extends BaseEvent {
 }
 
 // Activity Logging Events
-export interface ActivityLoggedEvent extends BaseEvent {
+export interface ActivityLoggedEvent extends ModelBaseEvent {
   type: 'ActivityLogged';
   data: {
     value?: number;
@@ -276,7 +285,7 @@ export interface ActivityLoggedEvent extends BaseEvent {
   };
 }
 
-export interface ActivityLogUpdatedEvent extends BaseEvent {
+export interface ActivityLogUpdatedEvent extends ModelBaseEvent {
   type: 'ActivityLogUpdated';
   data: {
     logId: string;
@@ -284,7 +293,7 @@ export interface ActivityLogUpdatedEvent extends BaseEvent {
   };
 }
 
-export interface ActivityLogDeletedEvent extends BaseEvent {
+export interface ActivityLogDeletedEvent extends ModelBaseEvent {
   type: 'ActivityLogDeleted';
   data: {
     logId: string;
@@ -292,7 +301,7 @@ export interface ActivityLogDeletedEvent extends BaseEvent {
 }
 
 // SubTask Events (for projects)
-export interface SubTaskStartedEvent extends BaseEvent {
+export interface SubTaskStartedEvent extends ModelBaseEvent {
   type: 'SubTaskStarted';
   data: {
     subtaskId: string;
@@ -300,7 +309,7 @@ export interface SubTaskStartedEvent extends BaseEvent {
   };
 }
 
-export interface SubTaskCompletedEvent extends BaseEvent {
+export interface SubTaskCompletedEvent extends ModelBaseEvent {
   type: 'SubTaskCompleted';
   data: {
     subtaskId: string;
@@ -309,7 +318,7 @@ export interface SubTaskCompletedEvent extends BaseEvent {
   };
 }
 
-export interface SubTaskPhotoAddedEvent extends BaseEvent {
+export interface SubTaskPhotoAddedEvent extends ModelBaseEvent {
   type: 'SubTaskPhotoAdded';
   data: {
     subtaskId: string;
@@ -319,7 +328,7 @@ export interface SubTaskPhotoAddedEvent extends BaseEvent {
 }
 
 // Nudge/Reminder Events (future)
-export interface NudgeScheduledEvent extends BaseEvent {
+export interface NudgeScheduledEvent extends ModelBaseEvent {
   type: 'NudgeScheduled';
   data: {
     time: string;             // "16:00"
@@ -327,7 +336,7 @@ export interface NudgeScheduledEvent extends BaseEvent {
   };
 }
 
-export interface NudgeUpdatedEvent extends BaseEvent {
+export interface NudgeUpdatedEvent extends ModelBaseEvent {
   type: 'NudgeUpdated';
   data: {
     time?: string;

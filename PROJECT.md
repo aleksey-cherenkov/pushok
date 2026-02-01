@@ -101,24 +101,27 @@
 
 ---
 
-### 🔄 Phase 3: Habit Tracking & Quick Check-ins (IN PROGRESS - PIVOTED)
+### ✅ Phase 3: Habit Tracking & Quick Check-ins (COMPLETED)
 
-**Status:** Rebuilding for gentle habit tracking with aggregation, no streaks
+**Status:** Core habit tracking UI built and ready for activity logging!
 
 **Architecture Pivot:**
 - **Was:** Aspirational goals (vague directions)
 - **Now:** Habits you want to nurture + quick activity check-ins + aggregated reflections
 
-**New Tasks:**
-- [ ] Rename Goal → Habit throughout codebase
-- [ ] Add `recurring` and `nudgeTime` fields to Habit
-- [ ] Create Activity aggregate for check-ins
-- [ ] Build ActivityLogged event type
-- [ ] Create quick check-in UI ("✓ Did it today")
+**Completed Tasks:**
+- [x] Rename Goal → Habit throughout codebase
+- [x] Add `recurring` and `nudgeTime` fields to Habit
+- [x] Create Habit aggregate with create/update/archive commands
+- [x] Build habit form for recurring options
+- [x] Create habit card with "Log Today" button
+- [x] Add back link to dashboard
+
+**Next Tasks (Phase 4):**
+- [ ] Implement ActivityLogged event handling
 - [ ] Build activity aggregation projection (weekly/monthly counts)
-- [ ] Create reflection views (no streaks, just facts)
+- [ ] Create Today's Focus dashboard
 - [ ] Add navigation bar (Home | Habits | Timeline | Settings)
-- [ ] Update habit form for recurring options
 
 **Core Principle Changes:**
 - ✅ Track activities → aggregate → reflect
@@ -539,10 +542,12 @@ MIT License - See LICENSE file
 
 ## Status Summary
 
-**Current Phase**: Phase 1 Complete ✅ → UI Added ✅ → Phase 2 Starting (Event Store Implementation)
-**Completion**: ~25% (Foundation + deployment + first UI complete)
-**Next Milestone**: Working event store with goal creation
-**Timeline**: ~1 week for GitHub Copilot CLI Challenge, then ongoing if useful
+**Status Summary**
+
+**Current Phase**: Phase 3 Complete ✅ → Phase 4 Starting (Activity Logging & Dashboard)
+**Completion**: ~40% (Foundation + deployment + habit UI complete)
+**Next Milestone**: Working activity logging with aggregations
+**Timeline**: GitHub Copilot CLI Challenge
 **Approach**: Journal/diary for meaningful living, not task manager
 
 **Deployment Status:** 🎉 LIVE at https://pushok.life with beautiful homepage

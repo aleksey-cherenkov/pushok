@@ -25,10 +25,10 @@ export default function Home() {
 
           <div className="flex gap-4 justify-center">
             <Button size="lg" asChild>
-              <a href="/goals">View Goals</a>
+              <a href="/habits">View Habits</a>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <a href="/goals">+ Create Goal</a>
+              <a href="/habits">+ Create Habit</a>
             </Button>
           </div>
         </div>

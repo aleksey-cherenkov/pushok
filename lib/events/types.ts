@@ -1,11 +1,13 @@
 // Event Sourcing - Event Type Definitions
 
 export type EventType =
-  | 'GoalCreated'
-  | 'GoalUpdated'
-  | 'GoalArchived'
-  | 'JournalEntryAdded'
-  | 'JournalEntryUpdated'
+  | 'HabitCreated'
+  | 'HabitUpdated'
+  | 'HabitArchived'
+  | 'HabitPaused'
+  | 'HabitResumed'
+  | 'ActivityLogged'
+  | 'ActivityUpdated'
   | 'ReflectionAdded'
   | 'MilestoneReached';
 
@@ -19,51 +21,70 @@ export interface BaseEvent {
   metadata?: Record<string, unknown>;
 }
 
-// Goal Events
-export interface GoalCreatedEvent extends BaseEvent {
-  type: 'GoalCreated';
+// Habit Events
+export interface HabitCreatedEvent extends BaseEvent {
+  type: 'HabitCreated';
   data: {
     title: string;
     description?: string;
     category?: string;
-    targetDate?: string;
+    linkedAspirationId?: string;
+    recurring?: 'daily' | 'weekly' | 'custom';
+    nudgeTime?: string;
   };
 }
 
-export interface GoalUpdatedEvent extends BaseEvent {
-  type: 'GoalUpdated';
+export interface HabitUpdatedEvent extends BaseEvent {
+  type: 'HabitUpdated';
   data: {
     title?: string;
     description?: string;
     category?: string;
-    targetDate?: string;
+    linkedAspirationId?: string;
+    recurring?: 'daily' | 'weekly' | 'custom';
+    nudgeTime?: string;
   };
 }
 
-export interface GoalArchivedEvent extends BaseEvent {
-  type: 'GoalArchived';
+export interface HabitArchivedEvent extends BaseEvent {
+  type: 'HabitArchived';
   data: {
     reason?: string;
   };
 }
 
-// Journal Events
-export interface JournalEntryAddedEvent extends BaseEvent {
-  type: 'JournalEntryAdded';
+export interface HabitPausedEvent extends BaseEvent {
+  type: 'HabitPaused';
   data: {
-    content: string;
-    mood?: string;
-    tags?: string[];
-    goalIds?: string[];
+    reason?: string;
   };
 }
 
-export interface JournalEntryUpdatedEvent extends BaseEvent {
-  type: 'JournalEntryUpdated';
+export interface HabitResumedEvent extends BaseEvent {
+  type: 'HabitResumed';
+  data: Record<string, never>;
+}
+
+// Activity Log Events (when you do something)
+export interface ActivityLoggedEvent extends BaseEvent {
+  type: 'ActivityLogged';
   data: {
-    content?: string;
+    habitId: string;
+    value?: number;
+    completed?: boolean;
+    notes?: string;
     mood?: string;
-    tags?: string[];
+    photoIds?: string[];
+  };
+}
+
+export interface ActivityUpdatedEvent extends BaseEvent {
+  type: 'ActivityUpdated';
+  data: {
+    logId: string;
+    value?: number;
+    notes?: string;
+    mood?: string;
   };
 }
 
@@ -72,8 +93,8 @@ export interface ReflectionAddedEvent extends BaseEvent {
   type: 'ReflectionAdded';
   data: {
     content: string;
-    journalEntryId?: string;
-    goalId?: string;
+    habitId?: string;
+    period?: 'weekly' | 'monthly' | 'quarterly';
   };
 }
 
@@ -81,17 +102,20 @@ export interface ReflectionAddedEvent extends BaseEvent {
 export interface MilestoneReachedEvent extends BaseEvent {
   type: 'MilestoneReached';
   data: {
-    goalId: string;
+    habitId: string;
     title: string;
+    count: number;
     description?: string;
   };
 }
 
 export type Event =
-  | GoalCreatedEvent
-  | GoalUpdatedEvent
-  | GoalArchivedEvent
-  | JournalEntryAddedEvent
-  | JournalEntryUpdatedEvent
+  | HabitCreatedEvent
+  | HabitUpdatedEvent
+  | HabitArchivedEvent
+  | HabitPausedEvent
+  | HabitResumedEvent
+  | ActivityLoggedEvent
+  | ActivityUpdatedEvent
   | ReflectionAddedEvent
   | MilestoneReachedEvent;
