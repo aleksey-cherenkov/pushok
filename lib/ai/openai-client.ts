@@ -88,10 +88,23 @@ Guidelines:
 - Descriptions should be motivating, not pressuring
 - Suggest realistic targets based on activity type
 - Choose the most natural metric for tracking
-- Nudge times should fit typical daily schedules
+- Nudge times should fit typical daily schedules (use 24-hour format HH:MM)
 - Include reasoning to help user understand choices
 
-Return a single JSON object (not an array) with the habit suggestion.`;
+Response format:
+{
+  "title": "Short action-oriented title",
+  "description": "Motivating description",
+  "category": "health|nature|mindfulness|family|learning|creativity|home",
+  "recurring": "daily|weekly|custom",
+  "metric": "checkmark|count|duration|distance",
+  "unit": "only if metric is count/duration/distance",
+  "target": number (optional),
+  "nudgeTime": "HH:MM in 24-hour format (e.g., '08:00', '16:30')",
+  "reasoning": "Brief explanation of your choices"
+}
+
+Return a single JSON object with these exact field names.`;
 
 export async function suggestHabit(
   userInput: string,
