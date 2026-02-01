@@ -24,7 +24,7 @@ export function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
   const [category, setCategory] = useState('');
   const [recurring, setRecurring] = useState<'daily' | 'weekly' | 'custom'>('daily');
   const [nudgeTime, setNudgeTime] = useState('');
-  const [metric, setMetric] = useState<'checkmark' | 'count' | 'duration' | 'distance' | 'steps'>('checkmark');
+  const [metric, setMetric] = useState<'checkmark' | 'count' | 'duration' | 'distance'>('checkmark');
   const [unit, setUnit] = useState('');
   const [target, setTarget] = useState('');
   const [frequency, setFrequency] = useState('daily');
@@ -271,10 +271,9 @@ export function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
                              focus:ring-2 focus:ring-sky-500 focus:border-transparent"
                 >
                   <option value="checkmark">✓ Checkmark (done/not done)</option>
-                  <option value="count">🔢 Count (reps, sets)</option>
-                  <option value="duration">⏱️ Duration (minutes)</option>
-                  <option value="distance">📏 Distance (miles/km)</option>
-                  <option value="steps">👣 Steps</option>
+                  <option value="count">🔢 Count (reps, steps, pages, etc.)</option>
+                  <option value="duration">⏱️ Duration (seconds, minutes, hours)</option>
+                  <option value="distance">📏 Distance (miles, km, meters)</option>
                 </select>
               </div>
 
@@ -322,7 +321,15 @@ export function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
                     id="unit"
                     value={unit}
                     onChange={(e) => setUnit(e.target.value)}
-                    placeholder={metric === 'duration' ? 'minutes' : metric === 'count' ? 'reps' : 'miles'}
+                    placeholder={
+                      metric === 'duration' 
+                        ? 'seconds, minutes, hours' 
+                        : metric === 'count' 
+                        ? 'reps, steps, pages, etc.' 
+                        : metric === 'distance'
+                        ? 'miles, km, meters'
+                        : ''
+                    }
                     className="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md 
                                bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100
                                focus:ring-2 focus:ring-sky-500 focus:border-transparent"

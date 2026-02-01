@@ -1,6 +1,6 @@
 // Azure OpenAI Client Wrapper
 
-import { AzureOpenAI } from 'openai';
+import { AzureOpenAI } from "openai";
 
 let client: AzureOpenAI | null = null;
 
@@ -8,17 +8,17 @@ export function getOpenAIClient(): AzureOpenAI {
   if (!client) {
     const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
     const apiKey = process.env.AZURE_OPENAI_API_KEY;
-    const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || 'gpt-5-nano';
+    const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-5-nano";
 
     if (!endpoint || !apiKey) {
-      throw new Error('Azure OpenAI credentials not configured');
+      throw new Error("Azure OpenAI credentials not configured");
     }
 
     client = new AzureOpenAI({
       endpoint,
       apiKey,
       deployment,
-      apiVersion: '2024-08-01-preview',
+      apiVersion: "2024-08-01-preview",
     });
   }
 
@@ -28,10 +28,17 @@ export function getOpenAIClient(): AzureOpenAI {
 export interface HabitSuggestion {
   title: string;
   description: string;
-  category: 'health' | 'nature' | 'mindfulness' | 'family' | 'learning' | 'creativity' | 'home';
-  recurring: 'daily' | 'weekly' | 'custom';
+  category:
+    | "health"
+    | "nature"
+    | "mindfulness"
+    | "family"
+    | "learning"
+    | "creativity"
+    | "home";
+  recurring: "daily" | "weekly" | "custom";
   nudgeTime?: string;
-  metric: 'checkmark' | 'count' | 'duration' | 'distance' | 'steps';
+  metric: "checkmark" | "count" | "duration" | "distance";
   unit?: string;
   target?: number;
   frequency?: string;
@@ -56,12 +63,25 @@ Recurring patterns:
 - weekly: Good for larger activities or schedules
 - custom: For irregular or flexible habits
 
-Metrics:
-- checkmark: Simple done/not done (e.g., "meditated today")
-- count: Number of reps (e.g., "20 pushups")
-- duration: Time spent in minutes (e.g., "30min walk")
-- distance: Miles or km (e.g., "2.5 miles")
-- steps: Step count (e.g., "10,000 steps")
+Metrics (choose the most natural way to track):
+- checkmark: Simple done/not done (e.g., "meditated today", "called parents")
+  * No target or unit needed - just track completion
+  
+- count: Numeric tracking with a unit (reps, pages, items, steps, etc.)
+  * Examples: "20 pushups" → metric: count, target: 20, unit: "reps"
+  * Examples: "10,000 steps" → metric: count, target: 10000, unit: "steps"
+  * Examples: "30 pages" → metric: count, target: 30, unit: "pages"
+  
+- duration: Time-based with flexible units (seconds, minutes, hours)
+  * Examples: "30min walk" → metric: duration, target: 30, unit: "minutes"
+  * Examples: "60s plank" → metric: duration, target: 60, unit: "seconds"
+  * Examples: "2hr study" → metric: duration, target: 2, unit: "hours"
+  
+- distance: Spatial measurement (miles, km, meters)
+  * Examples: "2.5 miles" → metric: distance, target: 2.5, unit: "miles"
+  * Examples: "5k run" → metric: distance, target: 5, unit: "km"
+
+IMPORTANT: Always include 'unit' field when using count, duration, or distance metrics.
 
 Guidelines:
 - Keep titles short and action-oriented
@@ -73,25 +93,37 @@ Guidelines:
 
 Return a single JSON object (not an array) with the habit suggestion.`;
 
-export async function suggestHabit(userInput: string): Promise<HabitSuggestion> {
+export async function suggestHabit(
+  userInput: string,
+): Promise<HabitSuggestion> {
   const client = getOpenAIClient();
 
-  const response = await client.chat.completions.create({
-    model: process.env.AZURE_OPENAI_DEPLOYMENT || 'gpt-5-nano',
-    messages: [
-      { role: 'system', content: SYSTEM_PROMPT },
-      { role: 'user', content: `User says: "${userInput}"\n\nSuggest a habit configuration.` },
-    ],
-    temperature: 0.7,
-    max_tokens: 500,
-    response_format: { type: 'json_object' },
-  });
+  try {
+    const response = await client.chat.completions.create({
+      model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-5-nano",
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        {
+          role: "user",
+          content: `User says: "${userInput}"\n\nSuggest a habit configuration.`,
+        },
+      ],
+      temperature: 1,
+      response_format: { type: "json_object" },
+    });
 
-  const content = response.choices[0]?.message?.content;
-  if (!content) {
-    throw new Error('No response from AI');
+    console.log("OpenAI response:", JSON.stringify(response, null, 2));
+
+    const content = response.choices[0]?.message?.content;
+    if (!content) {
+      console.error("No content in response. Full response:", response);
+      throw new Error("No response from AI");
+    }
+
+    const suggestion = JSON.parse(content) as HabitSuggestion;
+    return suggestion;
+  } catch (error) {
+    console.error("OpenAI API error:", error);
+    throw error;
   }
-
-  const suggestion = JSON.parse(content) as HabitSuggestion;
-  return suggestion;
 }
