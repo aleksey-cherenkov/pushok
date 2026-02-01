@@ -50,7 +50,35 @@ Built with **Event Sourcing** architecture for habit tracking:
 
 *(Coming soon as features are built)*
 
-**Current Status:** Phase 1 Complete - Full deployment infrastructure live!
+**Current Status:** Phase 3+ Complete - Core features working!
+
+### Core Features Built
+
+✅ **Habit Management**
+- Create habits manually or with AI assistance
+- Edit, pause, archive habits
+- Category organization (health, nature, mindfulness, family, learning, creativity, home)
+
+✅ **AI-Assisted Creation** (GPT-5-nano)
+- Natural language input: "remind me to plank for 60 seconds daily"
+- AI suggests: title, category, metric, target, unit, nudge time, reasoning
+- User reviews and tweaks before creating
+
+✅ **Flexible Tracking Metrics**
+- **Checkmark**: Simple done/not done
+- **Count**: Reps, steps, pages (with custom unit)
+- **Duration**: Seconds, minutes, hours (flexible units)
+- **Distance**: Miles, km, meters
+
+✅ **Activity Logging**
+- Quick "Log Today" button (2-second check-in)
+- Activity counts shown on habit cards ("5 times logged ✨")
+- Event sourcing stores complete history
+
+✅ **Event Sourcing Architecture**
+- All changes stored as immutable events
+- Complete audit trail
+- Aggregation without guilt ("18 walks this month" not "missed 12 days")
 
 ### Video Walkthrough
 

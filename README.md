@@ -245,10 +245,17 @@ npm run type-check   # TypeScript check
 **🎉 Live at https://pushok.life**
 
 ### Phase 2: Core Features (Current)
-- [ ] Activity logging (quick check-ins)
+- [x] Activity logging (quick check-ins) ✅
+- [x] AI habit creation with GPT-5-nano ✅
 - [ ] Today's Focus dashboard
-- [ ] AI habit refinement (GPT-5-nano)
 - [ ] Weekly/monthly aggregations
+- [ ] Navigation bar
+
+**Recent additions:**
+- 🤖 **AI-Assisted Habit Creation**: Natural language → configured habit
+- 📊 **Flexible Metrics**: checkmark, count, duration, distance with units
+- ✅ **Activity Logging**: "Log Today" button with event sourcing
+- 🔢 **Activity Counts**: Shows "X times logged" on habit cards
 
 ### Phase 3: Polish & Submit
 - [ ] Milestone celebrations
