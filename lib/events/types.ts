@@ -14,7 +14,9 @@ export type EventType =
   | 'AspirationResumed'
   | 'AspirationArchived'
   | 'ReflectionAdded'
-  | 'MilestoneReached';
+  | 'MilestoneReached'
+  | 'StelaMessageCreated'
+  | 'StelaMessageDismissed';
 
 export interface BaseEvent {
   id: string;
@@ -153,6 +155,24 @@ export interface MilestoneReachedEvent extends BaseEvent {
   };
 }
 
+// Stela Message Events
+export interface StelaMessageCreatedEvent extends BaseEvent {
+  type: 'StelaMessageCreated';
+  data: {
+    message: string;
+    category: 'family' | 'nature' | 'creativity' | 'rest' | 'connection' | 'mindfulness' | 'play';
+    generatedAt: number;
+  };
+}
+
+export interface StelaMessageDismissedEvent extends BaseEvent {
+  type: 'StelaMessageDismissed';
+  data: {
+    dismissedAt: number;
+    reason?: 'not-relevant' | 'done' | 'later';
+  };
+}
+
 export type Event =
   | HabitCreatedEvent
   | HabitUpdatedEvent
@@ -167,4 +187,6 @@ export type Event =
   | AspirationResumedEvent
   | AspirationArchivedEvent
   | ReflectionAddedEvent
-  | MilestoneReachedEvent;
+  | MilestoneReachedEvent
+  | StelaMessageCreatedEvent
+  | StelaMessageDismissedEvent;
