@@ -15,6 +15,7 @@ interface TodayActivity {
   value?: number;
   notes?: string;
   mood?: string;
+  overcameResistance?: boolean;
 }
 
 export default function TodayPage() {
@@ -63,6 +64,7 @@ export default function TodayPage() {
           value: data.value as number | undefined,
           notes: data.notes as string | undefined,
           mood: data.mood as string | undefined,
+          overcameResistance: data.overcameResistance as boolean | undefined,
         };
       });
 
@@ -78,7 +80,7 @@ export default function TodayPage() {
     loadData();
   }, []);
 
-  const handleQuickLog = async (habitId: string, logData: { value?: number; notes?: string; mood?: string }) => {
+  const handleQuickLog = async (habitId: string, logData: { value?: number; notes?: string; mood?: string; overcameResistance?: boolean }) => {
     try {
       const activity = new Activity();
       activity.log({
@@ -124,6 +126,7 @@ export default function TodayPage() {
   }
 
   const completedCount = todayActivities.length;
+  const resistanceCount = todayActivities.filter(a => a.overcameResistance).length;
   const totalHabits = habits.length;
 
   return (
@@ -157,6 +160,16 @@ export default function TodayPage() {
                   ? 'Great start! 🌿'
                   : `${completedCount} activities logged today! Keep going! 🎉`}
               </p>
+              {resistanceCount > 0 && (
+                <div className="mt-3 pt-3 border-t border-emerald-200 dark:border-emerald-800">
+                  <p className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                    💪 Overcame Resistance {resistanceCount} {resistanceCount === 1 ? 'time' : 'times'} today
+                  </p>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                    You showed up when it was hard. That's growth.
+                  </p>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -234,7 +247,11 @@ export default function TodayPage() {
                           {logs.map((log) => (
                             <div
                               key={log.id}
-                              className="flex items-center justify-between text-sm bg-zinc-50 dark:bg-zinc-900 rounded-lg p-3"
+                              className={`flex items-center justify-between text-sm rounded-lg p-3 ${
+                                log.overcameResistance 
+                                  ? 'bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900' 
+                                  : 'bg-zinc-50 dark:bg-zinc-900'
+                              }`}
                             >
                               <div className="flex-1">
                                 <div className="flex items-center gap-2">
@@ -247,6 +264,11 @@ export default function TodayPage() {
                                     </span>
                                   )}
                                   {log.mood && <span>{log.mood}</span>}
+                                  {log.overcameResistance && (
+                                    <span className="text-xs font-medium text-amber-700 dark:text-amber-400 flex items-center gap-1">
+                                      💪 Resistance
+                                    </span>
+                                  )}
                                 </div>
                                 {log.notes && (
                                   <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">

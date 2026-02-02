@@ -78,6 +78,7 @@ export interface ActivityLoggedEvent extends BaseEvent {
     notes?: string;
     mood?: string;
     photoIds?: string[];
+    overcameResistance?: boolean;
   };
 }
 

@@ -7,7 +7,7 @@ import type { HabitState } from '@/lib/aggregates/habit';
 
 interface ActivityLogModalProps {
   habit: HabitState;
-  onLog: (data: { value?: number; notes?: string; mood?: string }) => void;
+  onLog: (data: { value?: number; notes?: string; mood?: string; overcameResistance?: boolean }) => void;
   onCancel: () => void;
 }
 
@@ -15,6 +15,7 @@ export function ActivityLogModal({ habit, onLog, onCancel }: ActivityLogModalPro
   const [value, setValue] = useState('');
   const [notes, setNotes] = useState('');
   const [mood, setMood] = useState('');
+  const [overcameResistance, setOvercameResistance] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
   // Determine metric info from habit
@@ -26,7 +27,7 @@ export function ActivityLogModal({ habit, onLog, onCancel }: ActivityLogModalPro
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const logData: { value?: number; notes?: string; mood?: string } = {};
+    const logData: { value?: number; notes?: string; mood?: string; overcameResistance?: boolean } = {};
 
     if (needsValue && value) {
       logData.value = parseFloat(value);
@@ -38,6 +39,10 @@ export function ActivityLogModal({ habit, onLog, onCancel }: ActivityLogModalPro
 
     if (mood) {
       logData.mood = mood;
+    }
+
+    if (overcameResistance) {
+      logData.overcameResistance = true;
     }
 
     onLog(logData);
@@ -104,6 +109,23 @@ export function ActivityLogModal({ habit, onLog, onCancel }: ActivityLogModalPro
                 </div>
               </div>
             )}
+
+            {/* Resistance Tracking */}
+            <div className="flex items-start space-x-3 py-2">
+              <input
+                type="checkbox"
+                id="overcameResistance"
+                checked={overcameResistance}
+                onChange={(e) => setOvercameResistance(e.target.checked)}
+                className="mt-1 h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-zinc-300 rounded"
+              />
+              <label htmlFor="overcameResistance" className="text-sm text-zinc-700 dark:text-zinc-300">
+                <span className="font-medium">Overcame Resistance 💪</span>
+                <span className="block text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  Check this if you logged even when you didn't feel like it
+                </span>
+              </label>
+            </div>
 
             {/* Optional Details */}
             <div>

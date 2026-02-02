@@ -16,6 +16,7 @@ export interface ActivityState {
   notes?: string;
   mood?: string;
   photoIds?: string[];
+  overcameResistance?: boolean;
   updatedAt?: number;
 }
 
@@ -30,6 +31,7 @@ export class Activity extends Aggregate {
     notes?: string;
     mood?: string;
     photoIds?: string[];
+    overcameResistance?: boolean;
   }): void {
     if (this.state) {
       throw new Error('Activity already logged');
@@ -77,6 +79,7 @@ export class Activity extends Aggregate {
       notes: event.data.notes,
       mood: event.data.mood,
       photoIds: event.data.photoIds,
+      overcameResistance: event.data.overcameResistance,
     };
   }
 
