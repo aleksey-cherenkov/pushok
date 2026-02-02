@@ -7,6 +7,7 @@ import type { AspirationState } from '@/lib/aggregates/aspiration';
 interface AspirationCardProps {
   aspiration: AspirationState;
   habitCount?: number;
+  linkedHabits?: string[];
   onEdit?: (aspirationId: string) => void;
   onArchive?: (aspirationId: string) => void;
   onViewDetails?: (aspirationId: string) => void;
@@ -24,6 +25,7 @@ const categoryEmojis: Record<string, string> = {
 export function AspirationCard({ 
   aspiration, 
   habitCount = 0, 
+  linkedHabits = [],
   onEdit, 
   onArchive, 
   onViewDetails 
@@ -90,6 +92,25 @@ export function AspirationCard({
               Created {formatDate(aspiration.createdAt)}
             </div>
           </div>
+
+          {/* Linked Habits */}
+          {linkedHabits.length > 0 && (
+            <div>
+              <p className="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-2">
+                Linked Habits:
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {linkedHabits.map((habitTitle, idx) => (
+                  <span
+                    key={idx}
+                    className="text-xs bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded"
+                  >
+                    🌱 {habitTitle}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Actions */}
           <div className="flex gap-2 pt-2">

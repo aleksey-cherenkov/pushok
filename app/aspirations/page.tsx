@@ -5,11 +5,13 @@ import { AspirationForm } from '@/components/aspirations/aspiration-form';
 import { AspirationList } from '@/components/aspirations/aspiration-list';
 import { Button } from '@/components/ui/button';
 import { Aspiration, type AspirationState } from '@/lib/aggregates/aspiration';
+import { Habit, type HabitState } from '@/lib/aggregates/habit';
 import { eventStore } from '@/lib/events/store';
 
 export default function AspirationsPage() {
   const [aspirations, setAspirations] = useState<AspirationState[]>([]);
   const [habitCounts, setHabitCounts] = useState<Record<string, number>>({});
+  const [linkedHabits, setLinkedHabits] = useState<Record<string, string[]>>({});
   const [showForm, setShowForm] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -34,17 +36,28 @@ export default function AspirationsPage() {
 
       setAspirations(loadedAspirations);
 
-      const habitEvents = events.filter((e) => e.aggregateType === 'Habit' && e.type === 'HabitCreated');
-      const counts: Record<string, number> = {};
-      
-      habitEvents.forEach((e) => {
-        const data = e.data as any;
-        const linkedAspirationId = data.linkedAspirationId as string | undefined;
-        if (linkedAspirationId) {
-          counts[linkedAspirationId] = (counts[linkedAspirationId] || 0) + 1;
-        }
-      });
+      // Load habits to get titles
+      const habitEvents = events.filter((e) => e.aggregateType === 'Habit');
+      const habitIds = [...new Set(habitEvents.map((e) => e.aggregateId))];
 
+      const habitsByAspiration: Record<string, string[]> = {};
+      const counts: Record<string, number> = {};
+
+      for (const habitId of habitIds) {
+        const habit = new Habit(habitId);
+        await habit.load();
+        const state = habit.getState();
+        if (state && state.linkedAspirationId) {
+          if (!habitsByAspiration[state.linkedAspirationId]) {
+            habitsByAspiration[state.linkedAspirationId] = [];
+            counts[state.linkedAspirationId] = 0;
+          }
+          habitsByAspiration[state.linkedAspirationId].push(state.title);
+          counts[state.linkedAspirationId]++;
+        }
+      }
+
+      setLinkedHabits(habitsByAspiration);
       setHabitCounts(counts);
     } catch (error) {
       console.error('Failed to load aspirations:', error);
@@ -135,6 +148,7 @@ export default function AspirationsPage() {
         <AspirationList
           aspirations={displayAspirations}
           habitCounts={habitCounts}
+          linkedHabits={linkedHabits}
           onArchive={handleArchive}
         />
 

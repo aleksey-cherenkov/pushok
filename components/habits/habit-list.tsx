@@ -6,6 +6,7 @@ import type { HabitState } from '@/lib/aggregates/habit';
 interface HabitListProps {
   habits: HabitState[];
   activityCounts?: Record<string, number>;
+  aspirationNames?: Record<string, string>;
   onEdit?: (habitId: string) => void;
   onArchive?: (habitId: string) => void;
   onLogActivity?: (habitId: string) => void;
@@ -15,6 +16,7 @@ interface HabitListProps {
 export function HabitList({
   habits,
   activityCounts = {},
+  aspirationNames = {},
   onEdit,
   onArchive,
   onLogActivity,
@@ -73,6 +75,7 @@ export function HabitList({
               key={habit.id}
               habit={habit}
               activityCount={activityCounts[habit.id] || 0}
+              aspirationName={habit.linkedAspirationId ? aspirationNames[habit.linkedAspirationId] : undefined}
               onEdit={onEdit}
               onArchive={onArchive}
               onLogActivity={onLogActivity}

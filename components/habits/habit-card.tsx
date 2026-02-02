@@ -7,6 +7,7 @@ import type { HabitState } from '@/lib/aggregates/habit';
 interface HabitCardProps {
   habit: HabitState;
   activityCount?: number;
+  aspirationName?: string;
   onEdit?: (habitId: string) => void;
   onArchive?: (habitId: string) => void;
   onLogActivity?: (habitId: string) => void;
@@ -22,7 +23,7 @@ const categoryEmojis: Record<string, string> = {
   home: '🏠',
 };
 
-export function HabitCard({ habit, activityCount = 0, onEdit, onArchive, onLogActivity }: HabitCardProps) {
+export function HabitCard({ habit, activityCount = 0, aspirationName, onEdit, onArchive, onLogActivity }: HabitCardProps) {
   const categoryEmoji = habit.category ? categoryEmojis[habit.category] : '✨';
   
   const formatDate = (timestamp: number) => {
@@ -43,14 +44,19 @@ export function HabitCard({ habit, activityCount = 0, onEdit, onArchive, onLogAc
               <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
                 {habit.title}
               </h3>
-              <div className="flex gap-2 mt-1">
+              <div className="flex flex-wrap gap-2 mt-1">
+                {aspirationName && (
+                  <span className="text-xs bg-sky-50 dark:bg-sky-950 text-sky-700 dark:text-sky-300 px-2 py-0.5 rounded flex items-center gap-1">
+                    🎯 {aspirationName}
+                  </span>
+                )}
                 {habit.category && (
                   <span className="text-xs text-zinc-500 dark:text-zinc-400 capitalize">
                     {habit.category}
                   </span>
                 )}
                 {habit.recurring && (
-                  <span className="text-xs bg-sky-100 dark:bg-sky-900 text-sky-700 dark:text-sky-300 px-2 py-0.5 rounded">
+                  <span className="text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-2 py-0.5 rounded">
                     {habit.recurring}
                   </span>
                 )}

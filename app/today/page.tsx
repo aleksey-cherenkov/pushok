@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Habit, type HabitState } from '@/lib/aggregates/habit';
+import { Aspiration, type AspirationState } from '@/lib/aggregates/aspiration';
 import { Activity } from '@/lib/aggregates/activity';
 import { ActivityLogModal } from '@/components/habits/activity-log-modal';
 import { eventStore } from '@/lib/events/store';
@@ -21,6 +22,7 @@ interface TodayActivity {
 export default function TodayPage() {
   const [habits, setHabits] = useState<HabitState[]>([]);
   const [todayActivities, setTodayActivities] = useState<TodayActivity[]>([]);
+  const [aspirationNames, setAspirationNames] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [loggingHabit, setLoggingHabit] = useState<HabitState | null>(null);
   const [expandedHabit, setExpandedHabit] = useState<string | null>(null);
@@ -45,6 +47,21 @@ export default function TodayPage() {
       }
 
       setHabits(loadedHabits);
+
+      // Load aspirations
+      const aspirationEvents = events.filter((e) => e.aggregateType === 'Aspiration');
+      const aspirationIds = [...new Set(aspirationEvents.map((e) => e.aggregateId))];
+
+      const names: Record<string, string> = {};
+      for (const aspirationId of aspirationIds) {
+        const aspiration = new Aspiration(aspirationId);
+        await aspiration.load();
+        const state = aspiration.getState();
+        if (state) {
+          names[state.id] = state.title;
+        }
+      }
+      setAspirationNames(names);
 
       // Load today's activities
       const today = new Date();
@@ -208,6 +225,11 @@ export default function TodayPage() {
                               <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
                                 {habit.title}
                               </h3>
+                              {habit.linkedAspirationId && aspirationNames[habit.linkedAspirationId] && (
+                                <p className="text-xs text-sky-600 dark:text-sky-400 mt-0.5">
+                                  🎯 {aspirationNames[habit.linkedAspirationId]}
+                                </p>
+                              )}
                               {habit.description && (
                                 <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-0.5">
                                   {habit.description}

@@ -6,6 +6,7 @@ import type { AspirationState } from '@/lib/aggregates/aspiration';
 interface AspirationListProps {
   aspirations: AspirationState[];
   habitCounts?: Record<string, number>;
+  linkedHabits?: Record<string, string[]>;
   onEdit?: (aspirationId: string) => void;
   onArchive?: (aspirationId: string) => void;
   onViewDetails?: (aspirationId: string) => void;
@@ -14,6 +15,7 @@ interface AspirationListProps {
 export function AspirationList({
   aspirations,
   habitCounts = {},
+  linkedHabits = {},
   onEdit,
   onArchive,
   onViewDetails,
@@ -49,6 +51,7 @@ export function AspirationList({
                 key={aspiration.id}
                 aspiration={aspiration}
                 habitCount={habitCounts[aspiration.id] || 0}
+                linkedHabits={linkedHabits[aspiration.id] || []}
                 onEdit={onEdit}
                 onArchive={onArchive}
                 onViewDetails={onViewDetails}
@@ -70,6 +73,7 @@ export function AspirationList({
                 key={aspiration.id}
                 aspiration={aspiration}
                 habitCount={habitCounts[aspiration.id] || 0}
+                linkedHabits={linkedHabits[aspiration.id] || []}
                 onEdit={onEdit}
                 onArchive={onArchive}
                 onViewDetails={onViewDetails}
@@ -91,6 +95,7 @@ export function AspirationList({
                 key={aspiration.id}
                 aspiration={aspiration}
                 habitCount={habitCounts[aspiration.id] || 0}
+                linkedHabits={linkedHabits[aspiration.id] || []}
                 onViewDetails={onViewDetails}
               />
             ))}

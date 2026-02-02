@@ -5,11 +5,13 @@ import { HabitForm } from '@/components/habits/habit-form';
 import { HabitList } from '@/components/habits/habit-list';
 import { Button } from '@/components/ui/button';
 import { Habit, type HabitState } from '@/lib/aggregates/habit';
+import { Aspiration, type AspirationState } from '@/lib/aggregates/aspiration';
 import { eventStore } from '@/lib/events/store';
 
 export default function HabitsPage() {
   const [habits, setHabits] = useState<HabitState[]>([]);
   const [activityCounts, setActivityCounts] = useState<Record<string, number>>({});
+  const [aspirationNames, setAspirationNames] = useState<Record<string, string>>({});
   const [showForm, setShowForm] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -20,11 +22,10 @@ export default function HabitsPage() {
     try {
       const events = await eventStore.getAllEvents();
       
-      // Group events by aggregateId
+      // Load habits
       const habitEvents = events.filter((e) => e.aggregateType === 'Habit');
       const habitIds = [...new Set(habitEvents.map((e) => e.aggregateId))];
 
-      // Rebuild each habit from its events
       const loadedHabits: HabitState[] = [];
       for (const habitId of habitIds) {
         const habit = new Habit(habitId);
@@ -35,9 +36,23 @@ export default function HabitsPage() {
         }
       }
 
-      // Sort by created date (newest first)
       loadedHabits.sort((a, b) => b.createdAt - a.createdAt);
       setHabits(loadedHabits);
+
+      // Load aspirations
+      const aspirationEvents = events.filter((e) => e.aggregateType === 'Aspiration');
+      const aspirationIds = [...new Set(aspirationEvents.map((e) => e.aggregateId))];
+
+      const names: Record<string, string> = {};
+      for (const aspirationId of aspirationIds) {
+        const aspiration = new Aspiration(aspirationId);
+        await aspiration.load();
+        const state = aspiration.getState();
+        if (state) {
+          names[state.id] = state.title;
+        }
+      }
+      setAspirationNames(names);
 
       // Calculate activity counts
       const activityEvents = events.filter((e) => e.type === 'ActivityLogged');
@@ -149,6 +164,7 @@ export default function HabitsPage() {
         <HabitList
           habits={habits}
           activityCounts={activityCounts}
+          aspirationNames={aspirationNames}
           onArchive={handleArchive}
           onLogActivity={handleLogActivity}
           showArchived={showArchived}
