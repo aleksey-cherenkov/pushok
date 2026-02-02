@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { HabitState } from '@/lib/aggregates/habit';
@@ -24,6 +25,7 @@ const categoryEmojis: Record<string, string> = {
 };
 
 export function HabitCard({ habit, activityCount = 0, aspirationName, onEdit, onArchive, onLogActivity }: HabitCardProps) {
+  const router = useRouter();
   const categoryEmoji = habit.category ? categoryEmojis[habit.category] : '✨';
   
   const formatDate = (timestamp: number) => {
@@ -34,8 +36,15 @@ export function HabitCard({ habit, activityCount = 0, aspirationName, onEdit, on
     });
   };
 
+  const handleCardClick = () => {
+    router.push(`/habits/${habit.id}`);
+  };
+
   return (
-    <Card className={habit.archived ? 'opacity-60' : ''}>
+    <Card 
+      className={`${habit.archived ? 'opacity-60' : ''} hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors cursor-pointer`}
+      onClick={handleCardClick}
+    >
       <CardHeader>
         <CardTitle className="flex items-start justify-between">
           <div className="flex items-start gap-2">
@@ -102,7 +111,10 @@ export function HabitCard({ habit, activityCount = 0, aspirationName, onEdit, on
             {onLogActivity && (
               <Button
                 size="sm"
-                onClick={() => onLogActivity(habit.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onLogActivity(habit.id);
+                }}
               >
                 ✓ Log Today
               </Button>
@@ -111,7 +123,10 @@ export function HabitCard({ habit, activityCount = 0, aspirationName, onEdit, on
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => onEdit(habit.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(habit.id);
+                }}
               >
                 Edit
               </Button>
@@ -120,7 +135,10 @@ export function HabitCard({ habit, activityCount = 0, aspirationName, onEdit, on
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => onArchive(habit.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onArchive(habit.id);
+                }}
               >
                 Archive
               </Button>
