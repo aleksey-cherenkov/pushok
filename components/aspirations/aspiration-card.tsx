@@ -114,16 +114,14 @@ export function AspirationCard({
 
           {/* Actions */}
           <div className="flex gap-2 pt-2">
-            {onViewDetails && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onViewDetails(aspiration.id)}
-                className="flex-1"
-              >
-                View Details
-              </Button>
-            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.location.href = `/aspirations/${aspiration.id}`}
+              className="flex-1"
+            >
+              View Progress
+            </Button>
             {onEdit && !aspiration.archived && (
               <Button
                 variant="outline"
