@@ -140,3 +140,73 @@ export async function suggestHabit(
     throw error;
   }
 }
+
+export interface AspirationSuggestion {
+  title: string;
+  description: string;
+  category: "Health & Fitness" | "Creative Work" | "Learning" | "Relationships" | "Career" | "Personal Growth";
+  reasoning?: string;
+}
+
+const ASPIRATION_SYSTEM_PROMPT = `You are a thoughtful coach helping someone articulate their long-term aspirations.
+
+Aspirations are different from goals:
+- NO deadlines or specific targets
+- Focus on direction and growth, not achievement
+- Qualitative, not quantitative
+- Can continue indefinitely
+- Multiple habits can support one aspiration
+
+Categories:
+- Health & Fitness: Get stronger, improve endurance, feel healthier
+- Creative Work: Write, paint, make music, create
+- Learning: Learn new skills, deepen understanding
+- Relationships: Be more present, strengthen connections
+- Career: Grow professionally, contribute meaningfully
+- Personal Growth: Build character, overcome challenges
+
+When a user describes what they want, help them word it as a long-term direction.
+
+Examples:
+- "I want to run a marathon" → "Build endurance and strength for distance running"
+- "I want to write a book" → "Develop as a writer"
+- "I want to spend more time with family" → "Be more present with family"
+- "I want to get better at painting" → "Grow as an artist"
+
+Keep titles short (5-8 words), aspirational, and focused on the journey not the destination.
+
+Respond in JSON format:
+{
+  "title": "Aspirational direction (5-8 words)",
+  "description": "Why this matters, what it means (2-3 sentences)",
+  "category": "One of the 6 categories",
+  "reasoning": "Brief explanation of your suggestions"
+}`;
+
+export async function suggestAspiration(input: string): Promise<AspirationSuggestion> {
+  try {
+    const client = getOpenAIClient();
+
+    const response = await client.chat.completions.create({
+      model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-5-nano",
+      messages: [
+        { role: "system", content: ASPIRATION_SYSTEM_PROMPT },
+        { role: "user", content: input },
+      ],
+      temperature: 0.7,
+      response_format: { type: "json_object" },
+    });
+
+    const content = response.choices[0]?.message?.content;
+    if (!content) {
+      console.error("No content in response. Full response:", response);
+      throw new Error("No response from AI");
+    }
+
+    const suggestion = JSON.parse(content) as AspirationSuggestion;
+    return suggestion;
+  } catch (error) {
+    console.error("OpenAI API error:", error);
+    throw error;
+  }
+}

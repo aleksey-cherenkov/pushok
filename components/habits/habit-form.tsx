@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Habit } from '@/lib/aggregates/habit';
+import { Aspiration, type AspirationState } from '@/lib/aggregates/aspiration';
+import { eventStore } from '@/lib/events/store';
 import type { HabitSuggestion } from '@/lib/ai/openai-client';
 
 interface HabitFormProps {
@@ -12,6 +14,36 @@ interface HabitFormProps {
 }
 
 export function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
+  // Aspirations
+  const [aspirations, setAspirations] = useState<AspirationState[]>([]);
+
+  // Load aspirations on mount
+  useEffect(() => {
+    loadAspirations();
+  }, []);
+
+  const loadAspirations = async () => {
+    try {
+      const events = await eventStore.getAllEvents();
+      const aspirationEvents = events.filter((e) => e.aggregateType === 'Aspiration');
+      const aspirationIds = [...new Set(aspirationEvents.map((e) => e.aggregateId))];
+
+      const loadedAspirations: AspirationState[] = [];
+      for (const aspirationId of aspirationIds) {
+        const aspiration = new Aspiration(aspirationId);
+        await aspiration.load();
+        const state = aspiration.getState();
+        if (state && !state.archived) {
+          loadedAspirations.push(state);
+        }
+      }
+
+      setAspirations(loadedAspirations);
+    } catch (error) {
+      console.error('Failed to load aspirations:', error);
+    }
+  };
+
   // AI Mode
   const [mode, setMode] = useState<'ai' | 'manual'>('ai');
   const [aiInput, setAiInput] = useState('');
@@ -28,6 +60,7 @@ export function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
   const [unit, setUnit] = useState('');
   const [target, setTarget] = useState('');
   const [frequency, setFrequency] = useState('daily');
+  const [linkedAspirationId, setLinkedAspirationId] = useState('');
 
   const handleAIGenerate = async () => {
     if (!aiInput.trim()) return;
@@ -82,6 +115,7 @@ export function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
       metric: metric || undefined,
       unit: unit || undefined,
       target: target ? parseFloat(target) : undefined,
+      linkedAspirationId: linkedAspirationId || undefined,
     });
 
     await habit.save();
@@ -241,6 +275,37 @@ export function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
                 </select>
               </div>
 
+              {/* Linked Aspiration */}
+              <div>
+                <label htmlFor="aspiration" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                  Link to Aspiration (optional)
+                </label>
+                <select
+                  id="aspiration"
+                  value={linkedAspirationId}
+                  onChange={(e) => setLinkedAspirationId(e.target.value)}
+                  className="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md 
+                             bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100
+                             focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                >
+                  <option value="">No aspiration</option>
+                  {aspirations.map((asp) => (
+                    <option key={asp.id} value={asp.id}>
+                      {asp.title}
+                    </option>
+                  ))}
+                </select>
+                {aspirations.length === 0 && (
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                    <a href="/aspirations" className="text-sky-600 dark:text-sky-400 hover:underline">
+                      Create an aspiration first
+                    </a>
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Recurring */}
               <div>
                 <label htmlFor="recurring" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
