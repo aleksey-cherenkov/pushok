@@ -1,8 +1,8 @@
 # Way Finder - Fighting Resistance, One Habit at a Time
 
-*Submission for the [GitHub Copilot CLI Challenge](https://dev.to/challenges/github-2026-01-21)*
+_Submission for the [GitHub Copilot CLI Challenge](https://dev.to/challenges/github-2026-01-21)_
 
-> **The Real Story:** I *could* build this. I've done full-stack before (IIS, Apache, C++/CGI, the works). But I didn't. For 7 months, I didn't. Not because I couldn't—because of perfectionism, self-doubt, procrastination. **Resistance.**
+> **The Real Story:** I _could_ build this. I've done full-stack before (IIS, Apache, C++/CGI, the works). But I didn't. For the past 15 years, I was mostly backend C# dev. I would not touch frontend because I knew how much imperfect my solution would be. I couldn't—because of perfectionism, self-doubt, procrastination. **Resistance.**
 >
 > Then GitHub Copilot CLI gave me permission to be imperfect. To not understand everything completely before starting. To just... ship.
 >
@@ -18,11 +18,12 @@
 
 No broken streaks. No guilt. Just "you showed up 18 times this month" and that's enough.
 
-Named after my cat Stela: sunshine, nature, presence, love. Simple joys.
+Named after my cat Stela (Pushistik, Pushok): sunshine, nature, presence, love. Simple joys.
 
 ### The Problem (In Apps and In Me)
 
 Productivity apps create Resistance:
+
 - "You broke your streak!" → Self-doubt
 - "You missed 3 days!" → Perfectionism (all or nothing)
 - Constant pressure → Procrastination (I'll start when I feel ready)
@@ -32,17 +33,20 @@ Productivity apps create Resistance:
 ### The Solution
 
 **Aggregation, not streaks:**
+
 - 🌿 "18 walks this month" (not "missed 12 days")
-- ✨ Volume over consistency (10 → 50 → 100)  
+- ✨ Volume over consistency (10 → 50 → 100)
 - 📊 Multiple logs per day ("3 sessions • 75 pushups")
 - ❌ No breaking, just continuing
 
 **Event Sourcing** makes it work:
+
 - Every action = immutable event
 - Aggregations show progress without guilt
 - No streak metadata to "break"
 
 **AI helps you start:**
+
 - "Do 50 pushups daily" → Configured habit
 - GPT-5-nano (~$1/month not $20)
 
@@ -53,6 +57,7 @@ Productivity apps create Resistance:
 🌐 **https://pushok.life** ✅
 
 **Working now:**
+
 - AI-assisted habit creation
 - Multiple logs per day with values
 - Aggregated totals ("3 sessions • 45 min")
@@ -65,6 +70,7 @@ Productivity apps create Resistance:
 ### My Background
 
 Full-stack experience:
+
 - 10+ years backend (C#, migrations, ETL)
 - Deployed IIS, Apache, C++/CGI manually
 - Built complete systems before
@@ -72,21 +78,22 @@ Full-stack experience:
 **But for 7 months:** Nothing.
 
 **Not because I couldn't. Because of Resistance:**
+
 - Perfectionism: "I need to understand React completely first"
-- Self-doubt: "Real devs don't struggle like this"  
+- Self-doubt: "Real devs don't struggle like this"
 - Procrastination: "I'll start when I feel ready"
 
-**Steven Pressfield nailed it in "The War of Art":** *"Resistance is the enemy of creativity. It shows up as procrastination, self-doubt, perfectionism, fear."*
+**Steven Pressfield nailed it in "The War of Art":** _"Resistance is the enemy of creativity. It shows up as procrastination, self-doubt, perfectionism, fear."_
 
 ### What Copilot CLI Did
 
-**Not teach me React** (I could Google that).
+**Not teach me React** (I could Bing that).
 
 **Got me unstuck:**
 
 ### What Copilot CLI Did
 
-**Not teach me React** (I could Google that).
+**Not teach me React** (I could Bing that).
 
 **Got me unstuck:**
 
@@ -117,6 +124,7 @@ Full-stack experience:
 ### The Honest Truth
 
 **I don't call this "professional"** because:
+
 - I didn't verify everything completely
 - I didn't understand every detail perfectly
 - I shipped before I felt "ready"
@@ -130,6 +138,7 @@ Perfectionism is Resistance. Self-doubt is Resistance. Waiting to "be ready" is 
 ### What I Actually Shipped
 
 First React app with:
+
 - Event sourcing (events as truth, aggregations for views)
 - Azure OpenAI integration (GPT-5-nano)
 - Next.js 16 (SSR, not static export)
@@ -137,6 +146,7 @@ First React app with:
 - Docs (wrote as I built, 3,100+ lines)
 
 **Stack I learned while building:**
+
 - React/Next.js 16
 - TypeScript (knew C# types, adapted)
 - Dexie.js for IndexedDB
@@ -146,6 +156,7 @@ First React app with:
 ### The Game-Changers
 
 **🎯 Cost Optimization**
+
 ```
 Me: "Best AI model?"
 Copilot: "GPT-4o-mini"
@@ -153,20 +164,25 @@ Copilot: "GPT-4o-mini"
 Me: "What about GPT-5-nano?"
 Copilot: "Exists! 67% cheaper, 90% caching"
 ```
+
 **Saved $180/year. One question.**
 
-**🌐 Avoiding Dead-Ends**  
+**🌐 Avoiding Dead-Ends**
+
 ```
 Me: "Static export vs SSR?"
 Copilot: "SSR. You need API routes for AI."
 ```
+
 **Would've wasted days realizing this.**
 
 **🎨 Design Through Conversation**
+
 ```
 Me: "Cats wake up, play... humans have chores..."
 Copilot: "3-layer system: Aspirations → Habits → Actions"
 ```
+
 **Turned rambling into architecture.**
 
 ---
@@ -176,6 +192,7 @@ Copilot: "3-layer system: Aspirations → Habits → Actions"
 ### If You Have Imposter Syndrome
 
 I have 10+ years experience. Still got stuck by:
+
 - "I need to understand this perfectly first"
 - "Real devs don't ask basic questions"
 - "I should know this already"
@@ -187,11 +204,13 @@ That permission to ask "dumb" questions? Gold.
 ### If You're Procrastinating
 
 Traditional approach:
+
 - Research for weeks
 - Plan perfectly
 - Never start (not ready yet)
 
 With Copilot CLI:
+
 - Ask questions as you go
 - Make decisions quickly
 - Ship imperfectly
@@ -224,6 +243,7 @@ With Copilot CLI:
 ## What's Next
 
 Building the Resistance-fighting features:
+
 - Aspirations ("Get stronger for hiking")
 - Progress visualization (not guilt)
 - "Overcame Resistance" tracking
@@ -257,9 +277,8 @@ Experienced dev → Blocked by perfectionism/self-doubt → Got moving with Copi
 
 ---
 
-*Built while fighting Resistance, with GitHub Copilot CLI as accountability partner*
+_Built while fighting Resistance, with GitHub Copilot CLI as accountability partner_
 
 **Status:** Shipped (imperfectly) | **Live:** pushok.life ✅
 
 **Last Updated:** 2026-02-02
-
