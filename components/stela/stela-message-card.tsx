@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Sparkles, X, RefreshCw, ThumbsDown } from 'lucide-react';
+import { Sparkles, X, RefreshCw, ThumbsDown, Settings } from 'lucide-react';
 
 interface StelaMessageCardProps {
   message: string;
   category: string;
   onDismiss: (reason?: 'not-relevant' | 'done' | 'later') => void;
   onRegenerate: () => void;
+  onSettings?: () => void;
   loading?: boolean;
 }
 
@@ -23,7 +24,7 @@ const CATEGORY_ICONS: Record<string, string> = {
   play: '🎈',
 };
 
-export function StelaMessageCard({ message, category, onDismiss, onRegenerate, loading }: StelaMessageCardProps) {
+export function StelaMessageCard({ message, category, onDismiss, onRegenerate, onSettings, loading }: StelaMessageCardProps) {
   const [showDismissOptions, setShowDismissOptions] = useState(false);
 
   return (
@@ -99,7 +100,7 @@ export function StelaMessageCard({ message, category, onDismiss, onRegenerate, l
                 </div>
               </div>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 <Button
                   size="sm"
                   variant="outline"
@@ -110,6 +111,17 @@ export function StelaMessageCard({ message, category, onDismiss, onRegenerate, l
                   <RefreshCw className={`h-3 w-3 ${loading ? 'animate-spin' : ''}`} />
                   {loading ? 'Generating...' : 'Generate Another'}
                 </Button>
+                {onSettings && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={onSettings}
+                    className="text-xs flex items-center gap-1"
+                  >
+                    <Settings className="h-3 w-3" />
+                    Update Values
+                  </Button>
+                )}
               </div>
             )}
           </div>

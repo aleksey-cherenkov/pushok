@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -30,6 +30,21 @@ const SUGGESTED_VALUES = [
 export function StelaOnboarding({ onComplete, onSkip }: StelaOnboardingProps) {
   const [values, setValues] = useState<string[]>([]);
   const [customValue, setCustomValue] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Load existing values on mount
+  useEffect(() => {
+    const savedValues = localStorage.getItem('stela-values');
+    if (savedValues) {
+      try {
+        const parsed = JSON.parse(savedValues);
+        setValues(parsed);
+        setIsEditing(true);
+      } catch (e) {
+        // Invalid JSON, ignore
+      }
+    }
+  }, []);
 
   const addValue = (value: string) => {
     if (value.trim() && !values.includes(value.trim())) {
@@ -56,11 +71,13 @@ export function StelaOnboarding({ onComplete, onSkip }: StelaOnboardingProps) {
         <CardHeader>
           <CardTitle className="text-2xl flex items-center gap-2">
             <Sparkles className="h-6 w-6 text-amber-500" />
-            What Truly Matters to You?
+            {isEditing ? 'Update What Matters to You' : 'What Truly Matters to You?'}
           </CardTitle>
           <CardDescription>
-            Stela will gently remind you to honor these values throughout your journey.
-            These aren't tasks to complete—they're moments of life to notice and cherish.
+            {isEditing 
+              ? 'Adjust your values and Stela will generate new messages based on what you choose.'
+              : "Stela will gently remind you to honor these values throughout your journey. These aren't tasks to complete—they're moments of life to notice and cherish."
+            }
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -137,15 +154,19 @@ export function StelaOnboarding({ onComplete, onSkip }: StelaOnboardingProps) {
               className="flex-1"
             >
               <Sparkles className="h-4 w-4 mr-2" />
-              Start Receiving Gentle Reminders
+              {isEditing ? 'Save & Regenerate Message' : 'Start Receiving Gentle Reminders'}
             </Button>
             <Button variant="outline" onClick={onSkip}>
-              Skip for Now
+              {isEditing ? 'Cancel' : 'Skip for Now'}
             </Button>
           </div>
 
           {/* Info */}
           <p className="text-xs text-muted-foreground text-center">
+            {isEditing 
+              ? 'Updating your values will generate a new message based on your current priorities.'
+              : 'You can update these values anytime. Stela will generate personalized messages based on what you choose.'
+            }
             You can update these values anytime in Settings. Stela will generate personalized messages based on what you choose.
           </p>
         </CardContent>

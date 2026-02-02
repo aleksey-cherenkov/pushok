@@ -287,8 +287,45 @@ export default function TodayPage() {
             category={stelaMessage.category}
             onDismiss={handleDismissStelaMessage}
             onRegenerate={() => generateStelaMessage()}
+            onSettings={() => setShowStelaOnboarding(true)}
             loading={generatingMessage}
           />
+        )}
+
+        {/* Stela Settings/Enable Button */}
+        {!stelaMessage && (
+          <Card className="bg-amber-50/50 dark:bg-amber-950/10 border-amber-200 dark:border-amber-800">
+            <CardContent className="pt-6">
+              <div className="text-center space-y-3">
+                <p className="text-sm text-amber-900 dark:text-amber-100">
+                  ✨ No Stela message for today
+                </p>
+                <div className="flex gap-2 justify-center flex-wrap">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      const savedValues = localStorage.getItem('stela-values');
+                      if (savedValues) {
+                        generateStelaMessage();
+                      } else {
+                        setShowStelaOnboarding(true);
+                      }
+                    }}
+                  >
+                    Generate Message
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setShowStelaOnboarding(true)}
+                  >
+                    Update What Matters to You
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         )}
 
         {/* Progress Summary */}
