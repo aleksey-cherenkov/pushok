@@ -50,6 +50,11 @@ export default function AboutPage() {
               After losing Stela, I realized how much time I spent on "urgent" things instead of what truly matters. 
               Way Finder is my answer—a tool that helps you build good habits without the stress of typical productivity apps.
             </p>
+            <p className="text-sm bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg p-3">
+              <strong>Note:</strong> This web version is a prototype built for the GitHub Copilot CLI Challenge. 
+              Some features (photos, native notifications, camera integration) will truly shine in the planned 
+              mobile app (Flutter). This prototype proves the core concept and event sourcing architecture.
+            </p>
           </CardContent>
         </Card>
 
@@ -117,7 +122,7 @@ export default function AboutPage() {
         {/* Project Status */}
         <Card>
           <CardHeader>
-            <CardTitle>Project Status</CardTitle>
+            <CardTitle>Project Status (Web Prototype)</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex justify-between items-center">
@@ -142,6 +147,15 @@ export default function AboutPage() {
             </div>
             <div className="text-sm text-zinc-500 dark:text-zinc-500 mt-4 pt-4 border-t">
               Overall Progress: <strong>~90%</strong> for challenge submission
+            </div>
+            <div className="text-sm text-zinc-600 dark:text-zinc-400 mt-4 pt-4 border-t space-y-2">
+              <p><strong>Why stop at Phase 4?</strong></p>
+              <p className="text-xs">
+                Some features (photos, native notifications, camera) make less sense on web. 
+                The core concept is proven. Phases 5-10 outlined in PROJECT.md will shine on mobile 
+                (Flutter with native APIs, offline-first, home widgets). This prototype validates the 
+                architecture and anti-streak philosophy with real working features.
+              </p>
             </div>
           </CardContent>
         </Card>

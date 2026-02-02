@@ -24,6 +24,8 @@ Named after my cat Stela (Pushistik, Pushok): sunshine, nature, presence, love. 
 
 **Built 100% with Copilot CLI:** From design conversations to deployment troubleshooting—every aspect created through CLI sessions.
 
+**Web Prototype for Mobile Vision:** This is a working prototype proving the concept. Some features (photos, native notifications, camera) will truly shine on mobile (Flutter). The core anti-streak philosophy and event sourcing architecture are validated here. Full roadmap in PROJECT.md.
+
 ### The Problem (In Apps and In Me)
 
 Productivity apps create Resistance:
@@ -301,12 +303,35 @@ With Copilot CLI:
 
 - Next.js 16 (SSR, Turbopack)
 - TypeScript (strict mode)
-- IndexedDB (Dexie.js)
+- IndexedDB (Dexie.js) - Event sourcing
 - Azure OpenAI (GPT-5-nano)
 - Azure Static Web Apps (Free)
 - Custom domain: pushok.life
 
-**Budget:** $1-5/month
+**Budget:** $1-2/month (GPT-5-nano with 90% prompt caching)
+
+### Web Prototype, Mobile Vision
+
+**Why web for the prototype?**
+- Fastest path to validate concept with Copilot CLI
+- Event sourcing architecture works identically on mobile
+- Azure infrastructure already set up for future sync
+- Shareable demo (pushok.life) for challenge submission
+
+**What's better on mobile?** (Post-challenge roadmap)
+- 📸 **Photos**: Native camera, proper storage, before/after galleries
+- 🔔 **Notifications**: Rich native notifications, not limited browser API
+- 📱 **Widgets**: Home screen progress at a glance
+- 🌐 **Offline-first**: Flutter + local SQLite + background sync
+- 🎯 **Quick logging**: 2-second check-ins from notification actions
+
+**Why stop at Phase 4?**
+- Core concept proven (anti-streak, aggregation, Resistance tracking)
+- Architecture validated (event sourcing, AI integration, progress viz)
+- Photo/notification features make less sense on web
+- Phases 5-10 outlined in PROJECT.md for mobile
+
+**This submission shows:** What Copilot CLI enabled me to build AND the thoughtful scope decision (ship what makes sense, plan what's next).
 
 ---
 
@@ -389,6 +414,8 @@ Experienced dev → Blocked by perfectionism/self-doubt → **One continuous CLI
 - Not "AI generated some code"
 - **One continuous conversation** that designed, built, deployed, and documented a product
 - Shows what Copilot CLI enables: **Ownership, not just assistance**
+- **Thoughtful scope**: Shipped what works on web, planned mobile for what doesn't (see PROJECT.md phases 5-10)
+- Honest about being a prototype with mobile vision (inviting feedback)
 
 ---
 

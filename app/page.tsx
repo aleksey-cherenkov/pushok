@@ -133,8 +133,11 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-4">
             Ready to find your way?
           </h2>
-          <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-8">
+          <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-2">
             Start tracking what matters. No streaks. No guilt. Just progress.
+          </p>
+          <p className="text-sm text-amber-600 dark:text-amber-400 mb-8 italic">
+            ⚡ Web prototype — Full experience coming to mobile (Flutter)
           </p>
 
           <div className="flex gap-4 justify-center mb-8">
