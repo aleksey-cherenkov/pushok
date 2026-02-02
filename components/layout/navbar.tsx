@@ -13,6 +13,8 @@ export function Navbar() {
     { href: '/today', label: 'Today', icon: '✨' },
     { href: '/habits', label: 'Habits', icon: '🌱' },
     { href: '/aspirations', label: 'Aspirations', icon: '🎯' },
+    { href: '/projects', label: 'Projects', icon: '📁' },
+    { href: '/reflections', label: 'Reflections', icon: '📖' },
   ];
 
   return (
