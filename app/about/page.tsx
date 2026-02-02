@@ -13,7 +13,28 @@ export default function AboutPage() {
           <p className="text-lg text-zinc-600 dark:text-zinc-400">
             In memory of Stela (Pushok) 🐱
           </p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-500 italic">
+            9 years and 9 months of joy
+          </p>
         </div>
+
+        {/* Stela's Memorial */}
+        <Card className="border-2 border-pink-200 dark:border-pink-900 bg-pink-50/30 dark:bg-pink-950/10">
+          <CardHeader>
+            <CardTitle className="text-center">In Memory of Stela 💙</CardTitle>
+          </CardHeader>
+          <CardContent className="text-center text-zinc-700 dark:text-zinc-300 space-y-3">
+            <p>
+              Stela loved the simple things—watching birds and squirrels from the window,
+              the warmth of the fireplace, the magic of Christmas trees, and the joy
+              of playing with wrapping paper.
+            </p>
+            <p className="text-sm italic">
+              This app honors her memory by helping us focus on what truly matters:
+              presence, nature, and the simple moments that make life beautiful.
+            </p>
+          </CardContent>
+        </Card>
 
         {/* Stela's Story */}
         <Card className="border-emerald-200 dark:border-emerald-900">
@@ -70,18 +91,58 @@ export default function AboutPage() {
         {/* Built With */}
         <Card>
           <CardHeader>
-            <CardTitle>Built With</CardTitle>
+            <CardTitle>Built With GitHub Copilot CLI</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2 text-sm text-zinc-700 dark:text-zinc-300">
-            <p>🤖 <strong>GitHub Copilot CLI</strong> - Terminal-based development assistant</p>
-            <p>⚛️ <strong>Next.js 16</strong> - React framework with App Router</p>
-            <p>🎨 <strong>Tailwind CSS + shadcn/ui</strong> - Beautiful, accessible components</p>
-            <p>🤖 <strong>Azure OpenAI (GPT-5-nano)</strong> - AI-assisted habit creation</p>
-            <p>💾 <strong>Event Sourcing + IndexedDB</strong> - Complete history, no data loss</p>
-            <p>☁️ <strong>Azure Static Web Apps</strong> - Fast, global deployment</p>
-            <p className="pt-4 text-xs text-zinc-500 dark:text-zinc-400">
-              Built for the <strong>Build with GitHub Copilot CLI Challenge</strong>
+          <CardContent className="space-y-3 text-zinc-700 dark:text-zinc-300">
+            <p className="text-sm">
+              <strong>100% built with GitHub Copilot CLI</strong> — from the first conversation about Stela 
+              to deployed app at pushok.life. Design → Infrastructure → Code → Deploy → Iterate. 
+              No tutorials. No Stack Overflow. Just one continuous conversation.
             </p>
+            <div className="text-sm space-y-2 pt-2">
+              <p>🤖 <strong>GitHub Copilot CLI</strong> - Complete project lifecycle</p>
+              <p>⚛️ <strong>Next.js 16</strong> - React framework with App Router</p>
+              <p>🎨 <strong>Tailwind CSS + shadcn/ui</strong> - Beautiful, accessible components</p>
+              <p>🤖 <strong>Azure OpenAI (GPT-5-nano)</strong> - AI-assisted creation ($1/month with 90% caching)</p>
+              <p>💾 <strong>Event Sourcing + IndexedDB</strong> - Complete history, no data loss</p>
+              <p>☁️ <strong>Azure Static Web Apps</strong> - Fast, global deployment</p>
+            </div>
+            <p className="pt-3 text-xs text-zinc-500 dark:text-zinc-400">
+              Built for the <strong>Build with GitHub Copilot CLI Challenge</strong> — 
+              fighting Resistance while building an app that fights Resistance.
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Project Status */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Project Status</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-zinc-600 dark:text-zinc-400">Phase 1: Foundation & Infrastructure</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">✅ Complete</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-zinc-600 dark:text-zinc-400">Phase 2: Event Store & Habit Tracking</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">✅ Complete</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-zinc-600 dark:text-zinc-400">Phase 3: Activity Logging with Metrics</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">✅ Complete</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-zinc-600 dark:text-zinc-400">Phase 4: Aspirations & Progress Viz</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">✅ Complete</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-zinc-600 dark:text-zinc-400">Phase 5: Demo Video</span>
+              <span className="text-sky-600 dark:text-sky-400 font-semibold">🔄 In Progress</span>
+            </div>
+            <div className="text-sm text-zinc-500 dark:text-zinc-500 mt-4 pt-4 border-t">
+              Overall Progress: <strong>~90%</strong> for challenge submission
+            </div>
           </CardContent>
         </Card>
 
