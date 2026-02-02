@@ -8,6 +8,11 @@ export type EventType =
   | 'HabitResumed'
   | 'ActivityLogged'
   | 'ActivityUpdated'
+  | 'AspirationCreated'
+  | 'AspirationUpdated'
+  | 'AspirationPaused'
+  | 'AspirationResumed'
+  | 'AspirationArchived'
   | 'ReflectionAdded'
   | 'MilestoneReached';
 
@@ -92,6 +97,40 @@ export interface ActivityUpdatedEvent extends BaseEvent {
   };
 }
 
+// Aspiration Events
+export interface AspirationCreatedEvent extends BaseEvent {
+  type: 'AspirationCreated';
+  data: {
+    title: string;
+    description?: string;
+    category?: string;
+  };
+}
+
+export interface AspirationUpdatedEvent extends BaseEvent {
+  type: 'AspirationUpdated';
+  data: {
+    title?: string;
+    description?: string;
+    category?: string;
+  };
+}
+
+export interface AspirationPausedEvent extends BaseEvent {
+  type: 'AspirationPaused';
+  data: Record<string, never>;
+}
+
+export interface AspirationResumedEvent extends BaseEvent {
+  type: 'AspirationResumed';
+  data: Record<string, never>;
+}
+
+export interface AspirationArchivedEvent extends BaseEvent {
+  type: 'AspirationArchived';
+  data: Record<string, never>;
+}
+
 // Reflection Events
 export interface ReflectionAddedEvent extends BaseEvent {
   type: 'ReflectionAdded';
@@ -121,5 +160,10 @@ export type Event =
   | HabitResumedEvent
   | ActivityLoggedEvent
   | ActivityUpdatedEvent
+  | AspirationCreatedEvent
+  | AspirationUpdatedEvent
+  | AspirationPausedEvent
+  | AspirationResumedEvent
+  | AspirationArchivedEvent
   | ReflectionAddedEvent
   | MilestoneReachedEvent;
