@@ -373,14 +373,21 @@ export function HabitForm({ habit: existingHabit, onSubmit, onCancel }: HabitFor
               <div>
                 <label htmlFor="metric" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
                   How to track?
+                  {existingHabit && (
+                    <span className="ml-2 text-xs text-amber-600 dark:text-amber-400">
+                      (Read-only - see below)
+                    </span>
+                  )}
                 </label>
                 <select
                   id="metric"
                   value={metric}
                   onChange={(e) => setMetric(e.target.value as any)}
-                  className="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md 
+                  disabled={!!existingHabit}
+                  className={`w-full px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md 
                              bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100
-                             focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                             focus:ring-2 focus:ring-sky-500 focus:border-transparent
+                             ${existingHabit ? 'opacity-60 cursor-not-allowed' : ''}`}
                 >
                   <option value="checkmark">✓ Checkmark (done/not done)</option>
                   <option value="count">🔢 Count (reps, steps, pages, etc.)</option>
@@ -412,27 +419,40 @@ export function HabitForm({ habit: existingHabit, onSubmit, onCancel }: HabitFor
                 <div>
                   <label htmlFor="target" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
                     Target (optional)
+                    {existingHabit && (
+                      <span className="ml-2 text-xs text-amber-600 dark:text-amber-400">
+                        (Read-only)
+                      </span>
+                    )}
                   </label>
                   <input
                     type="number"
                     id="target"
                     value={target}
                     onChange={(e) => setTarget(e.target.value)}
+                    disabled={!!existingHabit}
                     placeholder="e.g., 30"
-                    className="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md 
+                    className={`w-full px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md 
                                bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100
-                               focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                               focus:ring-2 focus:ring-sky-500 focus:border-transparent
+                               ${existingHabit ? 'opacity-60 cursor-not-allowed' : ''}`}
                   />
                 </div>
                 <div>
                   <label htmlFor="unit" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
                     Unit
+                    {existingHabit && (
+                      <span className="ml-2 text-xs text-amber-600 dark:text-amber-400">
+                        (Read-only)
+                      </span>
+                    )}
                   </label>
                   <input
                     type="text"
                     id="unit"
                     value={unit}
                     onChange={(e) => setUnit(e.target.value)}
+                    disabled={!!existingHabit}
                     placeholder={
                       metric === 'duration' 
                         ? 'seconds, minutes, hours' 
@@ -442,11 +462,28 @@ export function HabitForm({ habit: existingHabit, onSubmit, onCancel }: HabitFor
                         ? 'miles, km, meters'
                         : ''
                     }
-                    className="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md 
+                    className={`w-full px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md 
                                bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100
-                               focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                               focus:ring-2 focus:ring-sky-500 focus:border-transparent
+                               ${existingHabit ? 'opacity-60 cursor-not-allowed' : ''}`}
                   />
                 </div>
+              </div>
+            )}
+
+            {/* Explanation when editing */}
+            {existingHabit && (
+              <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-lg">
+                <p className="text-sm text-blue-900 dark:text-blue-100 mb-2">
+                  <strong>ℹ️ Why can't I change "How to track"?</strong>
+                </p>
+                <p className="text-xs text-blue-700 dark:text-blue-300 mb-3">
+                  Changing the metric type (checkmark → count → duration) would make your historical activity logs incorrect. 
+                  For example, "50 pushups" would display as "50 minutes" if you changed from count to duration.
+                </p>
+                <p className="text-xs text-blue-700 dark:text-blue-300 font-medium">
+                  💡 Need to change it? Archive this habit and create a new one with the correct metric type.
+                </p>
               </div>
             )}
 
