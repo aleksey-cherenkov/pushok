@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { HabitForm } from '@/components/habits/habit-form';
 import { HabitList } from '@/components/habits/habit-list';
+import { ActivityLogModal } from '@/components/habits/activity-log-modal';
 import { Button } from '@/components/ui/button';
 import { Habit, type HabitState } from '@/lib/aggregates/habit';
 import { Aspiration, type AspirationState } from '@/lib/aggregates/aspiration';
@@ -14,6 +15,7 @@ export default function HabitsPage() {
   const [aspirationNames, setAspirationNames] = useState<Record<string, string>>({});
   const [showForm, setShowForm] = useState(false);
   const [editingHabit, setEditingHabit] = useState<HabitState | null>(null);
+  const [loggingHabit, setLoggingHabit] = useState<HabitState | null>(null);
   const [showArchived, setShowArchived] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -100,20 +102,33 @@ export default function HabitsPage() {
     }
   };
 
-  const handleLogActivity = async (habitId: string) => {
+  const handleLogActivity = (habitId: string) => {
+    const habit = habits.find(h => h.id === habitId);
+    if (habit) {
+      setLoggingHabit(habit);
+    }
+  };
+
+  const handleActivityLogged = async (data: { 
+    value?: number; 
+    notes?: string; 
+    mood?: string; 
+    overcameResistance?: boolean;
+    resistanceType?: 'perfectionism' | 'self-doubt' | 'procrastination' | 'fatigue' | 'fear' | 'distraction';
+  }) => {
+    if (!loggingHabit) return;
+
     try {
       const { Activity } = await import('@/lib/aggregates/activity');
       const activity = new Activity();
       activity.log({
-        habitId,
+        habitId: loggingHabit.id,
+        ...data,
         completed: true,
       });
       await activity.save();
       
-      // Show success feedback
-      alert('✅ Logged! Great job!');
-      
-      // Reload to update counts
+      setLoggingHabit(null);
       await loadHabits();
     } catch (error) {
       console.error('Failed to log activity:', error);
@@ -189,6 +204,15 @@ export default function HabitsPage() {
           onLogActivity={handleLogActivity}
           showArchived={showArchived}
         />
+
+        {/* Activity Log Modal */}
+        {loggingHabit && (
+          <ActivityLogModal
+            habit={loggingHabit}
+            onLog={handleActivityLogged}
+            onCancel={() => setLoggingHabit(null)}
+          />
+        )}
       </div>
     </div>
   );
