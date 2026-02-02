@@ -7,7 +7,13 @@ import type { HabitState } from '@/lib/aggregates/habit';
 
 interface ActivityLogModalProps {
   habit: HabitState;
-  onLog: (data: { value?: number; notes?: string; mood?: string; overcameResistance?: boolean }) => void;
+  onLog: (data: { 
+    value?: number; 
+    notes?: string; 
+    mood?: string; 
+    overcameResistance?: boolean;
+    resistanceType?: 'perfectionism' | 'self-doubt' | 'procrastination' | 'fatigue' | 'fear' | 'distraction';
+  }) => void;
   onCancel: () => void;
 }
 
@@ -16,6 +22,7 @@ export function ActivityLogModal({ habit, onLog, onCancel }: ActivityLogModalPro
   const [notes, setNotes] = useState('');
   const [mood, setMood] = useState('');
   const [overcameResistance, setOvercameResistance] = useState(false);
+  const [resistanceType, setResistanceType] = useState<'perfectionism' | 'self-doubt' | 'procrastination' | 'fatigue' | 'fear' | 'distraction' | ''>('');
   const [showDetails, setShowDetails] = useState(false);
 
   // Determine metric info from habit
@@ -27,7 +34,13 @@ export function ActivityLogModal({ habit, onLog, onCancel }: ActivityLogModalPro
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const logData: { value?: number; notes?: string; mood?: string; overcameResistance?: boolean } = {};
+    const logData: { 
+      value?: number; 
+      notes?: string; 
+      mood?: string; 
+      overcameResistance?: boolean;
+      resistanceType?: 'perfectionism' | 'self-doubt' | 'procrastination' | 'fatigue' | 'fear' | 'distraction';
+    } = {};
 
     if (needsValue && value) {
       logData.value = parseFloat(value);
@@ -43,6 +56,9 @@ export function ActivityLogModal({ habit, onLog, onCancel }: ActivityLogModalPro
 
     if (overcameResistance) {
       logData.overcameResistance = true;
+      if (resistanceType) {
+        logData.resistanceType = resistanceType;
+      }
     }
 
     onLog(logData);
@@ -111,20 +127,51 @@ export function ActivityLogModal({ habit, onLog, onCancel }: ActivityLogModalPro
             )}
 
             {/* Resistance Tracking */}
-            <div className="flex items-start space-x-3 py-2">
-              <input
-                type="checkbox"
-                id="overcameResistance"
-                checked={overcameResistance}
-                onChange={(e) => setOvercameResistance(e.target.checked)}
-                className="mt-1 h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-zinc-300 rounded"
-              />
-              <label htmlFor="overcameResistance" className="text-sm text-zinc-700 dark:text-zinc-300">
-                <span className="font-medium">Overcame Resistance 💪</span>
-                <span className="block text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                  Check this if you logged even when you didn't feel like it
-                </span>
-              </label>
+            <div className="p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
+              <div className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="overcameResistance"
+                  checked={overcameResistance}
+                  onChange={(e) => {
+                    setOvercameResistance(e.target.checked);
+                    if (!e.target.checked) setResistanceType(''); // Clear type if unchecked
+                  }}
+                  className="mt-1 h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-zinc-300 rounded"
+                />
+                <div className="flex-1">
+                  <label htmlFor="overcameResistance" className="text-sm text-zinc-700 dark:text-zinc-300">
+                    <span className="font-medium">Overcame Resistance 💪</span>
+                    <span className="block text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                      Check this if you logged even when you didn't feel like it
+                    </span>
+                  </label>
+
+                  {/* Resistance Type Dropdown (optional) */}
+                  {overcameResistance && (
+                    <div className="mt-3">
+                      <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1.5">
+                        What did you overcome? (optional)
+                      </label>
+                      <select
+                        value={resistanceType}
+                        onChange={(e) => setResistanceType(e.target.value as any)}
+                        className="w-full px-3 py-1.5 text-sm border border-amber-300 dark:border-amber-800 rounded-md 
+                                  bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100
+                                  focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      >
+                        <option value="">Not specified</option>
+                        <option value="perfectionism">Perfectionism</option>
+                        <option value="self-doubt">Self-doubt</option>
+                        <option value="procrastination">Procrastination</option>
+                        <option value="fatigue">Fatigue</option>
+                        <option value="fear">Fear</option>
+                        <option value="distraction">Distraction</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
 
             {/* Optional Details */}

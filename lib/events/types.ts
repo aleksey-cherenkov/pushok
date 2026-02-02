@@ -84,6 +84,7 @@ export interface ActivityLoggedEvent extends BaseEvent {
     mood?: string;
     photoIds?: string[];
     overcameResistance?: boolean;
+    resistanceType?: 'perfectionism' | 'self-doubt' | 'procrastination' | 'fatigue' | 'fear' | 'distraction';
   };
 }
 

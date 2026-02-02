@@ -17,6 +17,7 @@ export interface ActivityState {
   mood?: string;
   photoIds?: string[];
   overcameResistance?: boolean;
+  resistanceType?: 'perfectionism' | 'self-doubt' | 'procrastination' | 'fatigue' | 'fear' | 'distraction';
   updatedAt?: number;
 }
 
@@ -32,6 +33,7 @@ export class Activity extends Aggregate {
     mood?: string;
     photoIds?: string[];
     overcameResistance?: boolean;
+    resistanceType?: 'perfectionism' | 'self-doubt' | 'procrastination' | 'fatigue' | 'fear' | 'distraction';
   }): void {
     if (this.state) {
       throw new Error('Activity already logged');
@@ -80,6 +82,7 @@ export class Activity extends Aggregate {
       mood: event.data.mood,
       photoIds: event.data.photoIds,
       overcameResistance: event.data.overcameResistance,
+      resistanceType: event.data.resistanceType,
     };
   }
 
