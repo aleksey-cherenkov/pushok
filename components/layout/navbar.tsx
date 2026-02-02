@@ -9,6 +9,7 @@ export function Navbar() {
 
   const links = [
     { href: '/', label: 'Home', icon: '🏠' },
+    { href: '/dashboard', label: 'Progress', icon: '📊' },
     { href: '/today', label: 'Today', icon: '✨' },
     { href: '/habits', label: 'Habits', icon: '🌱' },
     { href: '/aspirations', label: 'Aspirations', icon: '🎯' },
