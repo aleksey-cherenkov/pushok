@@ -55,30 +55,43 @@ Built with **Event Sourcing** architecture for habit tracking:
 ### Core Features Built
 
 ✅ **Habit Management**
-- Create habits manually or with AI assistance
+- Create habits manually or with AI assistance  
 - Edit, pause, archive habits
 - Category organization (health, nature, mindfulness, family, learning, creativity, home)
+- Metric tracking (checkmark, count, duration, distance)
+- Flexible units (reps, steps, seconds, minutes, hours, miles, km, etc.)
 
 ✅ **AI-Assisted Creation** (GPT-5-nano)
-- Natural language input: "remind me to plank for 60 seconds daily"
+- Natural language input: "do 50 pushups daily" or "plank for 60 seconds"
 - AI suggests: title, category, metric, target, unit, nudge time, reasoning
 - User reviews and tweaks before creating
+- Cost-optimized with 90% prompt caching
 
-✅ **Flexible Tracking Metrics**
-- **Checkmark**: Simple done/not done
-- **Count**: Reps, steps, pages (with custom unit)
-- **Duration**: Seconds, minutes, hours (flexible units)
-- **Distance**: Miles, km, meters
+✅ **Enhanced Activity Logging**
+- Quick "Log Now" button with modal input
+- **Multiple logs per day**: Log morning session, evening session separately
+- **Value tracking**: Enter reps, minutes, distance with each log
+- **Aggregated totals**: "3 sessions today • 75 total"
+- **Expandable timeline**: See individual logs with timestamps, values, mood, notes
+- Optional details: mood emoji, notes
 
-✅ **Activity Logging**
-- Quick "Log Today" button (2-second check-in)
-- Activity counts shown on habit cards ("5 times logged ✨")
-- Event sourcing stores complete history
+✅ **Today's Focus Dashboard**
+- Daily habit view with aggregated progress
+- Shows how many times logged and total value
+- Timeline of individual logs (expandable)
+- Motivational messages: "Stela would be proud"
+
+✅ **Navigation & UX**
+- Seamless navigation: Home | Today | Habits | About
+- About page with Stela's story and philosophy
+- Clean, calming emerald theme
+- Responsive design
 
 ✅ **Event Sourcing Architecture**
 - All changes stored as immutable events
-- Complete audit trail
+- Complete audit trail of every action
 - Aggregation without guilt ("18 walks this month" not "missed 12 days")
+- Foundation for future mobile sync
 
 ### Video Walkthrough
 
@@ -702,8 +715,8 @@ This multi-tool verification builds confidence when doing something for the firs
 
 *Built with ❤️ and GitHub Copilot CLI*
 
-**Status:** Active Development | **Phase:** 1 Complete (20%) | **Live:** https://pushok.life
+**Status:** Active Development | **Phase:** 3 Complete (65%) | **Live:** https://pushok.life
 
 ---
 
-**Last Updated:** 2026-01-31
+**Last Updated:** 2026-02-02

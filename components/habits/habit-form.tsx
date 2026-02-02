@@ -79,6 +79,9 @@ export function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
       category: category || undefined,
       recurring: recurring,
       nudgeTime: nudgeTime || undefined,
+      metric: metric || undefined,
+      unit: unit || undefined,
+      target: target ? parseFloat(target) : undefined,
     });
 
     await habit.save();

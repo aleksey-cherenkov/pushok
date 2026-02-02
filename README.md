@@ -244,25 +244,34 @@ npm run type-check   # TypeScript check
 
 **🎉 Live at https://pushok.life**
 
-### Phase 2: Core Features (Current)
-- [x] Activity logging (quick check-ins) ✅
+### Phase 2: Core Features ✅ COMPLETE
+- [x] Activity logging with multiple logs per day ✅
 - [x] AI habit creation with GPT-5-nano ✅
-- [ ] Today's Focus dashboard
-- [ ] Weekly/monthly aggregations
-- [ ] Navigation bar
+- [x] Metric tracking (count, duration, distance) ✅
+- [x] Today's Focus dashboard ✅
+- [x] Navigation bar ✅
+- [x] About page with Stela's story ✅
 
 **Recent additions:**
-- 🤖 **AI-Assisted Habit Creation**: Natural language → configured habit
-- 📊 **Flexible Metrics**: checkmark, count, duration, distance with units
-- ✅ **Activity Logging**: "Log Today" button with event sourcing
-- 🔢 **Activity Counts**: Shows "X times logged" on habit cards
+- 🤖 **AI-Assisted Habit Creation**: Natural language → configured habit with metrics
+- 📊 **Flexible Metrics**: checkmark, count (reps/steps), duration (sec/min/hr), distance (mi/km)
+- ✅ **Enhanced Activity Logging**: Multiple sessions per day with value tracking
+- 📈 **Aggregated Progress**: "3 sessions today • 45 total" - see real progress
+- 🗓️ **Today's Focus**: Daily dashboard with expandable log timelines
+- 🧭 **Navigation**: Seamless flow between Home, Today, Habits, About
 
-### Phase 3: Polish & Submit
+### Phase 3: Progress & Motivation (Current)
+- [ ] Long-term aspirations/goals
+- [ ] Progress visualization (combat futility)
+- [ ] Resistance tracking (inspired by "The War of Art")
+- [ ] Weekly/monthly aggregations
 - [ ] Milestone celebrations
+
+### Phase 4: Polish & Submit
 - [ ] Reflection views
 - [ ] Demo video for challenge submission
 
-### Phase 4: Future (Post-Challenge)
+### Phase 5: Future (Post-Challenge)
 - [ ] Flutter mobile app (where photos really shine)
 - [ ] Native notifications (proper gentle reminders)
 - [ ] Cloud sync (Azure Functions + SignalR)

@@ -2,21 +2,27 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Habit, type HabitState } from '@/lib/aggregates/habit';
 import { Activity } from '@/lib/aggregates/activity';
+import { ActivityLogModal } from '@/components/habits/activity-log-modal';
 import { eventStore } from '@/lib/events/store';
 
 interface TodayActivity {
+  id: string;
   habitId: string;
   loggedAt: number;
+  value?: number;
   notes?: string;
+  mood?: string;
 }
 
 export default function TodayPage() {
   const [habits, setHabits] = useState<HabitState[]>([]);
   const [todayActivities, setTodayActivities] = useState<TodayActivity[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loggingHabit, setLoggingHabit] = useState<HabitState | null>(null);
+  const [expandedHabit, setExpandedHabit] = useState<string | null>(null);
 
   const loadData = async () => {
     setLoading(true);
@@ -51,9 +57,12 @@ export default function TodayPage() {
       const activities = activityEvents.map((e) => {
         const data = e.data as any;
         return {
+          id: e.aggregateId,
           habitId: data.habitId as string,
           loggedAt: e.timestamp,
+          value: data.value as number | undefined,
           notes: data.notes as string | undefined,
+          mood: data.mood as string | undefined,
         };
       });
 
@@ -69,14 +78,16 @@ export default function TodayPage() {
     loadData();
   }, []);
 
-  const handleQuickLog = async (habitId: string) => {
+  const handleQuickLog = async (habitId: string, logData: { value?: number; notes?: string; mood?: string }) => {
     try {
       const activity = new Activity();
       activity.log({
         habitId,
         completed: true,
+        ...logData,
       });
       await activity.save();
+      setLoggingHabit(null);
       await loadData();
     } catch (error) {
       console.error('Failed to log activity:', error);
@@ -84,8 +95,15 @@ export default function TodayPage() {
     }
   };
 
-  const isLoggedToday = (habitId: string) => {
-    return todayActivities.some((a) => a.habitId === habitId);
+  const getHabitLogs = (habitId: string) => {
+    return todayActivities.filter((a) => a.habitId === habitId);
+  };
+
+  const getHabitSummary = (habitId: string) => {
+    const logs = getHabitLogs(habitId);
+    const count = logs.length;
+    const totalValue = logs.reduce((sum, log) => sum + (log.value || 0), 0);
+    return { count, totalValue };
   };
 
   const formatTime = (timestamp: number) => {
@@ -130,14 +148,14 @@ export default function TodayPage() {
           <CardContent className="pt-6">
             <div className="text-center">
               <div className="text-5xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">
-                {completedCount} / {totalHabits}
+                {completedCount}
               </div>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
                 {completedCount === 0
                   ? 'Ready to start your day? ✨'
-                  : completedCount === totalHabits
-                  ? 'Amazing! All done for today! 🎉'
-                  : `You're doing great! Keep going! 🌿`}
+                  : completedCount === 1
+                  ? 'Great start! 🌿'
+                  : `${completedCount} activities logged today! Keep going! 🎉`}
               </p>
             </div>
           </CardContent>
@@ -163,21 +181,16 @@ export default function TodayPage() {
           ) : (
             <div className="space-y-3">
               {habits.map((habit) => {
-                const logged = isLoggedToday(habit.id);
-                const activityTime = todayActivities.find((a) => a.habitId === habit.id)?.loggedAt;
+                const { count, totalValue } = getHabitSummary(habit.id);
+                const logs = getHabitLogs(habit.id);
+                const isExpanded = expandedHabit === habit.id;
 
                 return (
-                  <Card
-                    key={habit.id}
-                    className={logged ? 'border-emerald-300 dark:border-emerald-800 bg-emerald-50/30 dark:bg-emerald-950/10' : ''}
-                  >
+                  <Card key={habit.id}>
                     <CardContent className="py-4">
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-3">
-                            {logged && (
-                              <span className="text-2xl">✅</span>
-                            )}
                             <div>
                               <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
                                 {habit.title}
@@ -187,30 +200,64 @@ export default function TodayPage() {
                                   {habit.description}
                                 </p>
                               )}
-                              {logged && activityTime && (
-                                <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">
-                                  Logged at {formatTime(activityTime)}
-                                </p>
+                              {count > 0 && (
+                                <div className="flex items-center gap-2 mt-2">
+                                  <p className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">
+                                    {count} {count === 1 ? 'session' : 'sessions'} today
+                                    {totalValue > 0 && ` • ${totalValue} total`}
+                                  </p>
+                                  <button
+                                    onClick={() => setExpandedHabit(isExpanded ? null : habit.id)}
+                                    className="text-xs text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300"
+                                  >
+                                    {isExpanded ? '− hide' : '+ show'}
+                                  </button>
+                                </div>
                               )}
                             </div>
                           </div>
                         </div>
 
                         <div className="flex gap-2">
-                          {!logged ? (
-                            <Button
-                              onClick={() => handleQuickLog(habit.id)}
-                              className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600"
-                            >
-                              ✓ Log Now
-                            </Button>
-                          ) : (
-                            <Button variant="outline" disabled>
-                              Done ✨
-                            </Button>
-                          )}
+                          <Button
+                            onClick={() => setLoggingHabit(habit)}
+                            className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600"
+                          >
+                            {count > 0 ? '+ Log Again' : '✓ Log Now'}
+                          </Button>
                         </div>
                       </div>
+
+                      {/* Expanded Logs */}
+                      {isExpanded && logs.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-700 space-y-2">
+                          {logs.map((log) => (
+                            <div
+                              key={log.id}
+                              className="flex items-center justify-between text-sm bg-zinc-50 dark:bg-zinc-900 rounded-lg p-3"
+                            >
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-zinc-600 dark:text-zinc-400">
+                                    {formatTime(log.loggedAt)}
+                                  </span>
+                                  {log.value && (
+                                    <span className="font-medium text-zinc-900 dark:text-zinc-50">
+                                      • {log.value}
+                                    </span>
+                                  )}
+                                  {log.mood && <span>{log.mood}</span>}
+                                </div>
+                                {log.notes && (
+                                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                                    {log.notes}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 );
@@ -228,6 +275,15 @@ export default function TodayPage() {
           </div>
         )}
       </div>
+
+      {/* Activity Log Modal */}
+      {loggingHabit && (
+        <ActivityLogModal
+          habit={loggingHabit}
+          onLog={(data) => handleQuickLog(loggingHabit.id, data)}
+          onCancel={() => setLoggingHabit(null)}
+        />
+      )}
     </div>
   );
 }

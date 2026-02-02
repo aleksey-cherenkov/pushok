@@ -31,6 +31,9 @@ export interface HabitCreatedEvent extends BaseEvent {
     linkedAspirationId?: string;
     recurring?: 'daily' | 'weekly' | 'custom';
     nudgeTime?: string;
+    metric?: 'checkmark' | 'count' | 'duration' | 'distance';
+    unit?: string;
+    target?: number;
   };
 }
 

@@ -101,27 +101,36 @@
 
 ---
 
-### ✅ Phase 3: Habit Tracking & Quick Check-ins (COMPLETED)
+### ✅ Phase 3: Habit Tracking & Enhanced Logging (COMPLETED) 🎉
 
-**Status:** Core habit tracking UI built and ready for activity logging!
+**Status:** Complete habit tracking with AI assistance, metric tracking, and multi-session logging!
 
 **Architecture Pivot:**
 - **Was:** Aspirational goals (vague directions)
-- **Now:** Habits you want to nurture + quick activity check-ins + aggregated reflections
+- **Now:** Habits you want to nurture + multiple activity logs per day + metric tracking
 
 **Completed Tasks:**
 - [x] Rename Goal → Habit throughout codebase
-- [x] Add `recurring` and `nudgeTime` fields to Habit
+- [x] Add `recurring`, `nudgeTime`, `metric`, `unit`, `target` fields to Habit
 - [x] Create Habit aggregate with create/update/archive commands
-- [x] Build habit form for recurring options
-- [x] Create habit card with "Log Today" button
-- [x] Add back link to dashboard
+- [x] Build comprehensive habit form (AI + Manual modes)
+- [x] Implement Azure OpenAI GPT-5-nano integration
+- [x] AI-assisted habit creation from natural language
+- [x] Create habit card with activity logging
+- [x] Activity aggregate with log/update commands
+- [x] Multiple logs per day with value tracking
+- [x] ActivityLogModal with metric-aware inputs
+- [x] Today's Focus dashboard with aggregated totals
+- [x] Expandable timeline of individual logs
+- [x] Navigation bar (Home | Today | Habits | About)
+- [x] About page with Stela's story
 
-**Next Tasks (Phase 4):**
-- [ ] Implement ActivityLogged event handling
-- [ ] Build activity aggregation projection (weekly/monthly counts)
-- [ ] Create Today's Focus dashboard
-- [ ] Add navigation bar (Home | Habits | Timeline | Settings)
+**Current Features:**
+- ✅ "Do 50 pushups daily" → AI suggests count metric, reps unit, 50 target
+- ✅ Log multiple sessions: "25 reps at 8am, 25 reps at 6pm"
+- ✅ See aggregated progress: "2 sessions today • 50 total"
+- ✅ Expandable timeline shows each log with timestamp, value, mood, notes
+- ✅ Four metric types: checkmark, count, duration, distance (with flexible units)
 
 **Core Principle Changes:**
 - ✅ Track activities → aggregate → reflect
@@ -132,7 +141,30 @@
 
 ---
 
-### 📋 Phase 4: Journal & Reflections
+### 📊 Phase 4: Progress & Motivation (Current)
+
+**Goal:** Combat futility by making progress visible. Fight Resistance (per Steven Pressfield's "The War of Art").
+
+**Tasks:**
+- [ ] Define Aspiration/Goal aggregate (long-term meaningful pursuits)
+- [ ] Link habits to aspirations ("50 pushups" → "Get strong for hiking")
+- [ ] Progress visualization dashboard
+- [ ] Weekly/monthly aggregation views
+- [ ] Milestone celebrations (not streaks - growth markers)
+- [ ] Resistance tracking ("logged when I didn't feel like it")
+- [ ] Reflection prompts
+
+**Design Philosophy:**
+- Show connection: daily habits → weekly progress → long-term aspirations
+- Make invisible progress visible: "12 writing sessions = 15,000 words"
+- Celebrate showing up when Resistance was high
+- Monthly/yearly retrospectives: "This year you..."
+
+**Dependencies:** Phase 3 (Habits) ✓
+
+---
+
+### 📋 Phase 5: Journal & Reflections
 
 **Tasks:**
 - [ ] Define goal aggregate (`lib/aggregates/goal.aggregate.ts`)
@@ -252,16 +284,19 @@
 
 ### 🤖 Phase 7: AI Integration
 
-**Tasks:**
-- [ ] Create Azure OpenAI client wrapper (`lib/ai/openai-client.ts`)
-- [ ] Implement goal refinement API route (`app/api/ai/refine-goal/route.ts`)
-- [ ] Build AI suggestion UI (Claude/Copilot CLI style - show options, clarify, regenerate)
-- [ ] Add AI suggestion UI components
-- [ ] Implement prompt engineering for goal refinement
-- [ ] Create AI analytics suggestions (future)
-- [ ] Add error handling & rate limiting
+**AI Integration Completed:**
+- [x] Create Azure OpenAI client wrapper (`lib/ai/openai-client.ts`)
+- [x] Implement habit suggestion API route (`app/api/ai/suggest-habit/route.ts`)
+- [x] Build AI suggestion UI (natural language → configured habit)
+- [x] Add metric-aware prompt engineering
+- [x] Error handling & graceful degradation
 
-**Dependencies:** Phase 3 (Goals)
+**Live Features:**
+- ✅ "remind me to do plank for 60 sec daily" → AI suggests duration metric, seconds unit
+- ✅ GPT-5-nano with 90% prompt caching discount
+- ✅ Budget: ~$0.50/month for AI calls
+
+**Dependencies:** Phase 3 (Habits) ✓
 
 **AI Interaction Pattern (Like Claude/Copilot CLI):**
 - Show multiple suggestions for user to choose
@@ -504,6 +539,34 @@ Based on event sourcing best practices (Martin Dilger, Adam Dymitruk), properly 
 
 ---
 
+## Current Status Summary
+
+**Overall Progress:** ~65% complete for challenge submission
+
+**✅ Completed:**
+- Infrastructure: Next.js 16, Azure Static Web Apps, pushok.life live
+- Event Store: Dexie.js with full event sourcing
+- Habit Management: CRUD with recurring, metric tracking
+- AI Integration: GPT-5-nano for habit suggestions
+- Activity Logging: Multiple logs per day with values
+- Today Dashboard: Aggregated progress with expandable timelines
+- Navigation: Seamless flow across pages
+
+**🚧 Current Focus (Phase 4):**
+- Long-term aspirations/goals
+- Progress visualization (combat futility)
+- Resistance tracking (inspired by "The War of Art")
+- Weekly/monthly aggregations
+
+**📝 Remaining for Submission:**
+- Reflection views
+- Demo video
+- Documentation polish
+
+**💰 Budget Status:** Under $5/month (Azure Free tier + GPT-5-nano with caching)
+
+---
+
 ## Resources & References
 
 ### Documentation
@@ -521,6 +584,7 @@ Based on event sourcing best practices (Martin Dilger, Adam Dymitruk), properly 
 - Calm technology principles
 - Nature-inspired color palettes
 - Mindful productivity apps (Headspace, Calm)
+- **Steven Pressfield - "The War of Art"**: Combat Resistance (procrastination, self-doubt, perfectionism)
 
 ---
 

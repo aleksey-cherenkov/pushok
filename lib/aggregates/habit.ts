@@ -16,6 +16,9 @@ export interface HabitState {
   linkedAspirationId?: string;
   recurring?: 'daily' | 'weekly' | 'custom';
   nudgeTime?: string;
+  metric?: 'checkmark' | 'count' | 'duration' | 'distance';
+  unit?: string;
+  target?: number;
   createdAt: number;
   updatedAt: number;
   archivedAt?: number;
@@ -34,6 +37,9 @@ export class Habit extends Aggregate {
     linkedAspirationId?: string;
     recurring?: 'daily' | 'weekly' | 'custom';
     nudgeTime?: string;
+    metric?: 'checkmark' | 'count' | 'duration' | 'distance';
+    unit?: string;
+    target?: number;
   }): void {
     if (this.state) {
       throw new Error('Habit already created');
@@ -100,6 +106,9 @@ export class Habit extends Aggregate {
       linkedAspirationId: event.data.linkedAspirationId,
       recurring: event.data.recurring,
       nudgeTime: event.data.nudgeTime,
+      metric: event.data.metric,
+      unit: event.data.unit,
+      target: event.data.target,
       createdAt: event.timestamp,
       updatedAt: event.timestamp,
       archived: false,
