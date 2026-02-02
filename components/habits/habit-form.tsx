@@ -88,11 +88,18 @@ export function HabitForm({ habit: existingHabit, onSubmit, onCancel }: HabitFor
         body: JSON.stringify({ input: aiInput }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to generate suggestion');
+      const data = await response.json();
+
+      // Handle rate limiting
+      if (response.status === 429) {
+        alert(data.error || 'Rate limit exceeded. Please try again later.');
+        return;
       }
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate suggestion');
+      }
+
       const sug = data.suggestion;
       setSuggestion(sug);
 

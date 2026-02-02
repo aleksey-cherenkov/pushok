@@ -2,9 +2,25 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { suggestHabit } from '@/lib/ai/openai-client';
+import { checkRateLimit, getClientIP } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting
+    const clientIP = getClientIP(request);
+    const rateLimit = checkRateLimit(clientIP, 100); // 100 requests per hour
+
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { 
+          error: rateLimit.message,
+          remaining: rateLimit.remaining,
+          resetAt: rateLimit.resetAt,
+        },
+        { status: 429 } // Too Many Requests
+      );
+    }
+
     const body = await request.json();
     const { input } = body;
 
@@ -17,7 +33,13 @@ export async function POST(request: NextRequest) {
 
     const suggestion = await suggestHabit(input);
 
-    return NextResponse.json({ suggestion });
+    return NextResponse.json({ 
+      suggestion,
+      rateLimit: {
+        remaining: rateLimit.remaining,
+        resetAt: rateLimit.resetAt,
+      }
+    });
   } catch (error) {
     console.error('AI suggestion error:', error);
     return NextResponse.json(
