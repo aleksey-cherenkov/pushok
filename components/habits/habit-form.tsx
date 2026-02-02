@@ -3,23 +3,38 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Habit } from '@/lib/aggregates/habit';
+import { Habit, type HabitState } from '@/lib/aggregates/habit';
 import { Aspiration, type AspirationState } from '@/lib/aggregates/aspiration';
 import { eventStore } from '@/lib/events/store';
 import type { HabitSuggestion } from '@/lib/ai/openai-client';
 
 interface HabitFormProps {
+  habit?: HabitState;  // If provided, we're editing
   onSubmit?: (habit: Habit) => void;
   onCancel?: () => void;
 }
 
-export function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
+export function HabitForm({ habit: existingHabit, onSubmit, onCancel }: HabitFormProps) {
   // Aspirations
   const [aspirations, setAspirations] = useState<AspirationState[]>([]);
 
-  // Load aspirations on mount
+  // Load aspirations on mount and populate form if editing
   useEffect(() => {
     loadAspirations();
+    
+    // If editing, populate form fields
+    if (existingHabit) {
+      setMode('manual');  // Always use manual mode for editing
+      setTitle(existingHabit.title);
+      setDescription(existingHabit.description || '');
+      setCategory(existingHabit.category || '');
+      setRecurring(existingHabit.recurring || 'daily');
+      setNudgeTime(existingHabit.nudgeTime || '');
+      setMetric(existingHabit.metric || 'checkmark');
+      setUnit(existingHabit.unit || '');
+      setTarget(existingHabit.target?.toString() || '');
+      setLinkedAspirationId(existingHabit.linkedAspirationId || '');
+    }
   }, []);
 
   const loadAspirations = async () => {
@@ -105,63 +120,85 @@ export function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const habit = new Habit();
-    habit.create({
-      title,
-      description: description || undefined,
-      category: category || undefined,
-      recurring: recurring,
-      nudgeTime: nudgeTime || undefined,
-      metric: metric || undefined,
-      unit: unit || undefined,
-      target: target ? parseFloat(target) : undefined,
-      linkedAspirationId: linkedAspirationId || undefined,
-    });
+    if (existingHabit) {
+      // Update existing habit
+      const habit = new Habit(existingHabit.id);
+      await habit.load();
+      habit.update({
+        title,
+        description: description || undefined,
+        category: category || undefined,
+        recurring: recurring,
+        nudgeTime: nudgeTime || undefined,
+        linkedAspirationId: linkedAspirationId || undefined,
+      });
+      await habit.save();
 
-    await habit.save();
+      if (onSubmit) {
+        onSubmit(habit);
+      }
+    } else {
+      // Create new habit
+      const habit = new Habit();
+      habit.create({
+        title,
+        description: description || undefined,
+        category: category || undefined,
+        recurring: recurring,
+        nudgeTime: nudgeTime || undefined,
+        metric: metric || undefined,
+        unit: unit || undefined,
+        target: target ? parseFloat(target) : undefined,
+        linkedAspirationId: linkedAspirationId || undefined,
+      });
 
-    if (onSubmit) {
-      onSubmit(habit);
+      await habit.save();
+
+      if (onSubmit) {
+        onSubmit(habit);
+      }
+
+      // Reset form (only for create)
+      setTitle('');
+      setDescription('');
+      setCategory('');
+      setRecurring('daily');
+      setNudgeTime('');
+      setMetric('checkmark');
+      setUnit('');
+      setTarget('');
+      setFrequency('daily');
+      setSuggestion(null);
+      setAiInput('');
+      setMode('ai');
     }
-
-    // Reset form
-    setTitle('');
-    setDescription('');
-    setCategory('');
-    setRecurring('daily');
-    setNudgeTime('');
-    setMetric('checkmark');
-    setUnit('');
-    setTarget('');
-    setFrequency('daily');
-    setSuggestion(null);
-    setAiInput('');
-    setMode('ai');
   };
 
   return (
     <Card className="w-full max-w-3xl">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span>Create a New Habit</span>
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant={mode === 'ai' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setMode('ai')}
-            >
-              🤖 AI Assist
-            </Button>
-            <Button
-              type="button"
-              variant={mode === 'manual' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setMode('manual')}
-            >
-              ✏️ Manual
-            </Button>
-          </div>
+          <span>{existingHabit ? 'Edit Habit' : 'Create a New Habit'}</span>
+          {!existingHabit && (
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant={mode === 'ai' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setMode('ai')}
+              >
+                🤖 AI Assist
+              </Button>
+              <Button
+                type="button"
+                variant={mode === 'manual' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setMode('manual')}
+              >
+                ✏️ Manual
+              </Button>
+            </div>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -409,7 +446,7 @@ export function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
             {/* Actions */}
             <div className="flex gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-700">
               <Button type="submit" className="flex-1">
-                Create Habit
+                {existingHabit ? 'Update Habit' : 'Create Habit'}
               </Button>
               {onCancel && (
                 <Button type="button" variant="outline" onClick={onCancel}>

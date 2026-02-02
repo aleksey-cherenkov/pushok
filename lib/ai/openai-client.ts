@@ -144,7 +144,13 @@ export async function suggestHabit(
 export interface AspirationSuggestion {
   title: string;
   description: string;
-  category: "Health & Fitness" | "Creative Work" | "Learning" | "Relationships" | "Career" | "Personal Growth";
+  category:
+    | "Health & Fitness"
+    | "Creative Work"
+    | "Learning"
+    | "Relationships"
+    | "Career"
+    | "Personal Growth";
   reasoning?: string;
 }
 
@@ -183,7 +189,9 @@ Respond in JSON format:
   "reasoning": "Brief explanation of your suggestions"
 }`;
 
-export async function suggestAspiration(input: string): Promise<AspirationSuggestion> {
+export async function suggestAspiration(
+  input: string,
+): Promise<AspirationSuggestion> {
   try {
     const client = getOpenAIClient();
 
@@ -193,7 +201,7 @@ export async function suggestAspiration(input: string): Promise<AspirationSugges
         { role: "system", content: ASPIRATION_SYSTEM_PROMPT },
         { role: "user", content: input },
       ],
-      temperature: 0.7,
+      temperature: 1,
       response_format: { type: "json_object" },
     });
 

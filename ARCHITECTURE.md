@@ -35,6 +35,7 @@ Pushok - Way Finder implements **Event Sourcing** and **Event Modeling** as desc
 ### Design Philosophy: Gentle Habit Tracking & Reflection
 
 Pushok is **not a task manager** or productivity tool with streaks. It's a **gentle companion** that helps you:
+
 - **Nurture good habits** without pressure or guilt
 - **Track meaningful moments** with photos and notes
 - **Reflect on progress** through aggregated views (weekly, monthly, yearly)
@@ -42,6 +43,7 @@ Pushok is **not a task manager** or productivity tool with streaks. It's a **gen
 - **Remember what matters** (In memory of Stela - simple joys: birds, nature, presence)
 
 **Core Principles:**
+
 - ✅ **Aggregation without guilt**: "You walked 18 times this month!" (not "You broke a 3-day streak!")
 - ✅ **Gentle nudging**: Daily reminders without pressure
 - ✅ **Celebrate milestones**: 10 walks, 30 walks, 100 walks - feel good!
@@ -50,6 +52,7 @@ Pushok is **not a task manager** or productivity tool with streaks. It's a **gen
 - ❌ **No FOMO mechanics**: No countdown timers, no "losing progress"
 
 **Single User Design (MVP):**
+
 - No authentication required
 - All data stored locally in IndexedDB
 - Privacy by default - your data never leaves your device
@@ -62,6 +65,7 @@ Pushok is **not a task manager** or productivity tool with streaks. It's a **gen
 ### Core Concepts
 
 **Event**: An immutable fact that something happened
+
 ```typescript
 {
   id: "evt_123",
@@ -74,21 +78,25 @@ Pushok is **not a task manager** or productivity tool with streaks. It's a **gen
 ```
 
 **Aggregate**: A cluster of domain objects treated as a unit
+
 - Enforces business rules
 - Generates events from commands
 - Rebuilds state by replaying events
 
 **Projection**: A read model built from events
+
 - Optimized for queries
 - Can be rebuilt at any time
 - Multiple projections from same events
 
 **Command**: An intent to change state
+
 ```typescript
 { type: "ActivateGoal", goalId: "goal_456", activatedAt: Date.now() }
 ```
 
 ### Event Flow
+
 ```
 Command → Aggregate → Events → Event Store → Projections → UI
    ↑                                               ↓
@@ -102,6 +110,7 @@ Command → Aggregate → Events → Event Store → Projections → UI
 ### Habit (formerly Goal) Aggregate
 
 **Events:**
+
 - `HabitCreated` - User defines a habit to nurture
 - `HabitUpdated` - Modify habit details
 - `HabitCategorized` - Assign category (nature, mindfulness, connection, health, etc.)
@@ -111,6 +120,7 @@ Command → Aggregate → Events → Event Store → Projections → UI
 - `HabitArchived` - Move to archived (no longer active)
 
 **Commands:**
+
 - `CreateHabit(title, description, category, recurring, nudgeTime)`
 - `UpdateHabit(habitId, updates)`
 - `SetNudgeSchedule(habitId, time)`
@@ -118,6 +128,7 @@ Command → Aggregate → Events → Event Store → Projections → UI
 - `ArchiveHabit(habitId)`
 
 **Example:**
+
 ```typescript
 habit = {
   id: "habit_123",
@@ -126,13 +137,14 @@ habit = {
   category: "nature",
   recurring: "daily",
   nudgeTime: "16:00", // 4pm gentle reminder
-  status: "active"
-}
+  status: "active",
+};
 ```
 
 ### Activity Aggregate (The Check-ins)
 
 **Events:**
+
 - `ActivityLogged` - User logs "I did it!" (quick check-in)
 - `ActivityNotesAdded` - Optional: Add reflection/notes
 - `ActivityPhotoAttached` - Optional: Link photos
@@ -142,15 +154,18 @@ habit = {
 - `ActivityDeleted` - Soft delete
 
 **Commands:**
+
 - `LogActivity(habitId, timestamp, note?, photo?, duration?, mood?)`
 - `AddActivityNote(activityId, note)`
 - `AttachPhoto(activityId, photoId)`
 
 **Use Cases:**
+
 - Quick: Tap "✓ Walked today" (2 seconds, saved)
 - Detailed: "Walked 30min, saw 2 cardinals and a squirrel 🐿️ [photo attached]"
 
 **No Streaks - Just Facts:**
+
 ```
 ActivityLogged: Jan 29 - Walked
 ActivityLogged: Jan 30 - Walked
@@ -164,6 +179,7 @@ NOT: "You broke a streak!" ✗
 ### Photo Aggregate
 
 **Photo Categories (User-Defined):**
+
 - **Project Photos**: Before/during/after shots for home improvement, creative work
 - **Family & Pets**: Kids, pets, meaningful moments together
 - **Nature**: Birds, squirrels, outdoor moments (Stela's favorites)
@@ -171,6 +187,7 @@ NOT: "You broke a streak!" ✗
 - **Custom**: User decides what matters to them
 
 **Events:**
+
 - `PhotoUploaded` - Upload photo (blob to IndexedDB)
 - `PhotoMetadataExtracted` - EXIF data (date, location)
 - `PhotoTagged` - Tag with people, pets, activities
@@ -180,6 +197,7 @@ NOT: "You broke a streak!" ✗
 - `PhotoPhaseSet` - Before/During/After for project tracking
 
 **Special: In Memory of Stela Gallery**
+
 - Dedicated gallery accessible from settings/about (couple clicks away)
 - Photos tagged with "Stela" appear here
 - Story of why this app exists
@@ -188,6 +206,7 @@ NOT: "You broke a streak!" ✗
 ### Reminder Aggregate
 
 **Events:**
+
 - `ReminderCreated` - Define reminder rule
 - `ReminderScheduleSet` - Set recurrence (daily, weekly, custom)
 - `ReminderTriggered` - Reminder fires (browser notification)
@@ -197,6 +216,7 @@ NOT: "You broke a streak!" ✗
 - `ReminderDisabled` / `ReminderEnabled`
 
 **Gentle Reminder Philosophy (Like Stela):**
+
 - **Not intrusive**: Daily digest instead of individual pop-ups
 - **Calm dashboard**: Suggestions appear softly, not demanding
 - **Nature imagery**: Birds, squirrels, grass, sunshine throughout
@@ -287,6 +307,7 @@ lib/
 ### Example: User Creates a Habit & Logs Activities
 
 **Step 1: User Creates Habit**
+
 ```typescript
 // User: "I want to go for daily walks"
 const habitCommand = {
@@ -294,7 +315,7 @@ const habitCommand = {
   description: "Connect with nature, like Stela loved",
   category: "nature",
   recurring: "daily",
-  nudgeTime: "16:00" // gentle 4pm reminder
+  nudgeTime: "16:00", // gentle 4pm reminder
 };
 
 // Create habit aggregate
@@ -309,13 +330,14 @@ await habit.save();
 ```
 
 **Step 2: User Logs Activity (Quick Check-in)**
+
 ```typescript
 // Day 1: User taps "✓ Walked today"
 const activity1 = new Activity();
 activity1.log({
   habitId: habit.getId(),
   timestamp: Date.now(),
-  note: "Saw cardinals at the park"
+  note: "Saw cardinals at the park",
 });
 await activity1.save();
 
@@ -323,12 +345,12 @@ await activity1.save();
 ```
 
 **Step 3: Aggregation (Weekly Reflection)**
+
 ```typescript
 // Projection builds view from events
-const activityEvents = await eventStore.getEventsByType('ActivityLogged');
-const thisWeekActivities = activityEvents.filter(e => 
-  e.data.habitId === habit.getId() &&
-  isThisWeek(e.timestamp)
+const activityEvents = await eventStore.getEventsByType("ActivityLogged");
+const thisWeekActivities = activityEvents.filter(
+  (e) => e.data.habitId === habit.getId() && isThisWeek(e.timestamp),
 );
 
 // Display: "You walked 5 times this week! 🌿"
@@ -336,19 +358,22 @@ const thisWeekActivities = activityEvents.filter(e =>
 ```
 
 **The Difference:**
+
 - ✅ **No Streaks**: Missing Tuesday doesn't "break" anything
 - ✅ **Aggregation**: "5 times this week" feels good
 - ✅ **Gentle**: Just facts, no guilt
 - ✅ **Milestones**: 10 walks → 20 walks → 50 walks (celebrate!)
+
 ```
 
 await eventStore.append(activatedEvent);
 ```
 
 **Step 5: Projection Updates**
+
 ```typescript
 // Projection rebuilds from events
-const activeGoalsProjection = await rebuildProjection('activeGoals');
+const activeGoalsProjection = await rebuildProjection("activeGoals");
 // Result: Shows new goal in dashboard
 
 // UI subscribes to projection changes (Zustand)
@@ -362,6 +387,7 @@ useStore.setState({ activeGoals: activeGoalsProjection });
 ### Schema
 
 **Events Table**
+
 ```typescript
 interface StoredEvent {
   id: string;              // evt_xxx
@@ -383,22 +409,24 @@ interface StoredEvent {
 ```
 
 **Snapshots Table (Optional - for performance)**
+
 ```typescript
 interface Snapshot {
   aggregateId: string;
   aggregateType: string;
-  version: number;        // Last event version included
-  state: any;             // Aggregate state at that version
+  version: number; // Last event version included
+  state: any; // Aggregate state at that version
   createdAt: number;
 }
 ```
 
 **Photos Table**
+
 ```typescript
 interface PhotoBlob {
   id: string;
-  blob: Blob;             // Actual photo data
-  thumbnail: Blob;        // Generated thumbnail
+  blob: Blob; // Actual photo data
+  thumbnail: Blob; // Generated thumbnail
   uploadedAt: number;
 }
 ```
@@ -406,7 +434,7 @@ interface PhotoBlob {
 ### Dexie.js Configuration
 
 ```typescript
-import Dexie, { Table } from 'dexie';
+import Dexie, { Table } from "dexie";
 
 class EventStoreDB extends Dexie {
   events!: Table<StoredEvent>;
@@ -414,11 +442,11 @@ class EventStoreDB extends Dexie {
   photos!: Table<PhotoBlob>;
 
   constructor() {
-    super('PushokEventStore');
+    super("PushokEventStore");
     this.version(1).stores({
-      events: 'id, [aggregateType+aggregateId], timestamp, [metadata.userId]',
-      snapshots: '[aggregateId+aggregateType], version',
-      photos: 'id, uploadedAt'
+      events: "id, [aggregateType+aggregateId], timestamp, [metadata.userId]",
+      snapshots: "[aggregateId+aggregateType], version",
+      photos: "id, uploadedAt",
     });
   }
 }
@@ -429,6 +457,7 @@ export const db = new EventStoreDB();
 ### Event Store Operations
 
 **Append Event**
+
 ```typescript
 async function appendEvent(event: StoredEvent): Promise<void> {
   await db.events.add(event);
@@ -438,14 +467,15 @@ async function appendEvent(event: StoredEvent): Promise<void> {
 ```
 
 **Load Aggregate**
+
 ```typescript
 async function loadAggregate<T>(
   aggregateId: string,
-  AggregateClass: new () => T
+  AggregateClass: new () => T,
 ): Promise<T> {
   // Try snapshot first (if exists)
   const snapshot = await db.snapshots
-    .where('[aggregateId+aggregateType]')
+    .where("[aggregateId+aggregateType]")
     .equals([aggregateId, aggregateType])
     .first();
 
@@ -459,12 +489,12 @@ async function loadAggregate<T>(
 
   // Load events after snapshot
   const events = await db.events
-    .where('[aggregateType+aggregateId]')
+    .where("[aggregateType+aggregateId]")
     .equals([aggregateType, aggregateId])
-    .and(e => e.metadata.version > fromVersion)
+    .and((e) => e.metadata.version > fromVersion)
     .toArray();
 
-  events.forEach(e => aggregate.apply(e));
+  events.forEach((e) => aggregate.apply(e));
   return aggregate;
 }
 ```
@@ -493,10 +523,10 @@ abstract class BaseAggregate {
       metadata: {
         userId: getCurrentUserId(),
         timestamp: Date.now(),
-        version: ++this.version
-      }
+        version: ++this.version,
+      },
     };
-    
+
     this.uncommittedEvents.push(event);
     this.apply(event);
   }
@@ -515,32 +545,32 @@ abstract class BaseAggregate {
 
 ```typescript
 class GoalAggregate extends BaseAggregate {
-  title: string = '';
-  description: string = '';
-  category: string = '';
-  status: 'draft' | 'active' | 'paused' | 'completed' = 'draft';
+  title: string = "";
+  description: string = "";
+  category: string = "";
+  status: "draft" | "active" | "paused" | "completed" = "draft";
   progress: number = 0;
   target: { value: number; unit: string; frequency: string } | null = null;
 
   apply(event: StoredEvent): void {
     switch (event.type) {
-      case 'GoalDefined':
+      case "GoalDefined":
         this.title = event.payload.title;
         this.description = event.payload.description;
         this.category = event.payload.category;
         this.target = event.payload.target;
         break;
 
-      case 'GoalActivated':
-        this.status = 'active';
+      case "GoalActivated":
+        this.status = "active";
         break;
 
-      case 'GoalProgressRecorded':
+      case "GoalProgressRecorded":
         this.progress += event.payload.amount;
         break;
 
-      case 'GoalCompleted':
-        this.status = 'completed';
+      case "GoalCompleted":
+        this.status = "completed";
         this.progress = this.target?.value || 100;
         break;
 
@@ -549,22 +579,27 @@ class GoalAggregate extends BaseAggregate {
   }
 
   // Commands
-  defineGoal(title: string, description: string, category: string, target: any): void {
-    if (!title) throw new Error('Goal title required');
-    this.addEvent('GoalDefined', { title, description, category, target });
+  defineGoal(
+    title: string,
+    description: string,
+    category: string,
+    target: any,
+  ): void {
+    if (!title) throw new Error("Goal title required");
+    this.addEvent("GoalDefined", { title, description, category, target });
   }
 
   activate(): void {
-    if (this.status !== 'draft') throw new Error('Goal must be in draft');
-    this.addEvent('GoalActivated', { activatedAt: Date.now() });
+    if (this.status !== "draft") throw new Error("Goal must be in draft");
+    this.addEvent("GoalActivated", { activatedAt: Date.now() });
   }
 
   recordProgress(amount: number): void {
-    if (this.status !== 'active') throw new Error('Goal must be active');
-    this.addEvent('GoalProgressRecorded', { amount, recordedAt: Date.now() });
-    
+    if (this.status !== "active") throw new Error("Goal must be active");
+    this.addEvent("GoalProgressRecorded", { amount, recordedAt: Date.now() });
+
     if (this.target && this.progress >= this.target.value) {
-      this.addEvent('GoalCompleted', { completedAt: Date.now() });
+      this.addEvent("GoalCompleted", { completedAt: Date.now() });
     }
   }
 }
@@ -579,6 +614,7 @@ class GoalAggregate extends BaseAggregate {
 **Design Decision: No Streaks**
 
 Streaks create stress when broken. Instead, we focus on:
+
 - **Milestones** - Celebrate achievements, not consecutive days
 - **Progress over time** - Weekly, monthly, yearly reflection
 - **Photo memories** - Visual proof of meaningful moments
@@ -603,11 +639,11 @@ class GoalsDashboardProjection {
     this.goals.clear();
 
     const events = await db.events
-      .where('aggregateType')
-      .equals('goal')
+      .where("aggregateType")
+      .equals("goal")
       .toArray();
 
-    events.forEach(e => this.apply(e));
+    events.forEach((e) => this.apply(e));
   }
 
   apply(event: StoredEvent): void {
@@ -615,23 +651,23 @@ class GoalsDashboardProjection {
     const goal = this.goals.get(goalId) || this.createEmpty(goalId);
 
     switch (event.type) {
-      case 'GoalDefined':
+      case "GoalDefined":
         goal.title = event.payload.title;
         goal.category = event.payload.category;
         goal.target = event.payload.target?.value || 100;
         break;
 
-      case 'GoalProgressRecorded':
+      case "GoalProgressRecorded":
         goal.progress += event.payload.amount;
         goal.lastActivity = event.payload.recordedAt;
         break;
 
-      case 'GoalMilestoneCompleted':
+      case "GoalMilestoneCompleted":
         goal.milestones.push(event.payload.milestone);
         break;
 
-      case 'GoalCompleted':
-        goal.status = 'completed';
+      case "GoalCompleted":
+        goal.status = "completed";
         goal.progress = goal.target;
         break;
     }
@@ -641,7 +677,7 @@ class GoalsDashboardProjection {
 
   getActiveGoals(): GoalDashboardItem[] {
     return Array.from(this.goals.values())
-      .filter(g => g.status === 'active')
+      .filter((g) => g.status === "active")
       .sort((a, b) => b.lastActivity - a.lastActivity);
   }
 }
@@ -652,7 +688,7 @@ class GoalsDashboardProjection {
 ```typescript
 interface TimelineItem {
   id: string;
-  type: 'activity' | 'photo' | 'milestone';
+  type: "activity" | "photo" | "milestone";
   timestamp: number;
   title: string;
   tags: string[];
@@ -665,11 +701,12 @@ class TimelineProjection {
 
   async rebuild(): Promise<void> {
     const events = await db.events
-      .where('type')
-      .anyOf(['ActivityLogged', 'PhotoUploaded', 'GoalMilestoneCompleted'])
+      .where("type")
+      .anyOf(["ActivityLogged", "PhotoUploaded", "GoalMilestoneCompleted"])
       .toArray();
 
-    this.items = events.map(e => this.eventToTimelineItem(e))
+    this.items = events
+      .map((e) => this.eventToTimelineItem(e))
       .sort((a, b) => b.timestamp - a.timestamp);
   }
 
@@ -678,11 +715,11 @@ class TimelineProjection {
   }
 
   getTimelineByGoal(goalId: string): TimelineItem[] {
-    return this.items.filter(i => i.goalIds.includes(goalId));
+    return this.items.filter((i) => i.goalIds.includes(goalId));
   }
 
   getPhotoTimeline(): TimelineItem[] {
-    return this.items.filter(i => i.photoIds.length > 0);
+    return this.items.filter((i) => i.photoIds.length > 0);
   }
 }
 ```
@@ -694,11 +731,13 @@ class TimelineProjection {
 ### Azure OpenAI for Goal Refinement
 
 **Model Strategy (Cost-Optimized):**
+
 - **Primary**: GPT-5-nano - Lowest cost with 90% prompt caching discount
 - **Alternative**: GPT-4.1-nano - Fallback option if GPT-5-nano unavailable
 - **Budget**: $1-5/month for personal use
 
 **Why GPT-5-nano:**
+
 - Input: $0.05 per 1M tokens (67% cheaper than GPT-4o-mini)
 - Cached input: $0.01 per 1M tokens (90% discount for system prompts)
 - Output: $0.40 per 1M tokens
@@ -706,17 +745,18 @@ class TimelineProjection {
 - Perfect for goal refinement with consistent system prompts
 
 **Interaction Pattern (Claude/Copilot CLI style):**
+
 - Show multiple suggestions for user to choose
 - Allow "clarify" to ask follow-up questions
 - Allow "regenerate" for new suggestions
 - User always has final control
 
 ```typescript
-import { OpenAIClient, AzureKeyCredential } from '@azure/openai';
+import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
 
 const client = new OpenAIClient(
   process.env.AZURE_OPENAI_ENDPOINT!,
-  new AzureKeyCredential(process.env.AZURE_OPENAI_API_KEY!)
+  new AzureKeyCredential(process.env.AZURE_OPENAI_API_KEY!),
 );
 
 // System prompt - will be cached for 90% cost savings on subsequent calls
@@ -734,10 +774,10 @@ async function refineGoalWithAI(roughIdea: string): Promise<GoalSuggestion[]> {
   const response = await client.getChatCompletions(
     process.env.AZURE_OPENAI_DEPLOYMENT!, // gpt-5-nano recommended
     [
-      { role: 'system', content: SYSTEM_PROMPT }, // Cached after first call
-      { role: 'user', content: `The person said: "${roughIdea}"` }
+      { role: "system", content: SYSTEM_PROMPT }, // Cached after first call
+      { role: "user", content: `The person said: "${roughIdea}"` },
     ],
-    { maxTokens: 500, temperature: 0.7 }
+    { maxTokens: 500, temperature: 1 },
   );
 
   return JSON.parse(response.choices[0].message.content);
@@ -747,6 +787,7 @@ async function refineGoalWithAI(roughIdea: string): Promise<GoalSuggestion[]> {
 ### Future: Pattern Analysis
 
 Once enough user data exists:
+
 - Analyze successful goal patterns
 - Suggest optimal reminder times
 - Identify correlations (e.g., "Exercise goals succeed more when paired with photo tracking")
@@ -759,6 +800,7 @@ Once enough user data exists:
 ### Event Sync Architecture (Flutter App)
 
 **Azure Resources (Future):**
+
 - **Resource Group**: `rg-pushok` (same as web app)
 - **Cosmos DB**: `pushok-cosmos` (event store)
 - **Azure Functions**: `pushok-sync` (sync service)
@@ -775,7 +817,7 @@ Once enough user data exists:
 └─────────────────┘         └──────────────────┘         └─────────────────┘
         │                            │
         └────── Sync Protocol ───────┘
-        
+
         1. Mobile appends local events
         2. Periodic sync pushes uncommitted events
         3. Azure Functions validates & appends to Cosmos DB
@@ -786,6 +828,7 @@ Once enough user data exists:
 ### Conflict Resolution
 
 Event sourcing makes conflicts rare:
+
 - Events are facts, not state updates
 - Timestamp + device ID ensures unique events
 - Commutative events (e.g., two progress logs) don't conflict
@@ -798,6 +841,7 @@ Event sourcing makes conflicts rare:
 ### Snapshot Strategy
 
 For aggregates with many events (100+), create snapshots:
+
 - Snapshot every 50 events
 - Load snapshot + replay remaining events
 - Rebuild projections in background (Web Worker)
@@ -829,12 +873,14 @@ Based on guidance from Martin Dilger and Adam Dymitruk (event sourcing experts),
 ### What We Test (Integration Only)
 
 **Manual/Integration Testing:**
+
 - Full flow: Command → Events → Projection → UI
 - AI refinement pipeline (GPT-4o mini responses)
 - Photo upload & retrieval
 - Event replay and state reconstruction
 
 **During Development:**
+
 - Delete IndexedDB and restart fresh when schemas change
 - No migration scripts needed for MVP
 - Visual verification through the UI
@@ -842,6 +888,7 @@ Based on guidance from Martin Dilger and Adam Dymitruk (event sourcing experts),
 ### Future Considerations
 
 For production/mobile app:
+
 - Consider integration tests for sync logic
 - E2E tests for critical user flows
 - But still no unit tests for aggregates/projections

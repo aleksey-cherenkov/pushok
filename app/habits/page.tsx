@@ -13,6 +13,7 @@ export default function HabitsPage() {
   const [activityCounts, setActivityCounts] = useState<Record<string, number>>({});
   const [aspirationNames, setAspirationNames] = useState<Record<string, string>>({});
   const [showForm, setShowForm] = useState(false);
+  const [editingHabit, setEditingHabit] = useState<HabitState | null>(null);
   const [showArchived, setShowArchived] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -75,7 +76,16 @@ export default function HabitsPage() {
 
   const handleHabitCreated = async () => {
     setShowForm(false);
+    setEditingHabit(null);
     await loadHabits();
+  };
+
+  const handleEdit = (habitId: string) => {
+    const habit = habits.find(h => h.id === habitId);
+    if (habit) {
+      setEditingHabit(habit);
+      setShowForm(true);
+    }
   };
 
   const handleArchive = async (habitId: string) => {
@@ -144,7 +154,12 @@ export default function HabitsPage() {
             >
               {showArchived ? 'Show Active' : 'Show All'}
             </Button>
-            <Button onClick={() => setShowForm(!showForm)}>
+            <Button onClick={() => {
+              setShowForm(!showForm);
+              if (showForm) {
+                setEditingHabit(null);
+              }
+            }}>
               {showForm ? 'Cancel' : '+ New Habit'}
             </Button>
           </div>
@@ -154,8 +169,12 @@ export default function HabitsPage() {
         {showForm && (
           <div className="flex justify-center">
             <HabitForm
+              habit={editingHabit || undefined}
               onSubmit={handleHabitCreated}
-              onCancel={() => setShowForm(false)}
+              onCancel={() => {
+                setShowForm(false);
+                setEditingHabit(null);
+              }}
             />
           </div>
         )}
@@ -165,6 +184,7 @@ export default function HabitsPage() {
           habits={habits}
           activityCounts={activityCounts}
           aspirationNames={aspirationNames}
+          onEdit={handleEdit}
           onArchive={handleArchive}
           onLogActivity={handleLogActivity}
           showArchived={showArchived}
