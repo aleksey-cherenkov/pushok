@@ -1,12 +1,6 @@
+import { getOpenAIClient } from "@/lib/ai/openai-client";
 import { checkRateLimit, getClientIP } from "@/lib/rate-limit";
 import { NextRequest, NextResponse } from "next/server";
-import OpenAI from "openai";
-
-function getOpenAIClient() {
-  return new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -58,10 +52,9 @@ Examples of the tone:
 Generate a message that fits their specific values. Return ONLY the message text, nothing else.`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-5-nano",
+      model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-5-nano",
       messages: [{ role: "user", content: prompt }],
       temperature: 1,
-      max_tokens: 100,
     });
 
     const message = completion.choices[0]?.message?.content?.trim();

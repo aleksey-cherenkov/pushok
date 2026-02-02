@@ -16,7 +16,16 @@ export type EventType =
   | 'ReflectionAdded'
   | 'MilestoneReached'
   | 'StelaMessageCreated'
-  | 'StelaMessageDismissed';
+  | 'StelaMessageDismissed'
+  | 'ProjectCreated'
+  | 'ProjectUpdated'
+  | 'ProjectArchived'
+  | 'PhaseAdded'
+  | 'PhaseUpdated'
+  | 'PhaseStatusChanged'
+  | 'PhasePhotoAdded'
+  | 'WeeklyReflectionCreated'
+  | 'WeeklyReflectionUpdated';
 
 export interface BaseEvent {
   id: string;
@@ -173,6 +182,101 @@ export interface StelaMessageDismissedEvent extends BaseEvent {
   };
 }
 
+// Project Events
+export interface ProjectCreatedEvent extends BaseEvent {
+  type: 'ProjectCreated';
+  data: {
+    title: string;
+    description?: string;
+    category?: string;
+    createdAt: number;
+  };
+}
+
+export interface ProjectUpdatedEvent extends BaseEvent {
+  type: 'ProjectUpdated';
+  data: {
+    title?: string;
+    description?: string;
+    category?: string;
+    updatedAt: number;
+  };
+}
+
+export interface ProjectArchivedEvent extends BaseEvent {
+  type: 'ProjectArchived';
+  data: {
+    archivedAt: number;
+  };
+}
+
+export interface PhaseAddedEvent extends BaseEvent {
+  type: 'PhaseAdded';
+  data: {
+    phaseId: string;
+    name: string;
+    order: number;
+    addedAt: number;
+  };
+}
+
+export interface PhaseUpdatedEvent extends BaseEvent {
+  type: 'PhaseUpdated';
+  data: {
+    phaseId: string;
+    name?: string;
+    notes?: string;
+    startDate?: number;
+    endDate?: number;
+    updatedAt: number;
+  };
+}
+
+export interface PhaseStatusChangedEvent extends BaseEvent {
+  type: 'PhaseStatusChanged';
+  data: {
+    phaseId: string;
+    status: 'not-started' | 'in-progress' | 'complete';
+    changedAt: number;
+  };
+}
+
+export interface PhasePhotoAddedEvent extends BaseEvent {
+  type: 'PhasePhotoAdded';
+  data: {
+    phaseId: string;
+    photoId: string;
+    photoData: string; // base64 encoded
+    caption?: string;
+    addedAt: number;
+  };
+}
+
+// Weekly Reflection Events
+export interface WeeklyReflectionCreatedEvent extends BaseEvent {
+  type: 'WeeklyReflectionCreated';
+  data: {
+    weekStart: number; // ISO week start date
+    weekEnd: number;
+    habitReview?: string;
+    projectProgress?: string;
+    personalReflections?: string;
+    mood?: number; // 1-5 scale
+    createdAt: number;
+  };
+}
+
+export interface WeeklyReflectionUpdatedEvent extends BaseEvent {
+  type: 'WeeklyReflectionUpdated';
+  data: {
+    habitReview?: string;
+    projectProgress?: string;
+    personalReflections?: string;
+    mood?: number;
+    updatedAt: number;
+  };
+}
+
 export type Event =
   | HabitCreatedEvent
   | HabitUpdatedEvent
@@ -189,4 +293,13 @@ export type Event =
   | ReflectionAddedEvent
   | MilestoneReachedEvent
   | StelaMessageCreatedEvent
-  | StelaMessageDismissedEvent;
+  | StelaMessageDismissedEvent
+  | ProjectCreatedEvent
+  | ProjectUpdatedEvent
+  | ProjectArchivedEvent
+  | PhaseAddedEvent
+  | PhaseUpdatedEvent
+  | PhaseStatusChangedEvent
+  | PhasePhotoAddedEvent
+  | WeeklyReflectionCreatedEvent
+  | WeeklyReflectionUpdatedEvent;
