@@ -32,22 +32,31 @@ We spend hours chasing virtual rewards in games while neglecting the real reward
 
 ### 🌿 Gentle Habit Tracking
 - Create habits you want to nurture (daily walks, time with family, etc.)
+- AI assistance: "remind me to plank 60 sec daily" → configured habit
 - Quick check-ins: "✓ Did it today" (2 seconds, no friction)
-- Optional details: Add notes, photos, mood, duration
-- **Aggregated reflections**: "5 walks this week" - feel good!
+- Multiple sessions per day: "3 sessions • 75 pushups total"
+- Edit habits: Update goals, link to aspirations
+- **Aggregated reflections**: "18 walks this month" - feel good!
 - **NO STREAKS**: Missing a day doesn't break anything
 
-### 🔔 Gentle Reminders (No Guilt)
-- Optional daily nudges at your preferred time
-- "Hey, want to go for a walk?" - suggestion, not pressure
-- No countdown timers, no "you're about to lose your streak!"
-- Learn from your patterns: suggest optimal times
+### 🎯 Aspirations (Long-term Meaningful Pursuits)
+- AI-assisted creation: "Get stronger for hiking" → no deadlines, just direction
+- Link habits to aspirations: See how daily actions connect to what matters
+- Aggregated progress: "18 plank sessions toward hiking goal"
+- Track across multiple habits: One aspiration, many supporting habits
 
-### 📊 Reflection Views (Not Productivity Metrics)
-- Weekly/monthly/yearly aggregations
-- Milestone celebrations: 10 walks → 50 walks → 100 walks
-- Charts show trends without guilt
+### 💪 Resistance Tracking
+- "Logged even when I didn't feel like it" checkbox
+- Celebrate victories: "Overcame Resistance 12 times 💪"
+- Inspired by Steven Pressfield's "The War of Art"
+- Combat perfectionism, self-doubt, procrastination
+
+### 📊 Progress Visualization (Not Guilt Metrics)
+- Milestone badges: 10 → 50 → 100 → 500 → 1000 sessions
+- Monthly comparison: "This month: 18 sessions (+50% vs last month)"
+- Growth percentages and total value aggregation
 - Focus on what you **did** accomplish, not what you missed
+- Individual habit progress + aspiration-level summaries
 
 ### 🔄 Event Sourcing Architecture
 - Complete audit trail of your journey
@@ -140,14 +149,16 @@ pushok/
 Pushok uses **Event Sourcing** - all state changes are stored as immutable events in an append-only log.
 
 ### Key Aggregates
-- **Habit**: Activities you want to nurture (walks, time with family, etc.)
-- **Activity**: Logged check-ins with optional details
-- **Photo**: Photos with phases (before/during/after), tags (future)
+- **Habit**: Activities you want to nurture (walks, planks, reading, etc.)
+- **Activity**: Logged check-ins with values, mood, notes, resistance tracking
+- **Aspiration**: Long-term meaningful pursuits (no deadlines, just direction)
+- **Photo**: Photos with phases (future)
 - **Reminder**: Gentle scheduled reminders (future)
 
 ### Sample Events
 ```typescript
-HabitCreated → HabitUpdated → ActivityLogged → MilestoneReached
+HabitCreated → AspirationCreated → HabitUpdated(linkedAspirationId) → 
+ActivityLogged(overcameResistance: true) → MilestoneReached(50 sessions)
 ```
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed event model.
@@ -252,23 +263,34 @@ npm run type-check   # TypeScript check
 - [x] Navigation bar ✅
 - [x] About page with Stela's story ✅
 
-**Recent additions:**
-- 🤖 **AI-Assisted Habit Creation**: Natural language → configured habit with metrics
+**Phase 4 Additions (Complete):**
+- 🎯 **Aspirations System**: AI-assisted long-term meaningful pursuits
+- 🔗 **Habit-Aspiration Linking**: See how daily actions connect to what matters
+- 💪 **Resistance Tracking**: Celebrate overcoming perfectionism, self-doubt, procrastination
+- 🏆 **Milestone Badges**: 10 → 50 → 100 → 500 → 1000 sessions
+- 📊 **Progress Visualization**: Monthly comparison, growth %, total value aggregation
+- ✏️ **Edit Habits**: Update goals and aspiration links
+- 📈 **Aspiration Progress**: Aggregated view across all linked habits
+
+**Earlier features:**
+- 🤖 **AI-Assisted Creation**: Natural language → habits + aspirations
 - 📊 **Flexible Metrics**: checkmark, count (reps/steps), duration (sec/min/hr), distance (mi/km)
 - ✅ **Enhanced Activity Logging**: Multiple sessions per day with value tracking
-- 📈 **Aggregated Progress**: "3 sessions today • 45 total" - see real progress
 - 🗓️ **Today's Focus**: Daily dashboard with expandable log timelines
-- 🧭 **Navigation**: Seamless flow between Home, Today, Habits, About
+- 🧭 **Navigation**: Home | Today | Habits | Aspirations | About
 
-### Phase 3: Progress & Motivation (Current)
-- [ ] Long-term aspirations/goals
-- [ ] Progress visualization (combat futility)
-- [ ] Resistance tracking (inspired by "The War of Art")
-- [ ] Weekly/monthly aggregations
-- [ ] Milestone celebrations
+### Phase 3: Progress & Motivation ✅ COMPLETE
+- [x] Long-term aspirations with AI assistance
+- [x] Link habits to aspirations
+- [x] Progress visualization (combat futility)
+- [x] Resistance tracking (inspired by "The War of Art")
+- [x] Weekly/monthly aggregations with growth percentages
+- [x] Milestone celebrations (10→50→100→500→1000)
+- [x] Habit edit functionality
+- [x] Aspiration detail page with comprehensive progress
 
-### Phase 4: Polish & Submit
-- [ ] Reflection views
+### Phase 4: Polish & Submit (Final)
+- [x] Documentation updates
 - [ ] Demo video for challenge submission
 
 ### Phase 5: Future (Post-Challenge)

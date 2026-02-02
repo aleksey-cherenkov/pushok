@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Aspiration, type AspirationState } from '@/lib/aggregates/aspiration';
-import { Habit, type HabitState } from '@/lib/aggregates/habit';
-import { eventStore } from '@/lib/events/store';
-import { AspirationProgress } from '@/components/progress/aspiration-progress';
-import { HabitProgress } from '@/components/progress/habit-progress';
+import { AspirationProgress } from "@/components/progress/aspiration-progress";
+import { HabitProgress } from "@/components/progress/habit-progress";
+import { Button } from "@/components/ui/button";
+import { Aspiration, type AspirationState } from "@/lib/aggregates/aspiration";
+import { Habit, type HabitState } from "@/lib/aggregates/habit";
+import { eventStore } from "@/lib/events/store";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface ActivityLog {
   loggedAt: number;
@@ -15,34 +15,43 @@ interface ActivityLog {
   overcameResistance?: boolean;
 }
 
-export default function AspirationDetailPage({ params }: { params: { id: string } }) {
+export default function AspirationDetailPage() {
   const router = useRouter();
+  const { id } = useParams() as { id?: string };
   const [aspiration, setAspiration] = useState<AspirationState | null>(null);
   const [linkedHabits, setLinkedHabits] = useState<HabitState[]>([]);
-  const [habitActivities, setHabitActivities] = useState<Record<string, ActivityLog[]>>({});
+  const [habitActivities, setHabitActivities] = useState<
+    Record<string, ActivityLog[]>
+  >({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadData();
-  }, [params.id]);
+    if (id) loadData();
+  }, [id]);
 
   const loadData = async () => {
     setLoading(true);
     try {
+      if (!id) {
+        setLoading(false);
+        router.push("/aspirations");
+        return;
+      }
+
       const events = await eventStore.getAllEvents();
 
       // Load aspiration
-      const asp = new Aspiration(params.id);
+      const asp = new Aspiration(id);
       await asp.load();
       const aspirationState = asp.getState();
       if (!aspirationState) {
-        router.push('/aspirations');
+        router.push("/aspirations");
         return;
       }
       setAspiration(aspirationState);
 
       // Load linked habits
-      const habitEvents = events.filter((e) => e.aggregateType === 'Habit');
+      const habitEvents = events.filter((e) => e.aggregateType === "Habit");
       const habitIds = [...new Set(habitEvents.map((e) => e.aggregateId))];
 
       const linked: HabitState[] = [];
@@ -50,14 +59,14 @@ export default function AspirationDetailPage({ params }: { params: { id: string 
         const habit = new Habit(habitId);
         await habit.load();
         const state = habit.getState();
-        if (state && state.linkedAspirationId === params.id) {
+        if (state && state.linkedAspirationId === id) {
           linked.push(state);
         }
       }
       setLinkedHabits(linked);
 
       // Load activities for each habit
-      const activityEvents = events.filter((e) => e.type === 'ActivityLogged');
+      const activityEvents = events.filter((e) => e.type === "ActivityLogged");
       const activitiesByHabit: Record<string, ActivityLog[]> = {};
 
       linked.forEach((habit) => {
@@ -71,7 +80,9 @@ export default function AspirationDetailPage({ params }: { params: { id: string 
             return {
               loggedAt: e.timestamp,
               value: data.value as number | undefined,
-              overcameResistance: data.overcameResistance as boolean | undefined,
+              overcameResistance: data.overcameResistance as
+                | boolean
+                | undefined,
             };
           });
         activitiesByHabit[habit.id] = habitActivities;
@@ -79,7 +90,7 @@ export default function AspirationDetailPage({ params }: { params: { id: string 
 
       setHabitActivities(activitiesByHabit);
     } catch (error) {
-      console.error('Failed to load aspiration details:', error);
+      console.error("Failed to load aspiration details:", error);
     } finally {
       setLoading(false);
     }
@@ -89,7 +100,9 @@ export default function AspirationDetailPage({ params }: { params: { id: string 
     return (
       <div className="min-h-screen bg-gradient-to-b from-sky-50 to-emerald-50 dark:from-zinc-900 dark:to-zinc-950 px-4 py-8">
         <div className="max-w-6xl mx-auto">
-          <p className="text-center text-zinc-500 dark:text-zinc-400">Loading...</p>
+          <p className="text-center text-zinc-500 dark:text-zinc-400">
+            Loading...
+          </p>
         </div>
       </div>
     );
@@ -103,14 +116,26 @@ export default function AspirationDetailPage({ params }: { params: { id: string 
   const habitSummaries = linkedHabits.map((habit) => {
     const activities = habitActivities[habit.id] || [];
     const now = new Date();
-    const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
-    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).getTime();
+    const thisMonthStart = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1,
+    ).getTime();
+    const lastMonthStart = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      1,
+    ).getTime();
 
-    const thisMonth = activities.filter((a) => a.loggedAt >= thisMonthStart).length;
-    const lastMonth = activities.filter(
-      (a) => a.loggedAt >= lastMonthStart && a.loggedAt < thisMonthStart
+    const thisMonth = activities.filter(
+      (a) => a.loggedAt >= thisMonthStart,
     ).length;
-    const resistanceCount = activities.filter((a) => a.overcameResistance).length;
+    const lastMonth = activities.filter(
+      (a) => a.loggedAt >= lastMonthStart && a.loggedAt < thisMonthStart,
+    ).length;
+    const resistanceCount = activities.filter(
+      (a) => a.overcameResistance,
+    ).length;
 
     return {
       title: habit.title,
@@ -127,7 +152,11 @@ export default function AspirationDetailPage({ params }: { params: { id: string 
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <Button variant="ghost" onClick={() => router.push('/aspirations')} className="mb-4">
+            <Button
+              variant="ghost"
+              onClick={() => router.push("/aspirations")}
+              className="mb-4"
+            >
               ← Back to Aspirations
             </Button>
             <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-50">
@@ -147,7 +176,10 @@ export default function AspirationDetailPage({ params }: { params: { id: string 
         </div>
 
         {/* Aspiration-Level Progress */}
-        <AspirationProgress aspirationTitle={aspiration.title} habitSummaries={habitSummaries} />
+        <AspirationProgress
+          aspirationTitle={aspiration.title}
+          habitSummaries={habitSummaries}
+        />
 
         {/* Per-Habit Progress */}
         {linkedHabits.length > 0 && (
