@@ -371,38 +371,6 @@ export default function ProjectDetailPage() {
               </CardHeader>
 
               <CardContent>
-                {/* Progress & Time Stats (when not editing) - Clickable to edit */}
-                {editingPhase !== phase.id && (
-                  <div 
-                    className="grid grid-cols-2 gap-4 mb-4 cursor-pointer hover:bg-secondary p-3 rounded-lg transition-colors"
-                    onClick={() => {
-                      setEditingPhase(phase.id);
-                      setPhaseNotes(phase.notes || '');
-                      setPhaseProgress(phase.progress || 0);
-                      const totalMins = phase.timeSpentMinutes || 0;
-                      setPhaseTimeHours(Math.floor(totalMins / 60));
-                      setPhaseTimeMinutes(totalMins % 60);
-                    }}
-                  >
-                    <div>
-                      <Label className="text-xs text-muted-foreground">Progress</Label>
-                      <div className="flex items-center gap-2 mt-1">
-                        <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-blue-500 transition-all"
-                            style={{ width: `${phase.progress || 0}%` }}
-                          />
-                        </div>
-                        <span className="text-sm font-medium">{phase.progress || 0}%</span>
-                      </div>
-                    </div>
-                    <div>
-                      <Label className="text-xs text-muted-foreground">Time Spent</Label>
-                      <p className="text-sm font-medium mt-1">{formatTimeSpent(phase.timeSpentMinutes)}</p>
-                    </div>
-                  </div>
-                )}
-
                 {/* Edit Form */}
                 {editingPhase === phase.id ? (
                   <div className="space-y-4">
@@ -470,26 +438,59 @@ export default function ProjectDetailPage() {
                     </div>
                   </div>
                 ) : (
-                  <div 
-                    className="mb-4 cursor-pointer hover:bg-secondary p-3 rounded-lg transition-colors"
-                    onClick={() => {
-                      setEditingPhase(phase.id);
-                      setPhaseNotes(phase.notes || '');
-                      setPhaseProgress(phase.progress || 0);
-                      const totalMins = phase.timeSpentMinutes || 0;
-                      setPhaseTimeHours(Math.floor(totalMins / 60));
-                      setPhaseTimeMinutes(totalMins % 60);
-                    }}
-                  >
-                    <Label className="text-sm font-medium mb-2 block">Notes</Label>
-                    <p className="text-sm text-muted-foreground min-h-[40px]">
-                      {phase.notes || 'Click anywhere to add notes, update progress, and log time...'}
-                    </p>
-                  </div>
+                  <>
+                    {/* Notes */}
+                    <div 
+                      className="mb-4 cursor-pointer hover:bg-secondary p-3 rounded-lg transition-colors"
+                      onClick={() => {
+                        setEditingPhase(phase.id);
+                        setPhaseNotes(phase.notes || '');
+                        setPhaseProgress(phase.progress || 0);
+                        const totalMins = phase.timeSpentMinutes || 0;
+                        setPhaseTimeHours(Math.floor(totalMins / 60));
+                        setPhaseTimeMinutes(totalMins % 60);
+                      }}
+                    >
+                      <Label className="text-sm font-medium mb-2 block">Notes</Label>
+                      <p className="text-sm text-muted-foreground min-h-[40px]">
+                        {phase.notes || 'Click anywhere to add notes, update progress, and log time...'}
+                      </p>
+                    </div>
+
+                    {/* Progress & Time Stats - Clickable to edit */}
+                    <div 
+                      className="grid grid-cols-2 gap-4 mb-4 cursor-pointer hover:bg-secondary p-3 rounded-lg transition-colors"
+                      onClick={() => {
+                        setEditingPhase(phase.id);
+                        setPhaseNotes(phase.notes || '');
+                        setPhaseProgress(phase.progress || 0);
+                        const totalMins = phase.timeSpentMinutes || 0;
+                        setPhaseTimeHours(Math.floor(totalMins / 60));
+                        setPhaseTimeMinutes(totalMins % 60);
+                      }}
+                    >
+                      <div>
+                        <Label className="text-sm font-medium mb-2 block">Progress</Label>
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-blue-500 transition-all"
+                              style={{ width: `${phase.progress || 0}%` }}
+                            />
+                          </div>
+                          <span className="text-sm font-medium">{phase.progress || 0}%</span>
+                        </div>
+                      </div>
+                      <div>
+                        <Label className="text-sm font-medium mb-2 block">Time Spent</Label>
+                        <p className="text-sm font-medium">{formatTimeSpent(phase.timeSpentMinutes)}</p>
+                      </div>
+                    </div>
+                  </>
                 )}
 
                 {/* Photos */}
-                <div>
+                <div className="mb-4">
                   <div className="flex items-center justify-between mb-2">
                     <Label className="text-sm font-medium">Photos</Label>
                     <Button
