@@ -21,6 +21,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { Project, type ProjectState, type Phase, type PhaseStatus } from '@/lib/aggregates/project';
+import { compressImage, formatFileSize, getBase64Size } from '@/lib/image-utils';
 import { format } from 'date-fns';
 
 export default function ProjectDetailPage() {
@@ -118,17 +119,37 @@ export default function ProjectDetailPage() {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        const photoData = event.target?.result as string;
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
+      }
+
+      try {
+        // Show original size
+        const originalSize = formatFileSize(file.size);
+        
+        // Compress image
+        const compressedData = await compressImage(file, {
+          maxWidth: 800,
+          maxHeight: 800,
+          quality: 0.8,
+          maxSizeKB: 200,
+        });
+
+        const compressedSize = formatFileSize(getBase64Size(compressedData));
+        console.log(`Photo compressed: ${originalSize} → ${compressedSize}`);
+
         const caption = prompt('Photo caption (optional):');
 
         const proj = new Project(projectId);
         await proj.load();
-        await proj.addPhotoToPhase(phaseId, photoData, caption || undefined);
+        await proj.addPhotoToPhase(phaseId, compressedData, caption || undefined);
         await loadProject();
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.error('Error uploading photo:', error);
+        alert('Failed to upload photo. Please try again with a different image.');
+      }
     };
 
     input.click();
