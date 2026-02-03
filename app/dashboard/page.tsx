@@ -576,10 +576,21 @@ export default function DashboardPage() {
                 const totalHours = Math.floor(totalMinutes / 60);
                 const remainingMins = totalMinutes % 60;
                 
-                // Get first and last photos
+                // Get first 3 and last 3 photos
                 const allPhotos = project.phases.flatMap(p => p.photos).sort((a, b) => a.addedAt - b.addedAt);
-                const firstPhoto = allPhotos[0];
-                const lastPhoto = allPhotos.length > 1 ? allPhotos[allPhotos.length - 1] : null;
+                const photosToShow: Array<{ photo: typeof allPhotos[0], label: string }> = [];
+                
+                if (allPhotos.length > 0) {
+                  // First 3 photos
+                  const firstPhotos = allPhotos.slice(0, 3);
+                  photosToShow.push(...firstPhotos.map(p => ({ photo: p, label: 'Before' })));
+                  
+                  // Last 3 photos (only if we have more than 3 total and they're different)
+                  if (allPhotos.length > 3) {
+                    const lastPhotos = allPhotos.slice(-3);
+                    photosToShow.push(...lastPhotos.map(p => ({ photo: p, label: 'After' })));
+                  }
+                }
                 
                 const isComplete = totalPhases > 0 && completedPhases === totalPhases;
 
@@ -591,32 +602,20 @@ export default function DashboardPage() {
                   >
                     <div className="flex items-start gap-4">
                       {/* Photos */}
-                      {(firstPhoto || lastPhoto) && (
-                        <div className="flex gap-2 shrink-0">
-                          {firstPhoto && (
-                            <div className="relative">
+                      {photosToShow.length > 0 && (
+                        <div className="flex flex-wrap gap-2 shrink-0 max-w-[280px]">
+                          {photosToShow.map((item, idx) => (
+                            <div key={idx} className="relative">
                               <img
-                                src={firstPhoto.data}
-                                alt="First photo"
+                                src={item.photo.data}
+                                alt={`Photo ${idx + 1}`}
                                 className="w-20 h-20 object-cover rounded-lg"
                               />
                               <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] text-center py-0.5 rounded-b-lg">
-                                Before
+                                {item.label}
                               </div>
                             </div>
-                          )}
-                          {lastPhoto && (
-                            <div className="relative">
-                              <img
-                                src={lastPhoto.data}
-                                alt="Latest photo"
-                                className="w-20 h-20 object-cover rounded-lg"
-                              />
-                              <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] text-center py-0.5 rounded-b-lg">
-                                After
-                              </div>
-                            </div>
-                          )}
+                          ))}
                         </div>
                       )}
                       
