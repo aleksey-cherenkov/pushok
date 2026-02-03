@@ -155,6 +155,10 @@ export default function ProjectDetailPage() {
       }
 
       try {
+        // Save scroll position before upload
+        scrollPositionRef.current = window.scrollY;
+        shouldRestoreScrollRef.current = true;
+        
         // Show original size
         const originalSize = formatFileSize(file.size);
         

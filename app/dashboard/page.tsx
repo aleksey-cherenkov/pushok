@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Habit, type HabitState } from '@/lib/aggregates/habit';
@@ -576,21 +577,9 @@ export default function DashboardPage() {
                 const totalHours = Math.floor(totalMinutes / 60);
                 const remainingMins = totalMinutes % 60;
                 
-                // Get first 3 and last 3 photos
+                // Get up to 5 photos chronologically (avoid duplicates)
                 const allPhotos = project.phases.flatMap(p => p.photos).sort((a, b) => a.addedAt - b.addedAt);
-                const photosToShow: Array<{ photo: typeof allPhotos[0], label: string }> = [];
-                
-                if (allPhotos.length > 0) {
-                  // First 3 photos
-                  const firstPhotos = allPhotos.slice(0, 3);
-                  photosToShow.push(...firstPhotos.map(p => ({ photo: p, label: 'Before' })));
-                  
-                  // Last 3 photos (only if we have more than 3 total and they're different)
-                  if (allPhotos.length > 3) {
-                    const lastPhotos = allPhotos.slice(-3);
-                    photosToShow.push(...lastPhotos.map(p => ({ photo: p, label: 'After' })));
-                  }
-                }
+                const photosToShow = allPhotos.slice(0, 5); // Just take first 5
                 
                 const isComplete = totalPhases > 0 && completedPhases === totalPhases;
 
@@ -604,15 +593,15 @@ export default function DashboardPage() {
                       {/* Photos */}
                       {photosToShow.length > 0 && (
                         <div className="flex flex-wrap gap-2 shrink-0 max-w-[280px]">
-                          {photosToShow.map((item, idx) => (
+                          {photosToShow.map((photo, idx) => (
                             <div key={idx} className="relative">
                               <img
-                                src={item.photo.data}
+                                src={photo.data}
                                 alt={`Photo ${idx + 1}`}
                                 className="w-20 h-20 object-cover rounded-lg"
                               />
                               <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] text-center py-0.5 rounded-b-lg">
-                                {item.label}
+                                {format(new Date(photo.addedAt), 'MMM d')}
                               </div>
                             </div>
                           ))}
