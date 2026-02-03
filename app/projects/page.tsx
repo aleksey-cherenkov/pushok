@@ -134,7 +134,7 @@ export default function ProjectsPage() {
 
   if (loading) {
     return (
-      <div className="container max-w-4xl py-8">
+      <div className="container mx-auto max-w-4xl py-8">
         <div className="flex items-center justify-center py-12">
           <p className="text-muted-foreground">Loading projects...</p>
         </div>
@@ -143,7 +143,7 @@ export default function ProjectsPage() {
   }
 
   return (
-    <div className="container max-w-4xl py-8">
+    <div className="container mx-auto max-w-4xl py-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>

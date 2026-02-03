@@ -191,7 +191,7 @@ export default function ProjectDetailPage() {
 
   if (loading) {
     return (
-      <div className="container max-w-4xl py-8">
+      <div className="container mx-auto max-w-4xl py-8">
         <div className="flex items-center justify-center py-12">
           <p className="text-muted-foreground">Loading project...</p>
         </div>
@@ -201,7 +201,7 @@ export default function ProjectDetailPage() {
 
   if (!project) {
     return (
-      <div className="container max-w-4xl py-8">
+      <div className="container mx-auto max-w-4xl py-8">
         <Card>
           <CardContent className="py-12 text-center">
             <p className="text-muted-foreground">Project not found</p>
@@ -215,7 +215,7 @@ export default function ProjectDetailPage() {
   }
 
   return (
-    <div className="container max-w-4xl py-8">
+    <div className="container mx-auto max-w-4xl py-8">
       {/* Back Button */}
       <Button
         variant="ghost"
@@ -444,6 +444,7 @@ export default function ProjectDetailPage() {
                       className="mb-4 cursor-pointer hover:bg-secondary p-3 rounded-lg transition-colors"
                       onClick={(e) => {
                         e.preventDefault();
+                        e.stopPropagation();
                         setEditingPhase(phase.id);
                         setPhaseNotes(phase.notes || '');
                         setPhaseProgress(phase.progress || 0);
@@ -463,6 +464,7 @@ export default function ProjectDetailPage() {
                       className="grid grid-cols-2 gap-4 mb-4 cursor-pointer hover:bg-secondary p-3 rounded-lg transition-colors"
                       onClick={(e) => {
                         e.preventDefault();
+                        e.stopPropagation();
                         setEditingPhase(phase.id);
                         setPhaseNotes(phase.notes || '');
                         setPhaseProgress(phase.progress || 0);
