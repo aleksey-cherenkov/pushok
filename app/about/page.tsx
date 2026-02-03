@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 export default function AboutPage() {
   return (
@@ -23,7 +24,23 @@ export default function AboutPage() {
           <CardHeader>
             <CardTitle className="text-center">In Memory of Stela 💙</CardTitle>
           </CardHeader>
-          <CardContent className="text-center text-zinc-700 dark:text-zinc-300 space-y-3">
+          <CardContent className="text-center text-zinc-700 dark:text-zinc-300 space-y-4">
+            <div className="flex justify-center gap-4 flex-wrap">
+              <Image
+                src="/images/stela-august-25.jpg"
+                alt="Stela as a kitten"
+                width={250}
+                height={250}
+                className="rounded-lg shadow-lg object-cover"
+              />
+              <Image
+                src="/images/stela-june-16.JPG"
+                alt="Stela"
+                width={250}
+                height={250}
+                className="rounded-lg shadow-lg object-cover"
+              />
+            </div>
             <p>
               Stela loved the simple things—watching birds and squirrels from the window,
               the warmth of the fireplace, the magic of Christmas trees, and the joy
