@@ -273,7 +273,7 @@ export async function suggestProject(
         { role: "system", content: PROJECT_SYSTEM_PROMPT },
         { role: "user", content: `Project description: "${description}"` },
       ],
-      temperature: 0.7,
+      temperature: 1,
       response_format: { type: "json_object" },
     });
 
