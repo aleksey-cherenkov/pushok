@@ -601,7 +601,7 @@ export default function DashboardPage() {
                                 className="w-20 h-20 object-cover rounded-lg"
                               />
                               <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] text-center py-0.5 rounded-b-lg">
-                                {format(new Date(photo.addedAt), "MMM d 'yy")}
+                                {format(new Date(photo.addedAt), "MMM d, ''yy")}
                               </div>
                             </div>
                           ))}

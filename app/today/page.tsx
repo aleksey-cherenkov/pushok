@@ -6,11 +6,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Habit, type HabitState } from '@/lib/aggregates/habit';
 import { Aspiration, type AspirationState } from '@/lib/aggregates/aspiration';
 import { Activity } from '@/lib/aggregates/activity';
-import { StelaMessage, type StelaMessageState } from '@/lib/aggregates/stela-message';
+import { Moment, type MomentState } from '@/lib/aggregates/moment';
 import { ActivityLogModal } from '@/components/habits/activity-log-modal';
-import { StelaOnboarding } from '@/components/stela/stela-onboarding';
-import { StelaMessageCard } from '@/components/stela/stela-message-card';
 import { eventStore } from '@/lib/events/store';
+import { Camera, RefreshCw } from 'lucide-react';
+import { format } from 'date-fns';
+import Link from 'next/link';
 
 interface TodayActivity {
   id: string;
@@ -29,120 +30,14 @@ export default function TodayPage() {
   const [loading, setLoading] = useState(true);
   const [loggingHabit, setLoggingHabit] = useState<HabitState | null>(null);
   const [expandedHabit, setExpandedHabit] = useState<string | null>(null);
-  
-  // Stela Messages State
-  const [showStelaOnboarding, setShowStelaOnboarding] = useState(false);
-  const [stelaMessage, setStelaMessage] = useState<StelaMessageState | null>(null);
-  const [generatingMessage, setGeneratingMessage] = useState(false);
+
+  // Moments State
+  const [randomMoment, setRandomMoment] = useState<MomentState | null>(null);
+  const [allMoments, setAllMoments] = useState<MomentState[]>([]);
 
   useEffect(() => {
     loadData();
-    checkStelaOnboarding();
   }, []);
-
-  const checkStelaOnboarding = async () => {
-    // Check if user has set up Stela values
-    const savedValues = localStorage.getItem('stela-values');
-    const onboardingDismissed = localStorage.getItem('stela-onboarding-dismissed');
-    
-    if (!savedValues && !onboardingDismissed) {
-      // Show onboarding after a brief delay so page loads first
-      setTimeout(() => setShowStelaOnboarding(true), 1000);
-    } else if (savedValues) {
-      // Load today's Stela message
-      await loadTodayStelaMessage();
-    }
-  };
-
-  const loadTodayStelaMessage = async () => {
-    const events = await eventStore.getAllEvents();
-    const messageEvents = events.filter((e) => e.aggregateType === 'StelaMessage');
-    const messageIds = [...new Set(messageEvents.map((e) => e.aggregateId))];
-
-    // Find today's message (not dismissed)
-    const today = new Date().toDateString();
-    for (const messageId of messageIds) {
-      const message = new StelaMessage(messageId);
-      await message.load();
-      const state = message.getState();
-      
-      if (state && !state.dismissed) {
-        const messageDate = new Date(state.generatedAt).toDateString();
-        if (messageDate === today) {
-          setStelaMessage(state);
-          return;
-        }
-      }
-    }
-
-    // No message for today - could generate one automatically
-  };
-
-  const handleStelaOnboardingComplete = async (values: string[]) => {
-    setShowStelaOnboarding(false);
-    await generateStelaMessage(values);
-  };
-
-  const handleStelaOnboardingSkip = () => {
-    setShowStelaOnboarding(false);
-    localStorage.setItem('stela-onboarding-dismissed', 'true');
-  };
-
-  const generateStelaMessage = async (customValues?: string[]) => {
-    setGeneratingMessage(true);
-    try {
-      const savedValues = customValues || JSON.parse(localStorage.getItem('stela-values') || '[]');
-      
-      if (savedValues.length === 0) {
-        return;
-      }
-
-      const response = await fetch('/api/ai/generate-stela-message', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userValues: savedValues }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to generate message');
-      }
-
-      const { message, category } = await response.json();
-
-      // Save as new StelaMessage
-      const messageId = `stela-${Date.now()}`;
-      const stelaMessage = new StelaMessage(messageId);
-      await stelaMessage.create(message, category);
-
-      const state = stelaMessage.getState();
-      if (state) {
-        setStelaMessage(state);
-      }
-    } catch (error) {
-      console.error('Error generating Stela message:', error);
-      alert('Failed to generate message. Please try again.');
-    } finally {
-      setGeneratingMessage(false);
-    }
-  };
-
-  const handleDismissStelaMessage = async (reason?: 'not-relevant' | 'done' | 'later') => {
-    if (!stelaMessage) return;
-
-    const message = new StelaMessage(stelaMessage.id);
-    await message.load();
-    await message.dismiss(reason);
-
-    setStelaMessage(null);
-
-    // If marked as "not-relevant", maybe suggest regenerating
-    if (reason === 'not-relevant') {
-      const shouldRegenerate = confirm('Would you like to generate a different message?');
-      if (shouldRegenerate) {
-        await generateStelaMessage();
-      }
-    }
-  };
 
   const loadData = async () => {
     setLoading(true);
@@ -179,6 +74,27 @@ export default function TodayPage() {
         }
       }
       setAspirationNames(names);
+
+      // Load moments
+      const momentEvents = events.filter((e) => e.aggregateType === 'moment');
+      const momentIds = [...new Set(momentEvents.map((e) => e.aggregateId))];
+      
+      const loadedMoments: MomentState[] = [];
+      for (const momentId of momentIds) {
+        const moment = new Moment(momentId);
+        const state = await moment.load();
+        if (!state.deleted) {
+          loadedMoments.push(state);
+        }
+      }
+      
+      setAllMoments(loadedMoments);
+      
+      // Set random moment
+      if (loadedMoments.length > 0) {
+        const randomIndex = Math.floor(Math.random() * loadedMoments.length);
+        setRandomMoment(loadedMoments[randomIndex]);
+      }
 
       // Load today's activities
       const today = new Date();
@@ -231,6 +147,18 @@ export default function TodayPage() {
     }
   };
 
+  const cycleRandomMoment = () => {
+    if (allMoments.length === 0) return;
+    
+    // Get a different random moment
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * allMoments.length);
+    } while (allMoments.length > 1 && allMoments[newIndex]?.id === randomMoment?.id);
+    
+    setRandomMoment(allMoments[newIndex]);
+  };
+
   const getHabitLogs = (habitId: string) => {
     return todayActivities.filter((a) => a.habitId === habitId);
   };
@@ -280,54 +208,6 @@ export default function TodayPage() {
           </p>
         </div>
 
-        {/* Stela Message */}
-        {stelaMessage && (
-          <StelaMessageCard
-            message={stelaMessage.message}
-            category={stelaMessage.category}
-            onDismiss={handleDismissStelaMessage}
-            onRegenerate={() => generateStelaMessage()}
-            onSettings={() => setShowStelaOnboarding(true)}
-            loading={generatingMessage}
-          />
-        )}
-
-        {/* Stela Settings/Enable Button */}
-        {!stelaMessage && (
-          <Card className="bg-amber-50/50 dark:bg-amber-950/10 border-amber-200 dark:border-amber-800">
-            <CardContent className="pt-6">
-              <div className="text-center space-y-3">
-                <p className="text-sm text-amber-900 dark:text-amber-100">
-                  ✨ No Stela message for today
-                </p>
-                <div className="flex gap-2 justify-center flex-wrap">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      const savedValues = localStorage.getItem('stela-values');
-                      if (savedValues) {
-                        generateStelaMessage();
-                      } else {
-                        setShowStelaOnboarding(true);
-                      }
-                    }}
-                  >
-                    Generate Message
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setShowStelaOnboarding(true)}
-                  >
-                    Update What Matters to You
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
         {/* Progress Summary */}
         <Card className="border-emerald-200 dark:border-emerald-900 bg-emerald-50/50 dark:bg-emerald-950/20">
           <CardContent className="pt-6">
@@ -355,6 +235,57 @@ export default function TodayPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Random Moment from Journey */}
+        {randomMoment && (
+          <Card className="border-amber-200 dark:border-amber-900 bg-amber-50/30 dark:bg-amber-950/10">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-amber-900 dark:text-amber-100 flex items-center gap-2">
+                  <Camera className="h-5 w-5" />
+                  A Moment from Your Journey
+                </h3>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={cycleRandomMoment}
+                    title="Show another moment"
+                  >
+                    <RefreshCw className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline" asChild>
+                    <Link href="/moments">
+                      View All
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4 items-center">
+                <img
+                  src={randomMoment.photoData}
+                  alt={randomMoment.caption || 'Moment'}
+                  className="w-full sm:w-48 h-48 object-cover rounded-lg"
+                />
+                <div className="flex-1 text-center sm:text-left">
+                  <p className="text-sm text-amber-900/70 dark:text-amber-100/70 mb-2">
+                    {format(new Date(randomMoment.createdAt), "MMM d, ''yy")}
+                  </p>
+                  {randomMoment.caption ? (
+                    <p className="text-base text-amber-900 dark:text-amber-50">
+                      "{randomMoment.caption}"
+                    </p>
+                  ) : (
+                    <p className="text-sm text-amber-900/60 dark:text-amber-100/60 italic">
+                      A captured moment
+                    </p>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Today's Habits */}
         <div className="space-y-4">
@@ -491,14 +422,6 @@ export default function TodayPage() {
           habit={loggingHabit}
           onLog={(data) => handleQuickLog(loggingHabit.id, data)}
           onCancel={() => setLoggingHabit(null)}
-        />
-      )}
-
-      {/* Stela Onboarding */}
-      {showStelaOnboarding && (
-        <StelaOnboarding
-          onComplete={handleStelaOnboardingComplete}
-          onSkip={handleStelaOnboardingSkip}
         />
       )}
     </div>

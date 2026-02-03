@@ -24,8 +24,9 @@ export type EventType =
   | 'PhaseUpdated'
   | 'PhaseStatusChanged'
   | 'PhasePhotoAdded'
-  | 'WeeklyReflectionCreated'
-  | 'WeeklyReflectionUpdated';
+  | 'MomentCreated'
+  | 'MomentUpdated'
+  | 'MomentDeleted';
 
 export interface BaseEvent {
   id: string;
@@ -254,28 +255,28 @@ export interface PhasePhotoAddedEvent extends BaseEvent {
   };
 }
 
-// Weekly Reflection Events
-export interface WeeklyReflectionCreatedEvent extends BaseEvent {
-  type: 'WeeklyReflectionCreated';
+// Moment Events
+export interface MomentCreatedEvent extends BaseEvent {
+  type: 'MomentCreated';
   data: {
-    weekStart: number; // ISO week start date
-    weekEnd: number;
-    habitReview?: string;
-    projectProgress?: string;
-    personalReflections?: string;
-    mood?: number; // 1-5 scale
+    photoData: string; // base64 encoded
+    caption?: string;
     createdAt: number;
   };
 }
 
-export interface WeeklyReflectionUpdatedEvent extends BaseEvent {
-  type: 'WeeklyReflectionUpdated';
+export interface MomentUpdatedEvent extends BaseEvent {
+  type: 'MomentUpdated';
   data: {
-    habitReview?: string;
-    projectProgress?: string;
-    personalReflections?: string;
-    mood?: number;
+    caption?: string;
     updatedAt: number;
+  };
+}
+
+export interface MomentDeletedEvent extends BaseEvent {
+  type: 'MomentDeleted';
+  data: {
+    deletedAt: number;
   };
 }
 
@@ -303,5 +304,6 @@ export type Event =
   | PhaseUpdatedEvent
   | PhaseStatusChangedEvent
   | PhasePhotoAddedEvent
-  | WeeklyReflectionCreatedEvent
-  | WeeklyReflectionUpdatedEvent;
+  | MomentCreatedEvent
+  | MomentUpdatedEvent
+  | MomentDeletedEvent;

@@ -14,7 +14,7 @@ export function Navbar() {
     { href: '/habits', label: 'Habits', icon: '🌱' },
     { href: '/aspirations', label: 'Aspirations', icon: '🎯' },
     { href: '/projects', label: 'Projects', icon: '📁' },
-    { href: '/reflections', label: 'Reflections', icon: '📖' },
+    { href: '/moments', label: 'Moments', icon: '📸' },
   ];
 
   return (
