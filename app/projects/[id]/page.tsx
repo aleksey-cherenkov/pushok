@@ -490,7 +490,7 @@ export default function ProjectDetailPage() {
                 )}
 
                 {/* Photos */}
-                <div className="mb-4">
+                <div className="mb-4 p-3">
                   <div className="flex items-center justify-between mb-2">
                     <Label className="text-sm font-medium">Photos</Label>
                     <Button
