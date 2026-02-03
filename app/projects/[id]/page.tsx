@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -43,9 +43,21 @@ export default function ProjectDetailPage() {
   const [phaseTimeHours, setPhaseTimeHours] = useState(0);
   const [phaseTimeMinutes, setPhaseTimeMinutes] = useState(0);
 
+  // Track scroll position to prevent jump on state changes
+  const scrollPositionRef = useRef<number>(0);
+  const shouldRestoreScrollRef = useRef<boolean>(false);
+
   useEffect(() => {
     loadProject();
   }, [projectId]);
+
+  // Restore scroll position after state changes
+  useEffect(() => {
+    if (shouldRestoreScrollRef.current) {
+      window.scrollTo(0, scrollPositionRef.current);
+      shouldRestoreScrollRef.current = false;
+    }
+  }, [project, editingPhase]);
 
   const loadProject = async () => {
     setLoading(true);
@@ -99,6 +111,9 @@ export default function ProjectDetailPage() {
   };
 
   const handleChangePhaseStatus = async (phaseId: string, status: PhaseStatus) => {
+    scrollPositionRef.current = window.scrollY;
+    shouldRestoreScrollRef.current = true;
+    
     const proj = new Project(projectId);
     await proj.load();
     await proj.changePhaseStatus(phaseId, status);
@@ -106,7 +121,8 @@ export default function ProjectDetailPage() {
   };
 
   const handleSavePhaseDetails = async (phaseId: string) => {
-    const scrollY = window.scrollY; // Save scroll position
+    scrollPositionRef.current = window.scrollY;
+    shouldRestoreScrollRef.current = true;
     
     const proj = new Project(projectId);
     await proj.load();
@@ -118,11 +134,9 @@ export default function ProjectDetailPage() {
       progress: phaseProgress,
       timeSpentMinutes: totalMinutes > 0 ? totalMinutes : undefined,
     });
-    setEditingPhase(null);
-    await loadProject();
     
-    // Restore scroll position after state update
-    setTimeout(() => window.scrollTo(0, scrollY), 0);
+    await loadProject();
+    setEditingPhase(null);
   };
 
   const handleUploadPhoto = async (phaseId: string) => {
@@ -348,7 +362,11 @@ export default function ProjectDetailPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleChangePhaseStatus(phase.id, 'not-started')}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleChangePhaseStatus(phase.id, 'not-started');
+                        }}
                       >
                         Not Started
                       </Button>
@@ -357,7 +375,11 @@ export default function ProjectDetailPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleChangePhaseStatus(phase.id, 'in-progress')}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleChangePhaseStatus(phase.id, 'in-progress');
+                        }}
                       >
                         In Progress
                       </Button>
@@ -366,7 +388,11 @@ export default function ProjectDetailPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleChangePhaseStatus(phase.id, 'complete')}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleChangePhaseStatus(phase.id, 'complete');
+                        }}
                       >
                         Complete
                       </Button>
@@ -451,6 +477,8 @@ export default function ProjectDetailPage() {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
+                        scrollPositionRef.current = window.scrollY;
+                        shouldRestoreScrollRef.current = true;
                         setEditingPhase(phase.id);
                         setPhaseNotes(phase.notes || '');
                         setPhaseProgress(phase.progress || 0);
@@ -471,6 +499,8 @@ export default function ProjectDetailPage() {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
+                        scrollPositionRef.current = window.scrollY;
+                        shouldRestoreScrollRef.current = true;
                         setEditingPhase(phase.id);
                         setPhaseNotes(phase.notes || '');
                         setPhaseProgress(phase.progress || 0);
