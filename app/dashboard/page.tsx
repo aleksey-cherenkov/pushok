@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Habit, type HabitState } from '@/lib/aggregates/habit';
 import { Aspiration, type AspirationState } from '@/lib/aggregates/aspiration';
 import { Activity, type ActivityState } from '@/lib/aggregates/activity';
+import { Project, type ProjectState } from '@/lib/aggregates/project';
 import { eventStore } from '@/lib/events/store';
 import { getResistanceLabel } from '@/lib/resistance-utils';
 import {
@@ -24,7 +25,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
-import { ArrowRight, TrendingUp, Target, Zap } from 'lucide-react';
+import { ArrowRight, TrendingUp, Target, Zap, FolderKanban, CheckCircle2, Trophy } from 'lucide-react';
 
 type Period = 'week' | 'month' | 'year' | 'all';
 
@@ -53,6 +54,7 @@ export default function DashboardPage() {
   const [habits, setHabits] = useState<HabitState[]>([]);
   const [aspirations, setAspirations] = useState<AspirationState[]>([]);
   const [activities, setActivities] = useState<ActivityState[]>([]);
+  const [projects, setProjects] = useState<ProjectState[]>([]);
   const [period, setPeriod] = useState<Period>('month');
   const [loading, setLoading] = useState(true);
   
@@ -66,6 +68,8 @@ export default function DashboardPage() {
     totalResistanceVictories: 0,
     activeHabits: 0,
     activeAspirations: 0,
+    activeProjects: 0,
+    completedProjects: 0,
   });
 
   useEffect(() => {
@@ -102,6 +106,20 @@ export default function DashboardPage() {
         const state = aspiration.getState();
         if (state && !state.archived) {
           loadedAspirations.push(state);
+        }
+      }
+
+      // Load all projects
+      const projectEvents = events.filter((e) => e.aggregateType === 'project');
+      const projectIds = [...new Set(projectEvents.map((e) => e.aggregateId))];
+
+      const loadedProjects: ProjectState[] = [];
+      for (const projectId of projectIds) {
+        const project = new Project(projectId);
+        await project.load();
+        const state = project.getState();
+        if (state && !state.archived) {
+          loadedProjects.push(state);
         }
       }
 
@@ -146,6 +164,8 @@ export default function DashboardPage() {
         totalResistanceVictories,
         activeHabits,
         activeAspirations,
+        activeProjects: 0, // Will be updated below
+        completedProjects: 0, // Will be updated below
       });
 
       // Build activity trend data
@@ -163,6 +183,19 @@ export default function DashboardPage() {
       setHabits(loadedHabits);
       setAspirations(loadedAspirations);
       setActivities(periodActivities);
+      setProjects(loadedProjects);
+
+      // Calculate project completion stats
+      const completedProjects = loadedProjects.filter(p => 
+        p.phases.length > 0 && p.phases.every(phase => phase.status === 'complete')
+      ).length;
+
+      // Update stats to include projects
+      setStats(prev => ({
+        ...prev,
+        activeProjects: loadedProjects.length,
+        completedProjects,
+      }));
     } catch (error) {
       console.error('Error loading dashboard data:', error);
     } finally {
@@ -491,6 +524,102 @@ export default function DashboardPage() {
                           </span>
                           <span className="text-muted-foreground">
                             {linkedHabits.length} {linkedHabits.length === 1 ? 'habit' : 'habits'}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <ArrowRight className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Projects Overview */}
+      {projects.length > 0 && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <FolderKanban className="h-5 w-5 text-blue-500" />
+                  Your Projects
+                </CardTitle>
+                <CardDescription>Track progress on meaningful projects</CardDescription>
+              </div>
+              {stats.completedProjects > 0 && (
+                <div className="flex items-center gap-2 bg-green-100 dark:bg-green-950 px-3 py-1 rounded-full">
+                  <Trophy className="h-4 w-4 text-green-600 dark:text-green-400" />
+                  <span className="text-sm font-medium text-green-700 dark:text-green-300">
+                    {stats.completedProjects} Completed!
+                  </span>
+                </div>
+              )}
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {projects.map((project) => {
+                const totalPhases = project.phases.length;
+                const completedPhases = project.phases.filter(p => p.status === 'complete').length;
+                const inProgressPhases = project.phases.filter(p => p.status === 'in-progress').length;
+                const progress = totalPhases > 0 ? (completedPhases / totalPhases) * 100 : 0;
+                const isComplete = totalPhases > 0 && completedPhases === totalPhases;
+
+                return (
+                  <div
+                    key={project.id}
+                    className="border rounded-lg p-4 hover:bg-accent cursor-pointer transition-colors"
+                    onClick={() => router.push(`/projects/${project.id}`)}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-semibold text-lg">{project.title}</h3>
+                          {isComplete && (
+                            <div className="flex items-center gap-1 bg-green-100 dark:bg-green-950 px-2 py-0.5 rounded-full">
+                              <CheckCircle2 className="h-3 w-3 text-green-600 dark:text-green-400" />
+                              <span className="text-xs font-medium text-green-700 dark:text-green-300">
+                                Complete
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        {project.description && (
+                          <p className="text-sm text-muted-foreground mt-1">{project.description}</p>
+                        )}
+                        
+                        {/* Progress Bar */}
+                        {totalPhases > 0 && (
+                          <div className="mt-3">
+                            <div className="flex items-center justify-between text-xs mb-1">
+                              <span className="text-muted-foreground">
+                                {completedPhases}/{totalPhases} phases complete
+                              </span>
+                              <span className="font-medium">{Math.round(progress)}%</span>
+                            </div>
+                            <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                              <div
+                                className={`h-full transition-all ${
+                                  isComplete ? 'bg-green-500' : 'bg-blue-500'
+                                }`}
+                                style={{ width: `${progress}%` }}
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="flex items-center gap-4 mt-3 text-sm">
+                          {inProgressPhases > 0 && (
+                            <span className="text-amber-600 font-medium">
+                              {inProgressPhases} in progress
+                            </span>
+                          )}
+                          <span className="text-muted-foreground">
+                            {totalPhases} {totalPhases === 1 ? 'phase' : 'phases'}
                           </span>
                         </div>
                       </div>
