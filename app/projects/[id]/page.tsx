@@ -106,6 +106,8 @@ export default function ProjectDetailPage() {
   };
 
   const handleSavePhaseDetails = async (phaseId: string) => {
+    const scrollY = window.scrollY; // Save scroll position
+    
     const proj = new Project(projectId);
     await proj.load();
     
@@ -118,6 +120,9 @@ export default function ProjectDetailPage() {
     });
     setEditingPhase(null);
     await loadProject();
+    
+    // Restore scroll position after state update
+    setTimeout(() => window.scrollTo(0, scrollY), 0);
   };
 
   const handleUploadPhoto = async (phaseId: string) => {
@@ -382,6 +387,7 @@ export default function ProjectDetailPage() {
                         placeholder="Add notes about this phase..."
                         rows={3}
                         className="mt-1"
+                        autoFocus={false}
                       />
                     </div>
                     
