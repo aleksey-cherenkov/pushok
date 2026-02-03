@@ -442,7 +442,8 @@ export default function ProjectDetailPage() {
                     {/* Notes */}
                     <div 
                       className="mb-4 cursor-pointer hover:bg-secondary p-3 rounded-lg transition-colors"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
                         setEditingPhase(phase.id);
                         setPhaseNotes(phase.notes || '');
                         setPhaseProgress(phase.progress || 0);
@@ -460,7 +461,8 @@ export default function ProjectDetailPage() {
                     {/* Progress & Time Stats - Clickable to edit */}
                     <div 
                       className="grid grid-cols-2 gap-4 mb-4 cursor-pointer hover:bg-secondary p-3 rounded-lg transition-colors"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
                         setEditingPhase(phase.id);
                         setPhaseNotes(phase.notes || '');
                         setPhaseProgress(phase.progress || 0);
