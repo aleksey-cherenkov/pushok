@@ -218,3 +218,75 @@ export async function suggestAspiration(
     throw error;
   }
 }
+
+export interface ProjectSuggestion {
+  title: string;
+  description: string;
+  phases: string[];
+  category: string;
+  reasoning?: string;
+}
+
+const PROJECT_SYSTEM_PROMPT = `You are a helpful project planning assistant.
+
+When a user describes a project (may have spelling errors, informal language), you should:
+1. Fix spelling and grammar
+2. Extract a clear project title (short, 2-6 words)
+3. Extract a clean description (1-2 sentences)
+4. Identify logical phases/steps for the project (in order)
+
+Make sure phases are:
+- In logical order (prep → work → finish)
+- Actionable (start with verbs)
+- Concise (5-8 words max)
+- 3-10 phases total
+
+Examples:
+User: "i need remove all spackle and mold, respackle, fix cracks, respackle around windows, repaint everything with primer, paint wall, remove and apply cauck around sink, and bathtub and toulet"
+Response: {
+  "title": "Bathroom Renovation",
+  "description": "Complete bathroom remodel including wall repairs, painting, and fixture maintenance.",
+  "phases": [
+    "Remove old spackle and mold",
+    "Repair cracks and respackle walls",
+    "Respackle around windows",
+    "Apply primer to all surfaces",
+    "Paint walls",
+    "Remove old caulk from fixtures",
+    "Apply new caulk around sink, tub, and toilet"
+  ],
+  "category": "home-improvement",
+  "reasoning": "Organized in logical order: prep work first, then painting, then finishing touches"
+}
+
+Respond in JSON format with these exact fields.`;
+
+export async function suggestProject(
+  description: string,
+): Promise<ProjectSuggestion> {
+  try {
+    const client = getOpenAIClient();
+
+    const response = await client.chat.completions.create({
+      model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-5-nano",
+      messages: [
+        { role: "system", content: PROJECT_SYSTEM_PROMPT },
+        { role: "user", content: `Project description: "${description}"` },
+      ],
+      temperature: 0.7,
+      response_format: { type: "json_object" },
+    });
+
+    const content = response.choices[0]?.message?.content;
+    if (!content) {
+      console.error("No content in response. Full response:", response);
+      throw new Error("No response from AI");
+    }
+
+    const suggestion = JSON.parse(content) as ProjectSuggestion;
+    return suggestion;
+  } catch (error) {
+    console.error("OpenAI API error:", error);
+    throw error;
+  }
+}

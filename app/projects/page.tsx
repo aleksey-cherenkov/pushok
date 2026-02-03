@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, FolderKanban, Clock, CheckCircle2, Circle } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Plus, FolderKanban, Clock, CheckCircle2, Circle, Sparkles, X } from 'lucide-react';
 import { eventStore } from '@/lib/events/store';
 import { Project, type ProjectState } from '@/lib/aggregates/project';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,6 +15,9 @@ export default function ProjectsPage() {
   const router = useRouter();
   const [projects, setProjects] = useState<ProjectState[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showAIForm, setShowAIForm] = useState(false);
+  const [aiDescription, setAiDescription] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
 
   useEffect(() => {
     loadProjects();
@@ -41,6 +46,50 @@ export default function ProjectsPage() {
       console.error('Error loading projects:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCreateProjectWithAI = async () => {
+    setAiLoading(true);
+    try {
+      const response = await fetch('/api/ai/suggest-project', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description: aiDescription }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get AI suggestion');
+      }
+
+      const data = await response.json();
+      const suggestion = data.suggestion;
+
+      // Create project with AI suggestion
+      const projectId = uuidv4();
+      const project = new Project(projectId);
+      
+      await project.create({
+        title: suggestion.title,
+        description: suggestion.description,
+        category: suggestion.category,
+      });
+
+      // Add all suggested phases
+      await project.load();
+      for (const phaseName of suggestion.phases) {
+        await project.addPhase(phaseName);
+      }
+
+      // Reset form and navigate
+      setShowAIForm(false);
+      setAiDescription('');
+      router.push(`/projects/${projectId}`);
+    } catch (error) {
+      console.error('Error creating project with AI:', error);
+      alert('Failed to create project. Please try again.');
+    } finally {
+      setAiLoading(false);
     }
   };
 
@@ -85,11 +134,88 @@ export default function ProjectsPage() {
             Track progress on meaningful projects with phases and photos
           </p>
         </div>
-        <Button onClick={handleCreateProject}>
-          <Plus className="h-4 w-4 mr-2" />
-          New Project
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => setShowAIForm(true)} variant="default">
+            <Sparkles className="h-4 w-4 mr-2" />
+            AI Project
+          </Button>
+          <Button onClick={handleCreateProject} variant="outline">
+            <Plus className="h-4 w-4 mr-2" />
+            Manual
+          </Button>
+        </div>
       </div>
+
+      {/* AI Project Form */}
+      {showAIForm && (
+        <Card className="mb-6">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-amber-500" />
+                  AI Project Assistant
+                </CardTitle>
+                <CardDescription>
+                  Describe your project in any way - spelling errors OK! AI will organize it.
+                </CardDescription>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setShowAIForm(false);
+                  setAiDescription('');
+                }}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label>Describe your project</Label>
+              <Textarea
+                value={aiDescription}
+                onChange={(e) => setAiDescription(e.target.value)}
+                placeholder="Example: i need remove all spackle and mold, respackle, fix cracks, respackle around windows, repaint everything with primer, paint wall, remove and apply cauck around sink, and bathtub and toulet"
+                rows={4}
+                className="mt-2"
+              />
+              <p className="text-xs text-muted-foreground mt-2">
+                AI will fix spelling, extract phases, and create your project ready to go!
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                onClick={handleCreateProjectWithAI}
+                disabled={aiLoading || !aiDescription.trim()}
+              >
+                {aiLoading ? (
+                  <>
+                    <span className="animate-spin mr-2">⏳</span>
+                    Creating Project...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Create Project with AI
+                  </>
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowAIForm(false);
+                  setAiDescription('');
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Projects List */}
       {projects.length === 0 ? (
