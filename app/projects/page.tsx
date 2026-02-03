@@ -311,7 +311,7 @@ export default function ProjectsPage() {
                             className="w-24 h-24 object-cover rounded-lg"
                           />
                           <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs text-center py-1 rounded-b-lg">
-                            {format(new Date(photo.addedAt), 'MMM d')}
+                            {format(new Date(photo.addedAt), "MMM d 'yy")}
                           </div>
                         </div>
                       ))}
