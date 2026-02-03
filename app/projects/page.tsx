@@ -254,7 +254,20 @@ export default function ProjectsPage() {
         <div className="space-y-4">
           {projects.map((project) => {
             const stats = getPhaseStats(project);
-            const progress = stats.total > 0 ? (stats.completed / stats.total) * 100 : 0;
+            
+            // Weighted average progress
+            const phaseProgressSum = project.phases.reduce((sum, p) => sum + (p.progress || 0), 0);
+            const avgProgress = stats.total > 0 ? phaseProgressSum / stats.total : 0;
+            
+            // Total time
+            const totalMinutes = project.phases.reduce((sum, p) => sum + (p.timeSpentMinutes || 0), 0);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const remainingMins = totalMinutes % 60;
+            
+            // First and last photos
+            const allPhotos = project.phases.flatMap(p => p.photos).sort((a, b) => a.addedAt - b.addedAt);
+            const firstPhoto = allPhotos[0];
+            const lastPhoto = allPhotos.length > 1 ? allPhotos[allPhotos.length - 1] : null;
 
             return (
               <Card
@@ -287,26 +300,63 @@ export default function ProjectsPage() {
                 </CardHeader>
 
                 <CardContent>
+                  {/* Before/After Photos */}
+                  {(firstPhoto || lastPhoto) && (
+                    <div className="flex gap-3 mb-4">
+                      {firstPhoto && (
+                        <div className="relative">
+                          <img
+                            src={firstPhoto.data}
+                            alt="First photo"
+                            className="w-24 h-24 object-cover rounded-lg"
+                          />
+                          <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs text-center py-1 rounded-b-lg">
+                            Before
+                          </div>
+                        </div>
+                      )}
+                      {lastPhoto && (
+                        <div className="relative">
+                          <img
+                            src={lastPhoto.data}
+                            alt="Latest photo"
+                            className="w-24 h-24 object-cover rounded-lg"
+                          />
+                          <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs text-center py-1 rounded-b-lg">
+                            After
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  
                   {/* Progress Bar */}
                   {stats.total > 0 && (
                     <div className="mb-4">
                       <div className="flex items-center justify-between text-sm mb-2">
-                        <span className="text-muted-foreground">Progress</span>
-                        <span className="font-medium">{Math.round(progress)}%</span>
+                        <span className="text-muted-foreground">Overall Progress</span>
+                        <span className="font-medium">{Math.round(avgProgress)}%</span>
                       </div>
                       <div className="h-2 bg-secondary rounded-full overflow-hidden">
                         <div
                           className="h-full bg-blue-500 transition-all"
-                          style={{ width: `${progress}%` }}
+                          style={{ width: `${avgProgress}%` }}
                         />
                       </div>
                     </div>
                   )}
 
-                  {/* Phase Stats */}
-                  <div className="flex items-center gap-4 text-sm">
+                  {/* Stats */}
+                  <div className="flex items-center gap-4 text-sm flex-wrap">
+                    {totalMinutes > 0 && (
+                      <div className="flex items-center gap-1 text-blue-600 dark:text-blue-400 font-medium">
+                        <Clock className="h-4 w-4" />
+                        <span>
+                          {totalHours > 0 ? `${totalHours}h${remainingMins > 0 ? ` ${remainingMins}m` : ''}` : `${remainingMins}m`}
+                        </span>
+                      </div>
+                    )}
                     <div className="flex items-center gap-1 text-muted-foreground">
-                      <Clock className="h-4 w-4" />
                       <span>{stats.total} phases</span>
                     </div>
                     {stats.inProgress > 0 && (

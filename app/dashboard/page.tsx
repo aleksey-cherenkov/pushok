@@ -566,7 +566,21 @@ export default function DashboardPage() {
                 const totalPhases = project.phases.length;
                 const completedPhases = project.phases.filter(p => p.status === 'complete').length;
                 const inProgressPhases = project.phases.filter(p => p.status === 'in-progress').length;
-                const progress = totalPhases > 0 ? (completedPhases / totalPhases) * 100 : 0;
+                
+                // Weighted average progress (each phase contributes equally)
+                const phaseProgressSum = project.phases.reduce((sum, p) => sum + (p.progress || 0), 0);
+                const avgProgress = totalPhases > 0 ? phaseProgressSum / totalPhases : 0;
+                
+                // Total time spent
+                const totalMinutes = project.phases.reduce((sum, p) => sum + (p.timeSpentMinutes || 0), 0);
+                const totalHours = Math.floor(totalMinutes / 60);
+                const remainingMins = totalMinutes % 60;
+                
+                // Get first and last photos
+                const allPhotos = project.phases.flatMap(p => p.photos).sort((a, b) => a.addedAt - b.addedAt);
+                const firstPhoto = allPhotos[0];
+                const lastPhoto = allPhotos.length > 1 ? allPhotos[allPhotos.length - 1] : null;
+                
                 const isComplete = totalPhases > 0 && completedPhases === totalPhases;
 
                 return (
@@ -575,12 +589,42 @@ export default function DashboardPage() {
                     className="border rounded-lg p-4 hover:bg-accent cursor-pointer transition-colors"
                     onClick={() => router.push(`/projects/${project.id}`)}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
+                    <div className="flex items-start gap-4">
+                      {/* Photos */}
+                      {(firstPhoto || lastPhoto) && (
+                        <div className="flex gap-2 shrink-0">
+                          {firstPhoto && (
+                            <div className="relative">
+                              <img
+                                src={firstPhoto.data}
+                                alt="First photo"
+                                className="w-20 h-20 object-cover rounded-lg"
+                              />
+                              <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] text-center py-0.5 rounded-b-lg">
+                                Before
+                              </div>
+                            </div>
+                          )}
+                          {lastPhoto && (
+                            <div className="relative">
+                              <img
+                                src={lastPhoto.data}
+                                alt="Latest photo"
+                                className="w-20 h-20 object-cover rounded-lg"
+                              />
+                              <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] text-center py-0.5 rounded-b-lg">
+                                After
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <h3 className="font-semibold text-lg">{project.title}</h3>
+                          <h3 className="font-semibold text-lg truncate">{project.title}</h3>
                           {isComplete && (
-                            <div className="flex items-center gap-1 bg-green-100 dark:bg-green-950 px-2 py-0.5 rounded-full">
+                            <div className="flex items-center gap-1 bg-green-100 dark:bg-green-950 px-2 py-0.5 rounded-full shrink-0">
                               <CheckCircle2 className="h-3 w-3 text-green-600 dark:text-green-400" />
                               <span className="text-xs font-medium text-green-700 dark:text-green-300">
                                 Complete
@@ -589,7 +633,7 @@ export default function DashboardPage() {
                           )}
                         </div>
                         {project.description && (
-                          <p className="text-sm text-muted-foreground mt-1">{project.description}</p>
+                          <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{project.description}</p>
                         )}
                         
                         {/* Progress Bar */}
@@ -597,34 +641,36 @@ export default function DashboardPage() {
                           <div className="mt-3">
                             <div className="flex items-center justify-between text-xs mb-1">
                               <span className="text-muted-foreground">
-                                {completedPhases}/{totalPhases} phases complete
+                                {completedPhases}/{totalPhases} phases
                               </span>
-                              <span className="font-medium">{Math.round(progress)}%</span>
+                              <span className="font-medium">{Math.round(avgProgress)}% complete</span>
                             </div>
                             <div className="h-2 bg-secondary rounded-full overflow-hidden">
                               <div
                                 className={`h-full transition-all ${
                                   isComplete ? 'bg-green-500' : 'bg-blue-500'
                                 }`}
-                                style={{ width: `${progress}%` }}
+                                style={{ width: `${avgProgress}%` }}
                               />
                             </div>
                           </div>
                         )}
 
                         <div className="flex items-center gap-4 mt-3 text-sm">
+                          {totalMinutes > 0 && (
+                            <span className="text-blue-600 dark:text-blue-400 font-medium">
+                              {totalHours > 0 ? `${totalHours}h${remainingMins > 0 ? ` ${remainingMins}m` : ''}` : `${remainingMins}m`} invested
+                            </span>
+                          )}
                           {inProgressPhases > 0 && (
                             <span className="text-amber-600 font-medium">
                               {inProgressPhases} in progress
                             </span>
                           )}
-                          <span className="text-muted-foreground">
-                            {totalPhases} {totalPhases === 1 ? 'phase' : 'phases'}
-                          </span>
                         </div>
                       </div>
                       
-                      <ArrowRight className="h-5 w-5 text-muted-foreground" />
+                      <ArrowRight className="h-5 w-5 text-muted-foreground shrink-0" />
                     </div>
                   </div>
                 );
