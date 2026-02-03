@@ -18,6 +18,7 @@ import {
   CheckCircle2,
   Image as ImageIcon,
   Calendar,
+  Trash2,
 } from 'lucide-react';
 import { Project, type ProjectState, type Phase, type PhaseStatus } from '@/lib/aggregates/project';
 import { format } from 'date-fns';
@@ -54,6 +55,22 @@ export default function ProjectDetailPage() {
       console.error('Error loading project:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteProject = async () => {
+    if (!confirm('Are you sure you want to delete this project? This cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const proj = new Project(projectId);
+      await proj.load();
+      await proj.archive();
+      router.push('/projects');
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      alert('Failed to delete project. Please try again.');
     }
   };
 
@@ -219,13 +236,23 @@ export default function ProjectDetailPage() {
                   </CardDescription>
                 )}
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setEditingProject(true)}
-              >
-                <Edit2 className="h-4 w-4" />
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setEditingProject(true)}
+                >
+                  <Edit2 className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDeleteProject}
+                  className="text-destructive hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           )}
         </CardHeader>

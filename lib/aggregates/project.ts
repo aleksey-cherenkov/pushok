@@ -177,26 +177,6 @@ export class Project {
     await this.load();
   }
 
-  // Archive project
-  async archive(): Promise<void> {
-    const version = await eventStore.getLatestVersion(this.state.id);
-
-    const event: ProjectArchivedEvent = {
-      id: uuidv4(),
-      aggregateId: this.state.id,
-      aggregateType: 'project',
-      type: 'ProjectArchived',
-      timestamp: Date.now(),
-      version: version + 1,
-      data: {
-        archivedAt: Date.now(),
-      },
-    };
-
-    await eventStore.append(event);
-    await this.load();
-  }
-
   // Add phase
   async addPhase(name: string): Promise<void> {
     const version = await eventStore.getLatestVersion(this.state.id);
@@ -294,6 +274,28 @@ export class Project {
         photoData,
         caption,
         addedAt: Date.now(),
+      },
+    };
+
+    await eventStore.append(event);
+    await this.load();
+  }
+
+  async archive(): Promise<void> {
+    if (this.state.archived) {
+      throw new Error('Project is already archived');
+    }
+
+    const version = await eventStore.getLatestVersion(this.state.id);
+    const event: ProjectArchivedEvent = {
+      id: uuidv4(),
+      aggregateId: this.state.id,
+      aggregateType: 'project',
+      type: 'ProjectArchived',
+      version: version + 1,
+      timestamp: Date.now(),
+      data: {
+        archivedAt: Date.now(),
       },
     };
 

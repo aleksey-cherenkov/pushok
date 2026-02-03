@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Plus, FolderKanban, Clock, CheckCircle2, Circle, Sparkles, X } from 'lucide-react';
+import { Plus, FolderKanban, Clock, CheckCircle2, Circle, Sparkles, X, Trash2 } from 'lucide-react';
 import { eventStore } from '@/lib/events/store';
 import { Project, type ProjectState } from '@/lib/aggregates/project';
 import { v4 as uuidv4 } from 'uuid';
@@ -104,6 +104,24 @@ export default function ProjectsPage() {
     });
 
     router.push(`/projects/${projectId}`);
+  };
+
+  const handleDeleteProject = async (projectId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (!confirm('Are you sure you want to delete this project? This cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const project = new Project(projectId);
+      await project.load();
+      await project.archive();
+      await loadProjects();
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      alert('Failed to delete project. Please try again.');
+    }
   };
 
   const getPhaseStats = (project: ProjectState) => {
@@ -257,6 +275,14 @@ export default function ProjectsPage() {
                         </CardDescription>
                       )}
                     </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => handleDeleteProject(project.id, e)}
+                      className="text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
                 </CardHeader>
 
