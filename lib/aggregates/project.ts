@@ -19,6 +19,8 @@ export interface Phase {
   name: string;
   status: PhaseStatus;
   notes?: string;
+  progress?: number; // 0-100 percentage within this phase
+  timeSpentMinutes?: number; // Total time spent in minutes
   startDate?: number;
   endDate?: number;
   photos: Array<{ id: string; data: string; caption?: string; addedAt: number }>;
@@ -93,6 +95,8 @@ export class Project {
           if (phaseToUpdate) {
             if (e.data.name) phaseToUpdate.name = e.data.name;
             if (e.data.notes !== undefined) phaseToUpdate.notes = e.data.notes;
+            if (e.data.progress !== undefined) phaseToUpdate.progress = e.data.progress;
+            if (e.data.timeSpentMinutes !== undefined) phaseToUpdate.timeSpentMinutes = e.data.timeSpentMinutes;
             if (e.data.startDate !== undefined) phaseToUpdate.startDate = e.data.startDate;
             if (e.data.endDate !== undefined) phaseToUpdate.endDate = e.data.endDate;
           }
@@ -207,6 +211,8 @@ export class Project {
     data: {
       name?: string;
       notes?: string;
+      progress?: number;
+      timeSpentMinutes?: number;
       startDate?: number;
       endDate?: number;
     }

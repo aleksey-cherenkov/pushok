@@ -39,6 +39,9 @@ export default function ProjectDetailPage() {
   
   const [phaseName, setPhaseName] = useState('');
   const [phaseNotes, setPhaseNotes] = useState('');
+  const [phaseProgress, setPhaseProgress] = useState(0);
+  const [phaseTimeHours, setPhaseTimeHours] = useState(0);
+  const [phaseTimeMinutes, setPhaseTimeMinutes] = useState(0);
 
   useEffect(() => {
     loadProject();
@@ -102,10 +105,17 @@ export default function ProjectDetailPage() {
     await loadProject();
   };
 
-  const handleSavePhaseNotes = async (phaseId: string) => {
+  const handleSavePhaseDetails = async (phaseId: string) => {
     const proj = new Project(projectId);
     await proj.load();
-    await proj.updatePhase(phaseId, { notes: phaseNotes });
+    
+    const totalMinutes = (phaseTimeHours * 60) + phaseTimeMinutes;
+    
+    await proj.updatePhase(phaseId, { 
+      notes: phaseNotes,
+      progress: phaseProgress,
+      timeSpentMinutes: totalMinutes > 0 ? totalMinutes : undefined,
+    });
     setEditingPhase(null);
     await loadProject();
   };
@@ -168,6 +178,15 @@ export default function ProjectDetailPage() {
 
   const getStatusLabel = (status: PhaseStatus) => {
     return status.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  };
+
+  const formatTimeSpent = (minutes?: number) => {
+    if (!minutes) return 'No time logged';
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    if (hours === 0) return `${mins}m`;
+    if (mins === 0) return `${hours}h`;
+    return `${hours}h ${mins}m`;
   };
 
   if (loading) {
@@ -352,45 +371,112 @@ export default function ProjectDetailPage() {
               </CardHeader>
 
               <CardContent>
-                {/* Notes */}
-                <div className="mb-4">
-                  <Label className="text-sm font-medium mb-2 block">Notes</Label>
-                  {editingPhase === phase.id ? (
-                    <div className="space-y-2">
+                {/* Progress & Time Stats (when not editing) */}
+                {editingPhase !== phase.id && (
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Progress</Label>
+                      <div className="flex items-center gap-2 mt-1">
+                        <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-blue-500 transition-all"
+                            style={{ width: `${phase.progress || 0}%` }}
+                          />
+                        </div>
+                        <span className="text-sm font-medium">{phase.progress || 0}%</span>
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Time Spent</Label>
+                      <p className="text-sm font-medium mt-1">{formatTimeSpent(phase.timeSpentMinutes)}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Edit Form */}
+                {editingPhase === phase.id ? (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-sm font-medium">Notes</Label>
                       <Textarea
                         value={phaseNotes}
                         onChange={(e) => setPhaseNotes(e.target.value)}
                         placeholder="Add notes about this phase..."
                         rows={3}
+                        className="mt-1"
                       />
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          onClick={() => handleSavePhaseNotes(phase.id)}
-                        >
-                          Save
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => setEditingPhase(null)}
-                        >
-                          Cancel
-                        </Button>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-sm font-medium">Progress %</Label>
+                        <Input
+                          type="number"
+                          min="0"
+                          max="100"
+                          value={phaseProgress}
+                          onChange={(e) => setPhaseProgress(Math.min(100, Math.max(0, parseInt(e.target.value) || 0)))}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-sm font-medium">Time Spent</Label>
+                        <div className="flex gap-2 mt-1">
+                          <Input
+                            type="number"
+                            min="0"
+                            value={phaseTimeHours}
+                            onChange={(e) => setPhaseTimeHours(Math.max(0, parseInt(e.target.value) || 0))}
+                            placeholder="Hours"
+                          />
+                          <Input
+                            type="number"
+                            min="0"
+                            max="59"
+                            value={phaseTimeMinutes}
+                            onChange={(e) => setPhaseTimeMinutes(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))}
+                            placeholder="Mins"
+                          />
+                        </div>
                       </div>
                     </div>
-                  ) : (
+                    
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        onClick={() => handleSavePhaseDetails(phase.id)}
+                      >
+                        <Check className="h-4 w-4 mr-2" />
+                        Save
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setEditingPhase(null)}
+                      >
+                        <X className="h-4 w-4 mr-2" />
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mb-4">
+                    <Label className="text-sm font-medium mb-2 block">Notes</Label>
                     <div
                       onClick={() => {
                         setEditingPhase(phase.id);
                         setPhaseNotes(phase.notes || '');
+                        setPhaseProgress(phase.progress || 0);
+                        const totalMins = phase.timeSpentMinutes || 0;
+                        setPhaseTimeHours(Math.floor(totalMins / 60));
+                        setPhaseTimeMinutes(totalMins % 60);
                       }}
                       className="text-sm text-muted-foreground cursor-pointer hover:bg-secondary p-2 rounded min-h-[60px]"
                     >
-                      {phase.notes || 'Click to add notes...'}
+                      {phase.notes || 'Click to add notes, update progress, and log time...'}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
 
                 {/* Photos */}
                 <div>
@@ -409,12 +495,16 @@ export default function ProjectDetailPage() {
                   {phase.photos.length > 0 ? (
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       {phase.photos.map((photo) => (
-                        <div key={photo.id} className="space-y-2">
+                        <div key={photo.id} className="space-y-1">
                           <img
                             src={photo.data}
                             alt={photo.caption || 'Phase photo'}
                             className="w-full h-40 object-cover rounded-lg"
                           />
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Calendar className="h-3 w-3" />
+                            <span>{format(new Date(photo.addedAt), 'MMM d, yyyy')}</span>
+                          </div>
                           {photo.caption && (
                             <p className="text-xs text-muted-foreground">
                               {photo.caption}

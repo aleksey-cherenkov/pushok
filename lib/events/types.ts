@@ -226,6 +226,8 @@ export interface PhaseUpdatedEvent extends BaseEvent {
     phaseId: string;
     name?: string;
     notes?: string;
+    progress?: number; // 0-100
+    timeSpentMinutes?: number;
     startDate?: number;
     endDate?: number;
     updatedAt: number;
