@@ -305,6 +305,31 @@ When suggesting documentation updates, use this format:
 
 ---
 
+## Git Workflow
+
+### Commit Strategy
+- **Commit locally frequently** - Save work often with descriptive messages
+- **Push only when ready** - Batch commits and push at major milestones or when ready to deploy
+- **Why:** Each push triggers GitHub Actions deployment (~5-10 minutes), uses CI/CD quota
+
+### When to Push
+- Major feature complete and tested
+- Ready to deploy to production (pushok.life)
+- End of work session with stable state
+- Before demo or submission deadline
+
+### Commit Message Format
+```bash
+# Good examples
+git commit -m "Feature: Add Moments photo gallery"
+git commit -m "Fix: Remove unused dependency causing deployment failure"
+git commit -m "Setup: Install Playwright for demo automation"
+
+# Categories: Feature, Fix, Setup, Docs, UI, Refactor
+```
+
+---
+
 ## Quick Reference Commands
 
 ```bash
