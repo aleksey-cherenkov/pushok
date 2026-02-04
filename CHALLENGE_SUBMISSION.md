@@ -66,13 +66,14 @@ Productivity apps create Resistance:
 
 - ✅ **Aspirations**: AI-assisted long-term pursuits ("Get stronger for hiking")
 - ✅ **Linked Habits**: Connect daily actions to what matters ("50 pushups" → aspiration)
-- ✅ **AI-assisted creation**: Natural language → configured habits + aspirations
-- ✅ **Progress visualization**: Milestones (10→50→100→500→1000), monthly comparison, growth %
-- ✅ **Resistance tracking**: "Overcame Resistance" checkbox, victories count
+- ✅ **AI-assisted creation**: Natural language → configured habits + aspirations + projects
+- ✅ **Projects**: Phases, progress %, time tracking, photos, archive/delete
+- ✅ **Progress dashboard**: Interactive charts (activity over time, resistance breakdown, top habits)
+- ✅ **Habit detail pages**: Progression charts, trend, personal best, history table
+- ✅ **Resistance tracking**: "Overcame Resistance" checkbox + victories count
 - ✅ **Multiple logs per day**: "3 sessions • 75 pushups" with values
-- ✅ **Edit habits**: Update goals, change aspiration links
-- ✅ **Aggregated totals**: Individual habit + aspiration-level progress
-- ✅ **Timeline view**: Expandable logs with mood, notes, timestamps
+- ✅ **Stela Messages**: AI-powered gentle daily prompt based on your values
+- ✅ **About page memorial**: Stela's photos and the project story
 
 ---
 
@@ -180,13 +181,15 @@ Perfectionism is Resistance. Self-doubt is Resistance. Waiting to "be ready" is 
 
 **Complete feature set:**
 
-- ✅ **Event sourcing** (3 aggregates: Habit, Activity, Aspiration)
+- ✅ **Event sourcing** (5 aggregates: Habit, Activity, Aspiration, Project, StelaMessage)
 - ✅ **Aspirations system** with AI assistance (GPT-5-nano)
 - ✅ **Habit-aspiration linking** (bidirectional display)
-- ✅ **Progress visualization**: Milestones, monthly comparison, growth %
-- ✅ **Resistance tracking**: Checkbox + victories count + amber highlights
-- ✅ **Activity logging**: Multiple per day, values, mood, notes
-- ✅ **Habit editing**: Update goals, change aspiration links
+- ✅ **Interactive progress dashboard** (charts + filters)
+- ✅ **Habit detail pages** (metric progression chart + trends)
+- ✅ **Projects** (phases, progress %, time, photos, archive/delete)
+- ✅ **Resistance tracking** (checkbox + victories count + amber highlights)
+- ✅ **Activity logging** (multiple per day, values, mood, notes)
+- ✅ **Stela Messages** (AI-powered gentle reminders based on your values)
 - ✅ **Custom domain**: pushok.life with SSL
 - ✅ **Comprehensive docs**: 3,100+ lines (README, ARCHITECTURE, PROJECT, DEPLOYMENT)
 
@@ -325,11 +328,12 @@ With Copilot CLI:
 - 🌐 **Offline-first**: Flutter + local SQLite + background sync
 - 🎯 **Quick logging**: 2-second check-ins from notification actions
 
-**Why stop at Phase 4?**
+**Why stop at Phase 5?**
 - Core concept proven (anti-streak, aggregation, Resistance tracking)
-- Architecture validated (event sourcing, AI integration, progress viz)
-- Photo/notification features make less sense on web
-- Phases 5-10 outlined in PROJECT.md for mobile
+- Architecture validated (event sourcing + AI + rich UI)
+- Projects + photos are in place for a compelling demo
+- Native camera/notifications/widgets still make more sense on mobile
+- Next phases outlined in PROJECT.md for mobile
 
 **This submission shows:** What Copilot CLI enabled me to build AND the thoughtful scope decision (ship what makes sense, plan what's next).
 
@@ -385,10 +389,12 @@ Experienced dev → Blocked by perfectionism/self-doubt → **One continuous CLI
 - Senior dev with 10+ years experience still got blocked—CLI got me shipping
 
 ### Technical Achievement
-- Event sourcing architecture (3 aggregates: Habit, Activity, Aspiration)
-- Azure OpenAI integration (GPT-5-nano with 90% prompt caching)
-- Progress visualization with milestones, monthly comparison, growth tracking
+- Event sourcing architecture (5 aggregates + projections)
+- Azure OpenAI integration (GPT-5-nano with prompt caching)
+- Interactive dashboard charts (Recharts)
+- Projects with phases + time tracking + photo compression
 - Resistance tracking system (inspired by "The War of Art")
+- Stela Messages (values-based daily AI prompt)
 - Comprehensive documentation (3,100+ lines, written as we built)
 
 ### Cost Optimization
@@ -435,4 +441,4 @@ _Built while fighting Resistance, with GitHub Copilot CLI as accountability part
 
 **Status:** Shipped (imperfectly) | **Live:** pushok.life ✅
 
-**Last Updated:** 2026-02-02
+**Last Updated:** 2026-02-04
