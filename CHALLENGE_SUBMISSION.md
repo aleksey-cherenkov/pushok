@@ -440,6 +440,8 @@ Experienced dev → Blocked by perfectionism/self-doubt → **One continuous CLI
 
 _Built while fighting Resistance, with GitHub Copilot CLI as accountability partner_
 
+**Note:** This submission document itself was written through Copilot CLI collaboration. I considered using external Copilot or Gemini (GPT-5.2 vs Claude Sonnet) for more polished writing, but chose to stay **100% CLI**—even for this document. Authenticity over polish. That's the whole point.
+
 **Status:** Shipped (imperfectly) | **Live:** pushok.life ✅
 
 **Last Updated:** 2026-02-04
