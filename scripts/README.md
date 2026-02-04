@@ -2,18 +2,24 @@
 
 This folder contains Playwright scripts for creating demo data and recording demo videos.
 
+## Planning
+
+### `demo-plan.md`
+Comprehensive plan for demo data including:
+- 5 aspirations
+- 10 habits with 4-week progression
+- 3 projects with phases
+- 12 moments
+- Demo script flow (~12 minutes)
+- Photo requirements (23 total)
+
 ## Scripts
 
 ### `test-playwright.spec.ts`
 Basic test to verify Playwright setup is working.
 
 ### `seed-demo-data.ts` (Coming Soon)
-Automated script to populate the app with realistic demo data:
-- 5 aspirations
-- 10 habits with progression over 4 weeks
-- ~100 activity logs
-- 3 projects with phases and photos
-- 12 moments with photos
+Automated script to populate the app with realistic demo data based on demo-plan.md.
 
 ### `record-demo.ts` (Coming Soon)
 Automated script to record a demo video showing all app features.
@@ -33,8 +39,7 @@ npx playwright test scripts/record-demo.ts
 
 ## Photos
 
-Place demo photos in the `demo-photos/` folder according to the plan in:
-`~/.copilot/session-state/.../files/demo-plan.md`
+Place demo photos in the `demo-photos/` folder according to the plan in `demo-plan.md`.
 
 Required structure:
 ```
