@@ -30,30 +30,30 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 
 - **Created:** Jan 7, 2026
 - **Description:** Invest time in family and friends. Quality over quantity.
-- **Linked Habits:** Weekly Family Call, Coffee with Friends
+- **Linked Habits:** Weekly Family Call
 
 ### Aspiration 3: "Build Physical Health"
 
 - **Created:** Jan 10, 2026
 - **Description:** Move daily, build strength, feel energized.
-- **Linked Habits:** Pushups, Running, Yoga
+- **Linked Habits:** Pushups, Running
 
 ### Aspiration 4: "Creative Expression"
 
 - **Created:** Jan 15, 2026
 - **Description:** Make time for art, music, and creative projects.
-- **Linked Habits:** Sketching
+- **Linked Habits:** Painting, Sketching
 - **Linked Projects:** Watercolor Series
 
 ### Aspiration 5: "Learn & Grow"
 
 - **Created:** Jan 20, 2026
 - **Description:** Continuous learning through reading and practice.
-- **Linked Habits:** Reading, Language Learning
+- **Linked Habits:** Microsoft Learn, John Savill Videos, Dev Projects, Codewars Katas
 
 ---
 
-## 2. HABITS (10 total - diverse metrics)
+## 2. HABITS (11 total - diverse metrics)
 
 ### Habit 1: Morning Meditation
 
@@ -141,17 +141,27 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 - **Notes:** "Finally solved 5 kyu!", "TypeScript practice", "Algorithm practice"
 - **Resistance:** Too difficult (motivation, 2x)
 
-### Habit 8: Guitar Practice
+### Habit 8: Painting
 - **Created:** Jan 15, 2026
+- **Metric:** Duration (minutes)
+- **Target:** 30
+- **Aspiration:** Creative Expression
+- **Activities:** 10 logs
+  - Mix: 20, 30, 45, 30, 60, 30, 40, 50, 30, 45
+- **Notes:** "Working on watercolor series", "Sunset piece turned out great", "Mountain landscape"
+- **Resistance:** Waiting for supplies (environmental, 1x)
+
+### Habit 9: Sketching
+- **Created:** Jan 18, 2026
 - **Metric:** Duration (minutes)
 - **Target:** 20
 - **Aspiration:** Creative Expression
-- **Activities:** 12 logs
-  - Mix: 10, 15, 20, 20, 25, 15, 30, 20, 20, 25, 30, 20
-- **Notes:** Songs being learned
-- **Resistance:** Fingers hurt (physical, 1x), Too loud for neighbors (environmental, 1x)
+- **Activities:** 8 logs
+  - 15, 20, 25, 20, 30, 20, 25, 30
+- **Notes:** "Practice hands today", "Quick gesture drawings", "Cat portrait study"
+- **Resistance:** None
 
-### Habit 9: Running
+### Habit 10: Running
 
 - **Created:** Jan 12, 2026
 - **Metric:** Distance (miles)
@@ -161,7 +171,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
   - 1.5, 2.0, 2.5, 2.0, 3.0, 2.5, 3.0, 3.5, 3.0, 4.0 (progression!)
 - **Resistance:** Shin splints (physical, 1x), Too hot (environmental, 1x)
 
-### Habit 10: Weekly Family Call
+### Habit 11: Weekly Family Call
 
 - **Created:** Jan 7, 2026
 - **Metric:** Duration (minutes)
