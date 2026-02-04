@@ -1,7 +1,9 @@
 # Way Finder Demo Data Plan
 
 ## Goal
+
 Create realistic sample data that showcases all features:
+
 - Habit tracking with different metrics
 - Resistance tracking (6 types)
 - Aspiration linking
@@ -11,6 +13,7 @@ Create realistic sample data that showcases all features:
 - Progress visualization
 
 ## Timeline
+
 Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 
 ---
@@ -18,27 +21,32 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 ## 1. ASPIRATIONS (5 total)
 
 ### Aspiration 1: "Be Present & Mindful"
+
 - **Created:** Jan 7, 2026
 - **Description:** Practice being present instead of rushed. Notice beauty in small moments.
 - **Linked Habits:** Morning Meditation, Evening Walk
 
 ### Aspiration 2: "Strengthen Relationships"
+
 - **Created:** Jan 7, 2026
 - **Description:** Invest time in family and friends. Quality over quantity.
 - **Linked Habits:** Weekly Family Call, Coffee with Friends
 
 ### Aspiration 3: "Build Physical Health"
+
 - **Created:** Jan 10, 2026
 - **Description:** Move daily, build strength, feel energized.
 - **Linked Habits:** Pushups, Running, Yoga
 
 ### Aspiration 4: "Creative Expression"
+
 - **Created:** Jan 15, 2026
 - **Description:** Make time for art, music, and creative projects.
-- **Linked Habits:** Guitar Practice, Sketching
+- **Linked Habits:** Sketching
 - **Linked Projects:** Watercolor Series
 
 ### Aspiration 5: "Learn & Grow"
+
 - **Created:** Jan 20, 2026
 - **Description:** Continuous learning through reading and practice.
 - **Linked Habits:** Reading, Language Learning
@@ -48,6 +56,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 ## 2. HABITS (10 total - diverse metrics)
 
 ### Habit 1: Morning Meditation
+
 - **Created:** Jan 7, 2026
 - **Metric:** Duration (minutes)
 - **Target:** 10 minutes
@@ -63,6 +72,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
   - None (15x - showing progress!)
 
 ### Habit 2: Pushups
+
 - **Created:** Jan 10, 2026
 - **Metric:** Count (reps)
 - **Target:** 50
@@ -78,6 +88,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
   - None (15x)
 
 ### Habit 3: Evening Walk
+
 - **Created:** Jan 7, 2026
 - **Metric:** Distance (miles)
 - **Target:** 2.0
@@ -87,17 +98,50 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 - **Notes:** Some mention seeing sunset, birds, feeling calm
 - **Resistance:** Rain (environmental, 1x), Too cold (environmental, 1x)
 
-### Habit 4: Reading
+### Habit 4: Microsoft Learn
 - **Created:** Jan 20, 2026
 - **Metric:** Duration (minutes)
 - **Target:** 30
-- **Aspiration:** Learn & Grow
-- **Activities:** 10 logs
-  - 15, 20, 30, 25, 45, 30, 35, 30, 40, 60 (weekend!)
-- **Notes:** Book titles mentioned
-- **Resistance:** Distracted by phone (distraction, 2x)
+- **Aspiration:** Technology & Learning
+- **Activities:** 12 logs
+  - Week 1: 15, 20 (2 days)
+  - Week 2: 30, 25, 30 (3 days)
+  - Week 3: 30, 45, 30 (3 days)
+  - Week 4: 40, 30, 60, 45 (4 days - weekend deep dive!)
+- **Notes:** "Completed AZ-104 module", "Azure networking labs", "Studying for cert"
+- **Resistance:** Distracted by work tasks (distraction, 1x)
 
-### Habit 5: Guitar Practice
+### Habit 5: John Savill Videos
+- **Created:** Jan 18, 2026
+- **Metric:** Count (videos)
+- **Target:** 1
+- **Aspiration:** Technology & Learning
+- **Activities:** 10 logs
+  - Mix: 1, 1, 2, 1, 1, 2, 1, 3, 1, 2 (15 videos total)
+- **Notes:** "Azure Master Class series", "Deep dive on Kubernetes", "Best explanations!"
+- **Resistance:** None (love his content!)
+
+### Habit 6: Dev Projects
+- **Created:** Jan 15, 2026
+- **Metric:** Duration (minutes)
+- **Target:** 60
+- **Aspiration:** Technology & Learning
+- **Activities:** 8 logs
+  - 30, 45, 60, 90, 60, 120, 75, 60
+- **Notes:** "Working on pushok.life", "Added new feature", "Fixed bug", "Deployed to prod"
+- **Resistance:** Stuck on bug (technical, 1x)
+
+### Habit 7: Codewars Katas
+- **Created:** Jan 22, 2026
+- **Metric:** Count (katas)
+- **Target:** 2
+- **Aspiration:** Technology & Learning
+- **Activities:** 10 logs
+  - 1, 2, 2, 3, 2, 2, 1, 3, 2, 2 (20 katas total)
+- **Notes:** "Finally solved 5 kyu!", "TypeScript practice", "Algorithm practice"
+- **Resistance:** Too difficult (motivation, 2x)
+
+### Habit 8: Guitar Practice
 - **Created:** Jan 15, 2026
 - **Metric:** Duration (minutes)
 - **Target:** 20
@@ -107,7 +151,8 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 - **Notes:** Songs being learned
 - **Resistance:** Fingers hurt (physical, 1x), Too loud for neighbors (environmental, 1x)
 
-### Habit 6: Running
+### Habit 9: Running
+
 - **Created:** Jan 12, 2026
 - **Metric:** Distance (miles)
 - **Target:** 3.0
@@ -116,7 +161,8 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
   - 1.5, 2.0, 2.5, 2.0, 3.0, 2.5, 3.0, 3.5, 3.0, 4.0 (progression!)
 - **Resistance:** Shin splints (physical, 1x), Too hot (environmental, 1x)
 
-### Habit 7: Weekly Family Call
+### Habit 10: Weekly Family Call
+
 - **Created:** Jan 7, 2026
 - **Metric:** Duration (minutes)
 - **Target:** 30
@@ -125,39 +171,12 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
   - 45, 60, 35, 50 (Sundays)
 - **Resistance:** None (important priority!)
 
-### Habit 8: Language Learning (Spanish)
-- **Created:** Jan 22, 2026
-- **Metric:** Duration (minutes)
-- **Target:** 15
-- **Aspiration:** Learn & Grow
-- **Activities:** 8 logs
-  - 10, 15, 20, 15, 15, 20, 15, 25
-- **Resistance:** None
-
-### Habit 9: Yoga
-- **Created:** Jan 18, 2026
-- **Metric:** Duration (minutes)
-- **Target:** 20
-- **Aspiration:** Build Physical Health
-- **Activities:** 8 logs
-  - 15, 20, 25, 20, 30, 20, 25, 30
-- **Resistance:** None
-
-### Habit 10: Sketching
-- **Created:** Jan 15, 2026
-- **Metric:** Duration (minutes)
-- **Target:** 15
-- **Aspiration:** Creative Expression
-- **Activities:** 6 logs
-  - 10, 15, 20, 15, 30, 20
-- **Notes:** Subjects drawn (cat, tree, hands)
-- **Resistance:** "Feeling uninspired" (motivation, 1x)
-
 ---
 
 ## 3. PROJECTS (3 total)
 
 ### Project 1: Home Office Setup
+
 - **Created:** Jan 10, 2026
 - **Description:** Transform spare room into productive workspace
 - **Aspiration:** Creative Expression (indirectly)
@@ -181,6 +200,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
   - Work in progress (cables, monitor)
 
 ### Project 2: Watercolor Series
+
 - **Created:** Jan 18, 2026
 - **Description:** Create 10 small watercolor paintings of nature scenes
 - **Aspiration:** Creative Expression
@@ -202,6 +222,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
   - Work in progress (palette, brushes)
 
 ### Project 3: Garden Redesign
+
 - **Created:** Feb 1, 2026
 - **Description:** Plan and plant spring vegetable garden
 - **Aspiration:** Be Present & Mindful (connection to nature)
@@ -225,61 +246,73 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 ## 4. MOMENTS (12 total - spontaneous captures)
 
 ### Moment 1: "Cat napping in sunbeam"
+
 - **Date:** Jan 8, 2026
 - **Caption:** "Perfect moment of peace"
 - **Photo Needed:** Cat in sunny spot
 
 ### Moment 2: "First snow of the year"
+
 - **Date:** Jan 12, 2026
 - **Caption:** "Magical morning walk"
 - **Photo Needed:** Snow on trees/yard
 
 ### Moment 3: "Homemade bread success!"
+
 - **Date:** Jan 15, 2026
 - **Caption:** "Smells amazing, tastes better"
 - **Photo Needed:** Fresh loaf of bread
 
 ### Moment 4: "Sunset from the hill"
+
 - **Date:** Jan 19, 2026
 - **Caption:** "Worth the climb"
 - **Photo Needed:** Sunset landscape
 
 ### Moment 5: "Found this old photo of grandma"
+
 - **Date:** Jan 22, 2026
 - **Caption:** "Made me smile and cry"
 - **Photo Needed:** Vintage family photo
 
 ### Moment 6: "Coffee + good book = Sunday bliss"
+
 - **Date:** Jan 25, 2026
 - **Caption:** "No agenda, just presence"
 - **Photo Needed:** Coffee cup and book
 
 ### Moment 7: "Kids playing in the park"
+
 - **Date:** Jan 28, 2026
 - **Caption:** "Their laughter is contagious"
 - **Photo Needed:** Park scene with kids playing
 
 ### Moment 8: "First flower of spring!"
+
 - **Date:** Feb 1, 2026
 - **Caption:** "Early crocus breaking through"
 - **Photo Needed:** Flower/crocus
 
 ### Moment 9: "Finished the watercolor"
+
 - **Date:** Feb 2, 2026
 - **Caption:** "Proud of this one"
 - **Photo Needed:** Completed painting
 
 ### Moment 10: "Deer in the backyard"
+
 - **Date:** Feb 3, 2026 (morning)
 - **Caption:** "Stood still and watched for 10 minutes"
 - **Photo Needed:** Deer photo
 
 ### Moment 11: "Guitar progress - learned the chorus!"
+
 - **Date:** Feb 3, 2026 (afternoon)
 - **Caption:** "Small wins matter"
 - **Photo Needed:** Guitar/sheet music
 
 ### Moment 12: "Star-filled night sky"
+
 - **Date:** Feb 4, 2026
 - **Caption:** "Perspective shift"
 - **Photo Needed:** Night sky/stars
@@ -291,6 +324,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 **User Values Set:** Nature, Family, Presence, Cats, Music
 
 **Example Messages Generated:**
+
 1. "The cats are purring nearby. Five minutes of stillness with them counts as much as any productivity."
 2. "When was the last time you called someone just to hear their voice? Today might be the day."
 3. "Notice the birds outside. They're not in a hurry. Neither should you be."
@@ -300,11 +334,13 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 ## Photo Requirements Summary
 
 ### For Projects:
+
 - **Home Office:** 3 photos (before, during, progress)
 - **Watercolor Series:** 5 photos (paintings + workspace)
 - **Garden:** 3 photos (current state, seeds, sketch)
 
 ### For Moments:
+
 - 12 photos (cat, snow, bread, sunset, vintage photo, coffee/book, park, flower, painting, deer, guitar, stars)
 
 **Total Photos Needed:** ~23 photos
@@ -314,6 +350,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 ## Demo Script Flow
 
 ### Act 1: Today Page (2 min)
+
 1. Open app to Today page
 2. Show today's habits with progress
 3. Log a quick activity (Pushups: 52 reps)
@@ -321,6 +358,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 5. Show random moment display
 
 ### Act 2: Habits & Detail Pages (2 min)
+
 1. Navigate to Habits page
 2. Show list of all habits
 3. Click into "Pushups" detail
@@ -329,6 +367,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 6. Show activity history table
 
 ### Act 3: Aspirations (1.5 min)
+
 1. Navigate to Aspirations
 2. Show "Build Physical Health"
 3. Show linked habits (Pushups, Running, Yoga)
@@ -336,6 +375,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 5. Show 3 AI suggestions
 
 ### Act 4: Projects (2 min)
+
 1. Navigate to Projects
 2. Open "Watercolor Series"
 3. Show phases with progress
@@ -344,6 +384,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 6. Log time on "Final Touches" phase
 
 ### Act 5: Moments (1.5 min)
+
 1. Navigate to Moments
 2. Show photo gallery (12 moments)
 3. Show Moments Message (AI wisdom)
@@ -351,6 +392,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 5. Show date format
 
 ### Act 6: Dashboard (2 min)
+
 1. Navigate to Dashboard
 2. Show Activity Over Time (line chart)
 3. Show Resistance Breakdown (pie chart)
@@ -359,6 +401,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 6. Filter by period (Month view)
 
 ### Act 7: About Page (1 min)
+
 1. Show Stela's photos
 2. Show philosophy (anti-guilt)
 3. Show tech stack
