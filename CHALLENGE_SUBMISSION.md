@@ -349,7 +349,7 @@ Building the Resistance-fighting features:
 - "Overcame Resistance" tracking
 - Milestones that celebrate volume
 
-Then: Demo video
+Then: **Demo data seeding + demo video recording** — also built with Copilot CLI collaboration using **Playwright** (repeatable scripted walkthrough + recorded video, then voice overlay).
 
 ---
 
