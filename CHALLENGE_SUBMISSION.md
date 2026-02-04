@@ -124,6 +124,7 @@ Full-stack experience:
    - Phase 2: Habit tracking with AI
    - Phase 3: Activity logging with metrics
    - Phase 4: Aspirations + Progress viz + Resistance tracking
+   - Phase 5: Projects (phases, photos, time) + dashboard charts + Stela Messages
    - Each phase: Copilot CLI generated code, fixed bugs, enhanced suggestions
 
 5. **Optimized costs through questions**
