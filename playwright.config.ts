@@ -18,7 +18,14 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { 
+        ...devices['Desktop Chrome'],
+        // Show URL bar in recordings
+        viewport: { width: 1280, height: 720 },
+        launchOptions: {
+          args: ['--start-maximized'],
+        },
+      },
     },
   ],
 

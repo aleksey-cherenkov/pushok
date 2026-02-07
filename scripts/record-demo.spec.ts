@@ -14,11 +14,12 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Way Finder Demo', () => {
-  test('should record 1-2 minute demo walkthrough', async ({ page }) => {
+  test('should record 1-2 minute demo walkthrough', async ({ page, context }) => {
     test.slow(); // Give extra time for recording
 
     console.log('🎬 Starting demo recording...');
     console.log('📹 Video will be saved to test-results/');
+    console.log('🌐 URL bar will be visible in recording');
 
     // ACT 1: Dashboard - Charts & Projects (30 seconds)
     console.log('\n🎯 Act 1: Dashboard (30s)');
