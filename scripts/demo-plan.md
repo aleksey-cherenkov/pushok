@@ -43,12 +43,12 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 - **Created:** Jan 15, 2026
 - **Description:** Make time for art, music, and creative projects.
 - **Linked Habits:** Painting, Sketching
-- **Linked Projects:** Watercolor Series
+- **Linked Projects:** Home Office Setup
 
-### Aspiration 5: "Learn & Grow"
+### Aspiration 5: "Technology & Learning"
 
 - **Created:** Jan 20, 2026
-- **Description:** Continuous learning through reading and practice.
+- **Description:** Continuous learning through tech practice and exploration.
 - **Linked Habits:** Microsoft Learn, John Savill Videos, Dev Projects, Codewars Katas
 
 ---
@@ -99,6 +99,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 - **Resistance:** Rain (environmental, 1x), Too cold (environmental, 1x)
 
 ### Habit 4: Microsoft Learn
+
 - **Created:** Jan 20, 2026
 - **Metric:** Duration (minutes)
 - **Target:** 30
@@ -112,6 +113,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 - **Resistance:** Distracted by work tasks (distraction, 1x)
 
 ### Habit 5: John Savill Videos
+
 - **Created:** Jan 18, 2026
 - **Metric:** Count (videos)
 - **Target:** 1
@@ -122,6 +124,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 - **Resistance:** None (love his content!)
 
 ### Habit 6: Dev Projects
+
 - **Created:** Jan 15, 2026
 - **Metric:** Duration (minutes)
 - **Target:** 60
@@ -132,6 +135,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 - **Resistance:** Stuck on bug (technical, 1x)
 
 ### Habit 7: Codewars Katas
+
 - **Created:** Jan 22, 2026
 - **Metric:** Count (katas)
 - **Target:** 2
@@ -142,6 +146,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 - **Resistance:** Too difficult (motivation, 2x)
 
 ### Habit 8: Painting
+
 - **Created:** Jan 15, 2026
 - **Metric:** Duration (minutes)
 - **Target:** 30
@@ -152,6 +157,7 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 - **Resistance:** Waiting for supplies (environmental, 1x)
 
 ### Habit 9: Sketching
+
 - **Created:** Jan 18, 2026
 - **Metric:** Duration (minutes)
 - **Target:** 20
@@ -183,149 +189,131 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 
 ---
 
-## 3. PROJECTS (3 total)
+## 3. PROJECTS (2 total)
 
 ### Project 1: Home Office Setup
 
 - **Created:** Jan 10, 2026
 - **Description:** Transform spare room into productive workspace
-- **Aspiration:** Creative Expression (indirectly)
-- **Status:** In Progress
+- **Aspiration:** Creative Expression
+- **Status:** Complete
 - **Phases:**
   1. **Planning & Design** (Complete)
      - Progress: 100%
      - Time: 3 hours
      - Notes: "Measured space, sketched layout, ordered desk"
-  2. **Assembly & Setup** (In Progress)
-     - Progress: 60%
+  2. **Assembly & Setup** (Complete)
+     - Progress: 100%
      - Time: 8 hours
-     - Notes: "Desk assembled, monitor mounted, cable management in progress"
-  3. **Final Touches** (Not Started)
-     - Progress: 0%
-     - Time: 0 hours
-     - Notes: "Awaiting: plants, artwork, lighting"
-- **Photos Needed:**
-  - Before (empty room)
-  - During (desk assembly)
-  - Work in progress (cables, monitor)
+     - Notes: "Desk assembled, monitor mounted, cable management done"
+  3. **Final Touches** (Complete)
+     - Progress: 100%
+     - Time: 4 hours
+     - Notes: "Added plants, artwork, floor lamp - workspace complete!"
+- **Photos:**
+  - [📷 room-before.jpg] Empty room before setup
+  - [📷 room-during.jpg] Desk assembly in progress
+  - [📷 room-done.jpg] Completed home office
 
-### Project 2: Watercolor Series
+### Project 2: Garden & Nature
 
 - **Created:** Jan 18, 2026
-- **Description:** Create 10 small watercolor paintings of nature scenes
-- **Aspiration:** Creative Expression
+- **Description:** Cultivate vegetable and flower garden, attract pollinators
+- **Aspiration:** Be Present & Mindful (connection to nature)
 - **Status:** In Progress
 - **Phases:**
-  1. **Sketches & Practice** (Complete)
+  1. **Planning & Research** (Complete)
      - Progress: 100%
-     - Time: 5 hours
-     - Notes: "Practiced washes, color mixing"
-  2. **First 5 Paintings** (In Progress)
-     - Progress: 80%
-     - Time: 12 hours
-     - Notes: "Completed: Sunset, Forest, Ocean, Mountains. In progress: Meadow"
-  3. **Final 5 Paintings** (Not Started)
-     - Progress: 0%
-- **Photos Needed:**
-  - Practice sketches
-  - Completed paintings (sunset, forest, ocean, mountains)
-  - Work in progress (palette, brushes)
-
-### Project 3: Garden Redesign
-
-- **Created:** Feb 1, 2026
-- **Description:** Plan and plant spring vegetable garden
-- **Aspiration:** Be Present & Mindful (connection to nature)
-- **Status:** Planning
-- **Phases:**
-  1. **Research & Planning** (In Progress)
-     - Progress: 40%
-     - Time: 2 hours
-     - Notes: "Researching companion planting, ordering seeds"
-  2. **Soil Prep** (Not Started)
-     - Progress: 0%
-  3. **Planting** (Not Started)
-     - Progress: 0%
-- **Photos Needed:**
-  - Current garden state
-  - Seed packets
-  - Garden layout sketch
+     - Time: 3 hours
+     - Notes: "Researched companion planting, ordered seeds"
+  2. **Spring Planting** (Complete)
+     - Progress: 100%
+     - Time: 10 hours
+     - Notes: "Raised beds built, vegetables and flowers planted"
+  3. **Summer Care & Observation** (In Progress)
+     - Progress: 60%
+     - Time: 8 hours
+     - Notes: "Garden thriving! Found monarch caterpillar"
+- **Photos:**
+  - [📷 garden-1.jpg] Raised bed garden with trellis
+  - [📷 garden-2.JPG] Colorful flower garden in bloom
+  - [📷 garden-3.jpg] Monarch caterpillar on leaf
 
 ---
 
 ## 4. MOMENTS (12 total - spontaneous captures)
 
-### Moment 1: "Cat napping in sunbeam"
+### Moment 1: "Nika in the sunbeam"
 
 - **Date:** Jan 8, 2026
 - **Caption:** "Perfect moment of peace"
-- **Photo Needed:** Cat in sunny spot
+- **Photo:** [📷 cat-nika-1.JPG]
 
-### Moment 2: "First snow of the year"
+### Moment 2: "Winter wonderland"
 
 - **Date:** Jan 12, 2026
-- **Caption:** "Magical morning walk"
-- **Photo Needed:** Snow on trees/yard
+- **Caption:** "Snow-covered rocks by the river"
+- **Photo:** [📷 snow-rocks.JPG]
 
-### Moment 3: "Homemade bread success!"
+### Moment 3: "Christmas magic"
 
 - **Date:** Jan 15, 2026
-- **Caption:** "Smells amazing, tastes better"
-- **Photo Needed:** Fresh loaf of bread
+- **Caption:** "There's something special about tree lights at night"
+- **Photo:** [📷 christmas-tree.JPG]
 
-### Moment 4: "Sunset from the hill"
+### Moment 4: "Golden hour perfection"
 
 - **Date:** Jan 19, 2026
-- **Caption:** "Worth the climb"
-- **Photo Needed:** Sunset landscape
+- **Caption:** "Worth the climb to catch this sunset"
+- **Photo:** [📷 sunset.JPG]
 
-### Moment 5: "Found this old photo of grandma"
+### Moment 5: "Old memories"
 
 - **Date:** Jan 22, 2026
-- **Caption:** "Made me smile and cry"
-- **Photo Needed:** Vintage family photo
+- **Caption:** "Found this vintage photo - made me smile"
+- **Photo:** [📷 vintage.JPG]
 
-### Moment 6: "Coffee + good book = Sunday bliss"
+### Moment 6: "Family visit"
 
 - **Date:** Jan 25, 2026
-- **Caption:** "No agenda, just presence"
-- **Photo Needed:** Coffee cup and book
+- **Caption:** "Time with parents is precious"
+- **Photo:** [📷 parents.JPG]
 
-### Moment 7: "Kids playing in the park"
+### Moment 7: "Epic adventure"
 
 - **Date:** Jan 28, 2026
-- **Caption:** "Their laughter is contagious"
-- **Photo Needed:** Park scene with kids playing
+- **Caption:** "Kids exploring Niagara Falls - pure joy!"
+- **Photo:** [📷 epic-children.jpg]
 
-### Moment 8: "First flower of spring!"
+### Moment 8: "Spring flowers blooming"
 
 - **Date:** Feb 1, 2026
-- **Caption:** "Early crocus breaking through"
-- **Photo Needed:** Flower/crocus
+- **Caption:** "Garden is coming alive"
+- **Photo:** [📷 flowers-1.JPG]
 
-### Moment 9: "Finished the watercolor"
+### Moment 9: "Mountain majesty"
 
 - **Date:** Feb 2, 2026
-- **Caption:** "Proud of this one"
-- **Photo Needed:** Completed painting
+- **Caption:** "Breathtaking view from the summit"
+- **Photo:** [📷 mountain-1.JPG]
 
-### Moment 10: "Deer in the backyard"
+### Moment 10: "Wildlife encounter"
 
 - **Date:** Feb 3, 2026 (morning)
-- **Caption:** "Stood still and watched for 10 minutes"
-- **Photo Needed:** Deer photo
+- **Caption:** "Spotted a bison on the trail!"
+- **Photo:** [📷 bizon.JPG]
 
-### Moment 11: "Guitar progress - learned the chorus!"
+### Moment 11: "River day"
 
 - **Date:** Feb 3, 2026 (afternoon)
-- **Caption:** "Small wins matter"
-- **Photo Needed:** Guitar/sheet music
+- **Caption:** "Perfect afternoon by the water"
+- **Photo:** [📷 river-1.JPG]
 
-### Moment 12: "Star-filled night sky"
+### Moment 12: "Winter sky magic"
 
 - **Date:** Feb 4, 2026
-- **Caption:** "Perspective shift"
-- **Photo Needed:** Night sky/stars
+- **Caption:** "Clear winter night - stars everywhere"
+- **Photo:** [📷 winter-sky.jpg]
 
 ---
 
@@ -345,15 +333,32 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 
 ### For Projects:
 
-- **Home Office:** 3 photos (before, during, progress)
-- **Watercolor Series:** 5 photos (paintings + workspace)
-- **Garden:** 3 photos (current state, seeds, sketch)
+- **Home Office:** 3 photos
+  - room-before.jpg
+  - room-during.jpg
+  - room-done.jpg
+- **Garden & Nature:** 3 photos
+  - garden-1.jpg
+  - garden-2.JPG
+  - garden-3.jpg
 
 ### For Moments:
 
-- 12 photos (cat, snow, bread, sunset, vintage photo, coffee/book, park, flower, painting, deer, guitar, stars)
+- **12 photos:**
+  - cat-nika-1.JPG
+  - snow-rocks.JPG
+  - christmas-tree.JPG
+  - sunset.JPG
+  - vintage.JPG
+  - parents.JPG
+  - epic-children.jpg
+  - flowers-1.JPG
+  - mountain-1.JPG
+  - bizon.JPG
+  - river-1.JPG
+  - winter-sky.jpg
 
-**Total Photos Needed:** ~23 photos
+**Total Photos:** 18 photos (all available in images/ folder)
 
 ---
 
@@ -387,11 +392,12 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 ### Act 4: Projects (2 min)
 
 1. Navigate to Projects
-2. Open "Watercolor Series"
-3. Show phases with progress
-4. Show photo gallery (paintings)
-5. Show weighted progress calculation
-6. Log time on "Final Touches" phase
+2. Open "Home Office Setup" (Complete)
+3. Show phases with progress (100%)
+4. Show photo gallery (before/during/after)
+5. Open "Garden & Nature" (In Progress)
+6. Show weighted progress calculation (73%)
+7. Show monarch caterpillar photo
 
 ### Act 5: Moments (1.5 min)
 
@@ -423,8 +429,8 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 
 ## Next Steps
 
-1. **User:** Source 23 photos based on list above
-2. **AI:** Install Playwright
+1. ✅ **User:** Aligned demo plan with actual photos in images/ folder
+2. ✅ **AI:** Installed Playwright
 3. **AI:** Create seed script (`scripts/seed-demo-data.ts`)
 4. **AI:** Create demo automation script (`scripts/record-demo.ts`)
 5. **User:** Review/run seed script
@@ -445,4 +451,4 @@ Seed data spanning **4 weeks** (Jan 7 - Feb 4, 2026) to show trends
 
 ---
 
-**Status:** Plan complete, awaiting photos!
+**Status:** ✅ Demo plan aligned with actual photos! Ready for seed script creation.
