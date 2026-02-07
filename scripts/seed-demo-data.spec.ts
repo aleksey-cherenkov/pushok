@@ -22,6 +22,8 @@ const END_DATE = new Date('2026-02-04');
 
 test.describe('Seed Demo Data', () => {
   test('should populate app with demo data', async ({ page }) => {
+    test.setTimeout(180000); // 3 minutes for seeding
+    
     // Navigate to app
     await page.goto('http://localhost:3000');
     await page.waitForLoadState('networkidle');
@@ -30,27 +32,36 @@ test.describe('Seed Demo Data', () => {
     console.log('📸 Copying demo photos to public folder...');
     await copyDemoPhotos();
 
-    // Step 2: Set Stela values
+    // Step 2: Clear existing data (fresh start)
+    console.log('🗑️ Clearing existing data...');
+    await page.evaluate(() => {
+      localStorage.clear();
+      indexedDB.deleteDatabase('way-finder-db');
+    });
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+
+    // Step 3: Set Stela values
     console.log('💛 Setting Stela values...');
     await setStelaValues(page);
 
-    // Step 3: Create aspirations
+    // Step 4: Create aspirations
     console.log('🎯 Creating 5 aspirations...');
     await createAspirations(page);
 
-    // Step 4: Create habits
+    // Step 5: Create habits
     console.log('📊 Creating 10 habits...');
     await createHabits(page);
 
-    // Step 5: Log activities (4 weeks of data)
+    // Step 6: Log activities (4 weeks of data)
     console.log('📝 Logging activities (this will take a moment)...');
     await logActivities(page);
 
-    // Step 6: Create projects
+    // Step 7: Create projects
     console.log('🏗️ Creating 2 projects...');
     await createProjects(page);
 
-    // Step 7: Create moments
+    // Step 8: Create moments
     console.log('📷 Creating 12 moments...');
     await createMoments(page);
 
@@ -98,23 +109,12 @@ async function copyDemoPhotos() {
 }
 
 async function setStelaValues(page: any) {
-  // Check if onboarding modal appears
-  await page.goto('http://localhost:3000/today');
-  await page.waitForTimeout(1000);
-
-  const onboardingVisible = await page.locator('text=What truly matters to you?').isVisible().catch(() => false);
-  
-  if (onboardingVisible) {
-    // Click value chips
-    await page.click('text=Family');
-    await page.click('text=Cats');
-    await page.click('text=Nature');
-    await page.click('text=Rest');
-    
-    // Continue
-    await page.click('button:has-text("Continue")');
-    await page.waitForTimeout(500);
-  }
+  // Set Stela values via localStorage (skip onboarding UI)
+  await page.evaluate(() => {
+    localStorage.setItem('stela-values', JSON.stringify(['Family', 'Cats', 'Nature', 'Rest']));
+    localStorage.setItem('stela-onboarding-complete', 'true');
+  });
+  console.log('  ✅ Stela values set via localStorage');
 }
 
 async function createAspirations(page: any) {
