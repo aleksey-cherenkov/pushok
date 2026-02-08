@@ -294,17 +294,26 @@ test('seed data and record demo', async ({ page }) => {
   await page.waitForTimeout(2000);
 
   // START RECORDING THE SAME BROWSER WITH DATA!
-  console.log('🎬 Act 1: Dashboard (10s)');
+  console.log('📊 Act 1: Dashboard (10s)');
   await page.goto('http://localhost:3000/dashboard');
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(3000);
   await page.evaluate(() => window.scrollTo(0, 300));
   await page.waitForTimeout(2000);
 
-  console.log('📝 Act 2: Habits (10s)');
+  console.log('📝 Act 2: Habits List (10s)');
   await page.goto('http://localhost:3000/habits');
   await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(2000);
+  
+  // Click on first habit card to go to detail page
+  await page.click('text=Morning Pushups');
+  await page.waitForLoadState('networkidle');
   await page.waitForTimeout(3000);
+  
+  // Scroll to see activity chart
+  await page.evaluate(() => window.scrollBy(0, 300));
+  await page.waitForTimeout(2000);
 
   console.log('🎯 Act 3: Aspirations (8s)');
   await page.goto('http://localhost:3000/aspirations');
