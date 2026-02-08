@@ -324,10 +324,13 @@ export default function ProjectDetailPage() {
                 <div className="mt-4">
                   <Label className="text-sm text-muted-foreground mb-2 block">Overall Progress</Label>
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 h-3 bg-secondary rounded-full overflow-hidden">
+                    <div className="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all"
-                        style={{ width: `${Math.round(project.phases.reduce((sum, p) => sum + (p.progress || 0), 0) / project.phases.length)}%` }}
+                        className="h-full bg-blue-500 transition-all duration-300"
+                        style={{ 
+                          width: `${Math.round(project.phases.reduce((sum, p) => sum + (p.progress || 0), 0) / project.phases.length)}%`,
+                          minWidth: '0%'
+                        }}
                       />
                     </div>
                     <span className="text-lg font-semibold min-w-[3rem] text-right">
