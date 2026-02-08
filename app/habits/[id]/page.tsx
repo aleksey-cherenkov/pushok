@@ -145,11 +145,14 @@ export default function HabitDetailPage() {
     const personalBest = Math.max(...values);
 
     // Calculate trend (compare first half vs second half)
+    // IMPORTANT: Sort by timestamp oldest first to compare early vs recent
     let trend: 'up' | 'down' | 'stable' = 'stable';
     if (activities.length >= 4) {
-      const midpoint = Math.floor(activities.length / 2);
-      const firstHalf = values.slice(0, midpoint);
-      const secondHalf = values.slice(midpoint);
+      const sorted = [...activities].sort((a, b) => a.loggedAt - b.loggedAt);
+      const sortedValues = sorted.map((a) => a.value || 0);
+      const midpoint = Math.floor(sortedValues.length / 2);
+      const firstHalf = sortedValues.slice(0, midpoint); // Older activities
+      const secondHalf = sortedValues.slice(midpoint);   // Newer activities
       
       const firstAvg = firstHalf.reduce((sum, v) => sum + v, 0) / firstHalf.length;
       const secondAvg = secondHalf.reduce((sum, v) => sum + v, 0) / secondHalf.length;

@@ -169,10 +169,10 @@ test('seed data and record demo', async ({ page }) => {
       date.setDate(date.getDate() - i);
       date.setHours(9, 0, 0, 0);
 
-      // Log for pushups (progressive increase)
+      // Log for pushups (progressive increase - more recent = more reps)
       events.push(createEvent(generateId(), 'Activity', 'ActivityLogged', {
         habitId: habits[0].id,
-        value: 20 + i * 2,
+        value: 30 + (6 - i) * 3, // Start at 30, increase by 3 each day (30, 33, 36, 39, 42, 45, 48)
         note: i === 0 ? 'Feeling strong!' : null,
         mood: 4,
         resistance: null,
