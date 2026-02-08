@@ -298,11 +298,11 @@ export default function MomentsPage() {
             </Button>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {moments.map((moment) => (
               <Card key={moment.id} className="overflow-hidden group">
                 {/* Photo */}
-                <div className="aspect-square relative bg-muted">
+                <div className="aspect-[4/3] relative bg-muted">
                   <img
                     src={moment.photoData}
                     alt={moment.caption || 'Moment'}

@@ -266,11 +266,11 @@ export default function TodayPage() {
                 <img
                   src={randomMoment.photoData}
                   alt={randomMoment.caption || 'Moment'}
-                  className="w-full sm:w-48 h-48 object-cover rounded-lg"
+                  className="w-full sm:w-64 h-48 object-cover rounded-lg"
                 />
                 <div className="flex-1 text-center sm:text-left">
                   <p className="text-sm text-amber-900/70 dark:text-amber-100/70 mb-2">
-                    {format(new Date(randomMoment.createdAt), "MMM d, ''yy")}
+                    {format(new Date(randomMoment.createdAt), "MMM d, yyyy")}
                   </p>
                   {randomMoment.caption ? (
                     <p className="text-base text-amber-900 dark:text-amber-50">

@@ -294,14 +294,39 @@ test('seed data and record demo', async ({ page }) => {
   await page.waitForTimeout(2000);
 
   // START RECORDING THE SAME BROWSER WITH DATA!
-  console.log('📊 Act 1: Dashboard (10s)');
+  console.log('📊 Act 1: Dashboard (8s)');
   await page.goto('http://localhost:3000/dashboard');
   await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(2000);
   await page.evaluate(() => window.scrollTo(0, 300));
   await page.waitForTimeout(2000);
 
-  console.log('📝 Act 2: Habits List (10s)');
+  console.log('✅ Act 2: Today - Log Now (12s)');
+  await page.goto('http://localhost:3000/today');
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(2000);
+  
+  // Click "Log Now" button on first habit
+  try {
+    await page.click('button:has-text("Log Now")', { timeout: 3000 });
+    await page.waitForTimeout(2000);
+    
+    // If modal opens, just show it (don't fill, too complex)
+    await page.waitForTimeout(2000);
+    
+    // Press Escape to close modal
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(1000);
+  } catch {
+    // If "Log Now" doesn't exist, just show the page
+    await page.waitForTimeout(3000);
+  }
+  
+  // Scroll to see moment
+  await page.evaluate(() => window.scrollBy(0, 300));
+  await page.waitForTimeout(2000);
+
+  console.log('📝 Act 3: Habits - View Detail (10s)');
   await page.goto('http://localhost:3000/habits');
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(2000);
@@ -309,18 +334,18 @@ test('seed data and record demo', async ({ page }) => {
   // Click on first habit card to go to detail page
   await page.click('text=Morning Pushups');
   await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(2000);
   
   // Scroll to see activity chart
   await page.evaluate(() => window.scrollBy(0, 300));
   await page.waitForTimeout(2000);
 
-  console.log('🎯 Act 3: Aspirations (8s)');
+  console.log('🎯 Act 4: Aspirations (6s)');
   await page.goto('http://localhost:3000/aspirations');
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(3000);
 
-  console.log('🏗️ Act 4: Projects (10s)');
+  console.log('🏗️ Act 5: Projects (10s)');
   await page.goto('http://localhost:3000/projects');
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(2000);
@@ -334,17 +359,12 @@ test('seed data and record demo', async ({ page }) => {
   await page.evaluate(() => window.scrollBy(0, 400));
   await page.waitForTimeout(2000);
 
-  console.log('📸 Act 5: Moments (8s)');
+  console.log('📸 Act 6: Moments (8s)');
   await page.goto('http://localhost:3000/moments');
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(3000);
   await page.evaluate(() => window.scrollBy(0, 400));
   await page.waitForTimeout(2000);
-
-  console.log('📊 Act 6: Today (8s)');
-  await page.goto('http://localhost:3000/today');
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(3000);
 
   console.log('\n✅ Recording complete!');
   console.log('📹 Video saved to: test-results/');
