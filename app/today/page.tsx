@@ -266,7 +266,7 @@ export default function TodayPage() {
                 <img
                   src={randomMoment.photoData}
                   alt={randomMoment.caption || 'Moment'}
-                  className="w-16 h-16 object-cover rounded-lg"
+                  className="w-20 h-20 object-cover rounded-lg"
                 />
                 <div className="flex-1 text-center sm:text-left">
                   <p className="text-sm text-amber-900/70 dark:text-amber-100/70 mb-2">

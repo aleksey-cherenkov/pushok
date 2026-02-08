@@ -347,20 +347,50 @@ test('seed data and record demo', async ({ page }) => {
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(3000);
 
-  console.log('🏗️ Act 5: Projects (12s)');
+  console.log('🏗️ Act 5: Projects - Add Progress (18s)');
   await page.goto('http://localhost:3000/projects');
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(2000);
   
-  // Click on the project to see detail page with all photos
+  // Click on the project to see detail page
   await page.click('text=Home Office Setup');
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(2000);
   
-  // Scroll down to see phases, progress, notes, and photos
+  // Scroll to see phases
   await page.evaluate(() => window.scrollBy(0, 300));
   await page.waitForTimeout(2000);
   
+  // Click on "Notes" section to edit phase (first visible phase)
+  try {
+    // Click on Notes section to open edit mode
+    await page.click('text=Click anywhere to add notes', { timeout: 3000 });
+    await page.waitForTimeout(2000);
+    
+    // Fill in notes
+    const notesField = page.locator('textarea').first();
+    await notesField.fill('Ordered standing desk converter');
+    await page.waitForTimeout(1000);
+    
+    // Fill in progress percentage
+    const progressField = page.locator('input[type="number"]').first();
+    await progressField.fill('75');
+    await page.waitForTimeout(1000);
+    
+    // Fill in time spent (hours field - should be second number input)
+    const timeFields = page.locator('input[type="number"]');
+    await timeFields.nth(1).fill('8'); // 8 hours
+    await page.waitForTimeout(1000);
+    
+    // Click Save button with checkmark icon (not "Save Changes")
+    await page.click('button:has-text("Save"):not(:has-text("Changes"))');
+    await page.waitForTimeout(2000);
+  } catch (error) {
+    console.log('  Phase editing skipped (UI elements not found)');
+    await page.waitForTimeout(3000);
+  }
+  
+  // Scroll to see photos
   await page.evaluate(() => window.scrollBy(0, 300));
   await page.waitForTimeout(2000);
 
