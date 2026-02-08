@@ -38,8 +38,28 @@ test('seed data and record demo', async ({ page }) => {
   const photo3 = loadPhotoAsBase64('room-done.jpg');
   console.log(`Loaded 3 project photos (${((photo1.length + photo2.length + photo3.length) / 1024).toFixed(0)} KB total)\n`);
 
+  console.log('Loading 12 moments photos...');
+  const moment1 = loadPhotoAsBase64('cat-nika-1.JPG');
+  const moment2 = loadPhotoAsBase64('snow-rocks.JPG');
+  const moment3 = loadPhotoAsBase64('christmas-tree.JPG');
+  const moment4 = loadPhotoAsBase64('sunset.JPG');
+  const moment5 = loadPhotoAsBase64('vintage.JPG');
+  const moment6 = loadPhotoAsBase64('cat-nika-2.JPG'); // Coffee/book substitute
+  const moment7 = loadPhotoAsBase64('epic-children.jpg');
+  const moment8 = loadPhotoAsBase64('flowers-1.JPG');
+  const moment9 = loadPhotoAsBase64('garden-1.jpg'); // Painting substitute
+  const moment10 = loadPhotoAsBase64('bizon.JPG'); // Deer substitute
+  const moment11 = loadPhotoAsBase64('winter-sky.jpg'); // Stars
+  const moment12 = loadPhotoAsBase64('mountain-1.JPG');
+  console.log(`Loaded 12 moments photos\n`);
+
   // SEED DATA directly in this browser
-  await page.evaluate(async (photos: { photo1: string; photo2: string; photo3: string }) => {
+  await page.evaluate(async (photos: { 
+    photo1: string; photo2: string; photo3: string;
+    moment1: string; moment2: string; moment3: string; moment4: string;
+    moment5: string; moment6: string; moment7: string; moment8: string;
+    moment9: string; moment10: string; moment11: string; moment12: string;
+  }) => {
     // Helper to generate UUID
     const generateId = () => crypto.randomUUID();
 
@@ -170,44 +190,30 @@ test('seed data and record demo', async ({ page }) => {
       }, date.getTime()));
     }
 
-    // 4. CREATE WEEKLY REFLECTIONS (2 reflections)
-    const thisWeekStart = new Date();
-    thisWeekStart.setDate(thisWeekStart.getDate() - thisWeekStart.getDay()); // Start of this week (Sunday)
-    thisWeekStart.setHours(0, 0, 0, 0);
-    
-    const thisWeekEnd = new Date(thisWeekStart);
-    thisWeekEnd.setDate(thisWeekEnd.getDate() + 6); // End of week (Saturday)
-    thisWeekEnd.setHours(23, 59, 59, 999);
+    // 4. CREATE MOMENTS (12 photos)
+    const momentsData = [
+      { caption: 'Nika being perfect as always', date: new Date(2026, 0, 10), photo: photos.moment1 },
+      { caption: 'Winter hike - the silence was healing', date: new Date(2026, 0, 13), photo: photos.moment2 },
+      { caption: 'Decorated the tree with family', date: new Date(2026, 0, 16), photo: photos.moment3 },
+      { caption: 'Worth the climb', date: new Date(2026, 0, 19), photo: photos.moment4 },
+      { caption: 'Made me smile and cry', date: new Date(2026, 0, 22), photo: photos.moment5 },
+      { caption: 'Coffee + good book = Sunday bliss', date: new Date(2026, 0, 25), photo: photos.moment6 },
+      { caption: 'Their laughter is contagious', date: new Date(2026, 0, 28), photo: photos.moment7 },
+      { caption: 'Early crocus breaking through', date: new Date(2026, 1, 1), photo: photos.moment8 },
+      { caption: 'Proud of this one', date: new Date(2026, 1, 2), photo: photos.moment9 },
+      { caption: 'Stood still and watched for 10 minutes', date: new Date(2026, 1, 3, 8, 0), photo: photos.moment10 },
+      { caption: 'Star-filled night sky', date: new Date(2026, 1, 4), photo: photos.moment11 },
+      { caption: 'Love this view', date: new Date(2026, 1, 5), photo: photos.moment12 },
+    ];
 
-    const lastWeekStart = new Date(thisWeekStart);
-    lastWeekStart.setDate(lastWeekStart.getDate() - 7);
-    
-    const lastWeekEnd = new Date(lastWeekStart);
-    lastWeekEnd.setDate(lastWeekEnd.getDate() + 6);
-
-    // This week's reflection
-    const reflection1Id = generateId();
-    events.push(createEvent(reflection1Id, 'weekly-reflection', 'WeeklyReflectionCreated', {
-      weekStart: thisWeekStart.getTime(),
-      weekEnd: thisWeekEnd.getTime(),
-      habitReview: 'Great week! Hit my pushup goals 6 out of 7 days.',
-      projectProgress: 'Office setup is 75% complete. Loving the new desk!',
-      personalReflections: 'Feeling more focused with the improved workspace.',
-      mood: 4,
-      createdAt: Date.now() - 1 * 24 * 60 * 60 * 1000, // Yesterday
-    }));
-
-    // Last week's reflection
-    const reflection2Id = generateId();
-    events.push(createEvent(reflection2Id, 'weekly-reflection', 'WeeklyReflectionCreated', {
-      weekStart: lastWeekStart.getTime(),
-      weekEnd: lastWeekEnd.getTime(),
-      habitReview: 'Building momentum. Started the office project.',
-      projectProgress: 'Ordered furniture and started planning layout.',
-      personalReflections: 'Excited about creating a better work environment.',
-      mood: 5,
-      createdAt: Date.now() - 8 * 24 * 60 * 60 * 1000, // 8 days ago
-    }));
+    momentsData.forEach((moment) => {
+      const momentId = generateId();
+      events.push(createEvent(momentId, 'moment', 'MomentCreated', {
+        photoData: moment.photo,
+        caption: moment.caption,
+        createdAt: moment.date.getTime(),
+      }));
+    });
 
     // 5. CREATE PROJECT
     const projectId = generateId();
@@ -277,7 +283,7 @@ test('seed data and record demo', async ({ page }) => {
     });
 
     console.log(`✅ Seeded ${events.length} events!`);
-  }, { photo1, photo2, photo3 }); // Pass 3 photos as parameter
+  }, { photo1, photo2, photo3, moment1, moment2, moment3, moment4, moment5, moment6, moment7, moment8, moment9, moment10, moment11, moment12 }); // Pass all photos
 
   console.log('✅ Data seeded successfully!\n');
   console.log('📹 Step 2: Recording demo video...\n');
@@ -319,10 +325,12 @@ test('seed data and record demo', async ({ page }) => {
   await page.evaluate(() => window.scrollBy(0, 400));
   await page.waitForTimeout(2000);
 
-  console.log('📖 Act 5: Reflections (8s)');
-  await page.goto('http://localhost:3000/reflections');
+  console.log('📸 Act 5: Moments (8s)');
+  await page.goto('http://localhost:3000/moments');
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(3000);
+  await page.evaluate(() => window.scrollBy(0, 400));
+  await page.waitForTimeout(2000);
 
   console.log('📊 Act 6: Today (8s)');
   await page.goto('http://localhost:3000/today');
@@ -337,5 +345,5 @@ test('seed data and record demo', async ({ page }) => {
   console.log('  - 3 habits');
   console.log('  - 14 activity logs');
   console.log('  - 1 project with 4 phases and 3 photos');
-  console.log('  - 2 weekly reflections (with weekEnd fixed)');
+  console.log('  - 12 moments with photos');
 });
