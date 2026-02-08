@@ -34,6 +34,7 @@ jobs:
           app_location: "/" # App source code path
           api_location: "" # Api source code path - optional
           output_location: ".next" # Built app content directory - optional
+          app_build_command: "npm ci --omit=dev && npm run build" # Skip devDependencies to avoid large packages
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
