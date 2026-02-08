@@ -2,9 +2,9 @@
 
 _Submission for the [GitHub Copilot CLI Challenge](https://dev.to/challenges/github-2026-01-21)_
 
-> **The Complete Lifecycle:** From the very first conversation about my cat Stela to a deployed app at pushok.life—every line of code, every decision, every pivot was made **100% with GitHub Copilot CLI**. No external tutorials. No Stack Overflow. No switching contexts. Just one continuous conversation that turned Resistance into a shipped product.
+> **The Complete Lifecycle:** From the very first conversation about my cat Stela to a deployed app at pushok.life—every line of code, every decision, every pivot was made **98% with GitHub Copilot CLI**. No external tutorials. No Stack Overflow. No switching contexts. Just one continuous conversation that turned Resistance into a shipped product.
 >
-> **The Real Story:** I _could_ build this. I've done full-stack before (IIS, Apache, C++/CGI, the works). But I didn't. For the past 15 years, I was mostly backend C# dev. I would not touch frontend because I knew how imperfect my solution would be. I couldn't—because of perfectionism, self-doubt, procrastination. **Resistance.**
+> **The Real Story:** I _could_ build this. I've done full-stack before. But I didn't. For the past 15 years, I was mostly backend C# dev. I would not touch frontend because I knew how imperfect my solution would be. I couldn't—because of perfectionism, self-doubt, procrastination. **Resistance.**
 >
 > Then GitHub Copilot CLI gave me permission to be imperfect. To not understand everything completely before starting. To just... ship.
 >
@@ -85,17 +85,15 @@ Productivity apps create Resistance:
 
 Full-stack experience:
 
-- 10+ years backend (C#, migrations, ETL)
-- Deployed IIS, Apache, C++/CGI manually
+- 20+ years backend (C#, migrations, ETL)
+- Started with Apache, C++/CGI manually, then moved to .NET, then mostly backend
 - Built complete systems before
 
-**But for 7 months:** Nothing.
+**But for 7 months:** I don't touch code. Management role. Watching innovations from afar.
 
 **Not because I couldn't. Because of Resistance:**
 
-- Perfectionism: "I need to understand React completely first"
-- Self-doubt: "Real devs don't struggle like this"
-- Procrastination: "I'll start when I feel ready"
+- Weekends projects were harder to start. I would need to work a lot of them anyway. :) But I couldn't start. Perfectionism ("I need to understand React completely first"), self-doubt ("Real devs don't struggle like this"), procrastination ("I'll start when I feel ready").
 
 **Steven Pressfield nailed it in "The War of Art":** _"Resistance is the enemy of creativity. It shows up as procrastination, self-doubt, perfectionism, fear."_
 
@@ -130,13 +128,15 @@ Full-stack experience:
    - Each phase: Copilot CLI generated code, fixed bugs, enhanced suggestions
 
 5. **Optimized costs through questions**
+
    ```
    Me: "Best AI model?"
    Copilot: "GPT-4o-mini"
-   
+
    Me: "What about GPT-5-nano?"
    Copilot: "Exists! 67% cheaper, 90% caching"
    ```
+
    **Saved $180/year. One question.**
 
 6. **Fixed deployment issues in real-time**
@@ -281,7 +281,8 @@ With Copilot CLI:
 
 ### The Numbers (Complete Project Lifecycle)
 
-**Time:** 
+**Time:**
+
 - 7 months of procrastination (couldn't start)
 - 2 weeks from first Copilot CLI conversation to shipped app
 - **Every phase built through CLI:** Design → Setup → Code → Deploy → Iterate
@@ -290,13 +291,15 @@ With Copilot CLI:
 
 **Docs:** 3,100+ lines written **as I built** through Copilot CLI (not afterthought)
 
-**Pivots made smoothly:** 
+**Pivots made smoothly:**
+
 - Goals → Habits (complete refactor)
 - Added Aspirations later (new aggregate)
 - Added Resistance tracking (enhanced existing features)
 - All without breaking, thanks to CLI guidance
 
-**Infrastructure configured:** 
+**Infrastructure configured:**
+
 - Azure Static Web Apps
 - Custom domain with SSL
 - GitHub Actions CI/CD
@@ -319,12 +322,14 @@ With Copilot CLI:
 ### Web Prototype, Mobile Vision
 
 **Why web for the prototype?**
+
 - Fastest path to validate concept with Copilot CLI
 - Event sourcing architecture works identically on mobile
 - Azure infrastructure already set up for future sync
 - Shareable demo (pushok.life) for challenge submission
 
 **What's better on mobile?** (Post-challenge roadmap)
+
 - 📸 **Photos**: Native camera, proper storage, before/after galleries
 - 🔔 **Notifications**: Rich native notifications, not limited browser API
 - 📱 **Widgets**: Home screen progress at a glance
@@ -332,6 +337,7 @@ With Copilot CLI:
 - 🎯 **Quick logging**: 2-second check-ins from notification actions
 
 **Why stop at Phase 5?**
+
 - Core concept proven (anti-streak, aggregation, Resistance tracking)
 - Architecture validated (event sourcing + AI + rich UI)
 - Projects + photos are in place for a compelling demo
@@ -361,7 +367,8 @@ Then: **Demo data seeding + demo video recording** — also built with Copilot C
 
 Experienced dev → Blocked by perfectionism/self-doubt → **One continuous CLI conversation** from "Tell me about Stela" to pushok.life → Shipped in 2 weeks.
 
-**100% built with Copilot CLI means:**
+**98% built with Copilot CLI means:**
+
 - Every line of code
 - Every architecture decision
 - Every infrastructure setup
@@ -380,18 +387,21 @@ Experienced dev → Blocked by perfectionism/self-doubt → **One continuous CLI
 ## Why This Should Win 🏆
 
 ### The Complete Lifecycle Story
-- **100% built with Copilot CLI** from first conversation ("my cat Stela...") to deployed app
+
+- **98% built with Copilot CLI** from first conversation ("my cat Stela...") to deployed app
 - Not just "used AI for coding"—entire project lifecycle in one continuous conversation
 - Design → Architecture → Infrastructure → Code → Deploy → Iterate → Document
 - No tutorials, no Stack Overflow, no context switching—just CLI and shipping
 
 ### The Resistance Breakthrough
+
 - App fights Resistance (perfectionism, self-doubt, procrastination)
 - Copilot CLI fought my Resistance to build it
 - Meta-story: Tool enables creation of tool with same purpose
 - Senior dev with 10+ years experience still got blocked—CLI got me shipping
 
 ### Technical Achievement
+
 - Event sourcing architecture (5 aggregates + projections)
 - Azure OpenAI integration (GPT-5-nano with prompt caching)
 - Interactive dashboard charts (Recharts)
@@ -402,23 +412,27 @@ Experienced dev → Blocked by perfectionism/self-doubt → **One continuous CLI
 - Comprehensive documentation (3,100+ lines, written as we built)
 
 ### Cost Optimization
+
 - **One question saved $180/year** ("What about GPT-5-nano?")
 - Total budget: $1-2/month for AI + hosting
 - Shows CLI provides strategic value, not just tactical coding
 
 ### The Joy Factor
+
 - **Experimenting is fun again**: Try ideas → Get feedback → Iterate → Ship
 - **Pivoting without fear**: Goals → Habits, added Aspirations, enhanced features
 - **Trust over oversight**: As senior dev, trust CLI iterations more than team reviews
 - **Boilerplate handled**: Focus on architecture and user experience, not config
 
 ### The Joke That's Also True
+
 - I asked Copilot CLI for a winning solution
 - Copilot CLI delivered a complete app from first conversation
 - **Therefore, I should win** 🏆😄
 - (But seriously: the complete lifecycle approach is unprecedented)
 
 ### What Makes This Different
+
 - Not a tutorial follow-along
 - Not Stack Overflow copy-paste
 - Not "AI generated some code"
@@ -432,23 +446,27 @@ Experienced dev → Blocked by perfectionism/self-doubt → **One continuous CLI
 ## Personal Reflection: My Journey with AI Dev Tools
 
 **Background:**
+
 - Used Copilot Chat in Visual Studio and VS Code for ~2 years
 - Past 6 months: stepped back from hands-on coding (more management role)
 - Watched innovations accelerate—chat, CLI, context windows, reasoning models
 
 **This Project:**
+
 - Recently tried Claude CLI for small demo prototype (exploration)
 - This project = **full-blown Copilot CLI immersion**
 - Even this submission document created and modified by CLI
 - Full development story visible in my [commit history](https://github.com/aleksey-cherenkov/pushok/commits/main)
 
 **The Reality:**
+
 - **~98% of code and docs** generated by Copilot CLI
 - Did I switch to chat occasionally? Maybe
 - Did I manually touch files here and there? Probably
 - But **every major decision, feature, pivot, fix—all through CLI**
 
 **Going Forward:**
+
 - Would definitely integrate CLI into my workflow
 - But also: use chat for specific questions
 - More carefully review files and changes (especially for production)
