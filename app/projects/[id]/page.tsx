@@ -290,32 +290,52 @@ export default function ProjectDetailPage() {
               </div>
             </div>
           ) : (
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <CardTitle className="text-2xl">{project.title}</CardTitle>
-                {project.description && (
-                  <CardDescription className="mt-2">
-                    {project.description}
-                  </CardDescription>
-                )}
+            <div>
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <CardTitle className="text-2xl">{project.title}</CardTitle>
+                  {project.description && (
+                    <CardDescription className="mt-2">
+                      {project.description}
+                    </CardDescription>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setEditingProject(true)}
+                  >
+                    <Edit2 className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleDeleteProject}
+                    className="text-destructive hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setEditingProject(true)}
-                >
-                  <Edit2 className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleDeleteProject}
-                  className="text-destructive hover:text-destructive"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
+              
+              {/* Overall Progress */}
+              {project.phases.length > 0 && (
+                <div className="mt-4">
+                  <Label className="text-sm text-muted-foreground mb-2 block">Overall Progress</Label>
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-3 bg-secondary rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all"
+                        style={{ width: `${Math.round(project.phases.reduce((sum, p) => sum + (p.progress || 0), 0) / project.phases.length)}%` }}
+                      />
+                    </div>
+                    <span className="text-lg font-semibold min-w-[3rem] text-right">
+                      {Math.round(project.phases.reduce((sum, p) => sum + (p.progress || 0), 0) / project.phases.length)}%
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </CardHeader>
