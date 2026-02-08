@@ -301,24 +301,26 @@ test('seed data and record demo', async ({ page }) => {
   await page.evaluate(() => window.scrollTo(0, 300));
   await page.waitForTimeout(2000);
 
-  console.log('✅ Act 2: Today - Log Now (12s)');
+  console.log('✅ Act 2: Today - Log Now (15s)');
   await page.goto('http://localhost:3000/today');
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(2000);
   
   // Click "Log Now" button on first habit
   try {
-    await page.click('button:has-text("Log Now")', { timeout: 3000 });
+    await page.click('button:has-text("Log Now")', { timeout: 5000 });
     await page.waitForTimeout(2000);
     
-    // If modal opens, just show it (don't fill, too complex)
-    await page.waitForTimeout(2000);
+    // Fill in number of reps
+    const valueInput = page.locator('input[type="number"]').first();
+    await valueInput.fill('52');
+    await page.waitForTimeout(1500);
     
-    // Press Escape to close modal
-    await page.keyboard.press('Escape');
-    await page.waitForTimeout(1000);
-  } catch {
-    // If "Log Now" doesn't exist, just show the page
+    // Click "Log it" or "Log Activity" button to save
+    await page.click('button:has-text("Log it"), button:has-text("Log Activity"):not(:has-text("Log Now"))');
+    await page.waitForTimeout(2000);
+  } catch (error) {
+    console.log('  Log Now interaction skipped (button not found or modal issue)');
     await page.waitForTimeout(3000);
   }
   
@@ -345,7 +347,7 @@ test('seed data and record demo', async ({ page }) => {
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(3000);
 
-  console.log('🏗️ Act 5: Projects (10s)');
+  console.log('🏗️ Act 5: Projects (12s)');
   await page.goto('http://localhost:3000/projects');
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(2000);
@@ -353,10 +355,13 @@ test('seed data and record demo', async ({ page }) => {
   // Click on the project to see detail page with all photos
   await page.click('text=Home Office Setup');
   await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(2000);
   
-  // Scroll down to see all phases and photos
-  await page.evaluate(() => window.scrollBy(0, 400));
+  // Scroll down to see phases, progress, notes, and photos
+  await page.evaluate(() => window.scrollBy(0, 300));
+  await page.waitForTimeout(2000);
+  
+  await page.evaluate(() => window.scrollBy(0, 300));
   await page.waitForTimeout(2000);
 
   console.log('📸 Act 6: Moments (8s)');
