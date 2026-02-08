@@ -60,7 +60,8 @@ Productivity apps create Resistance:
 
 ## Live Demo
 
-🌐 **https://pushok.life** ✅
+🌐 **https://pushok.life** ✅  
+🎬 **Demo Video:** [demo/demo-final.mp4](demo/demo-final.mp4) (~1 minute)
 
 **Working now:**
 
@@ -68,6 +69,7 @@ Productivity apps create Resistance:
 - ✅ **Linked Habits**: Connect daily actions to what matters ("50 pushups" → aspiration)
 - ✅ **AI-assisted creation**: Natural language → configured habits + aspirations + projects
 - ✅ **Projects**: Phases, progress %, time tracking, photos, archive/delete
+- ✅ **Moments**: Photo gallery for spontaneous life moments
 - ✅ **Progress dashboard**: Interactive charts (activity over time, resistance breakdown, top habits)
 - ✅ **Habit detail pages**: Progression charts, trend, personal best, history table
 - ✅ **Resistance tracking**: "Overcame Resistance" checkbox + victories count
@@ -396,6 +398,7 @@ Experienced dev → Blocked by perfectionism/self-doubt → **One continuous CLI
 - Projects with phases + time tracking + photo compression
 - Resistance tracking system (inspired by "The War of Art")
 - Stela Messages (values-based daily AI prompt)
+- **Demo video recording** (Playwright automation + voiceover)
 - Comprehensive documentation (3,100+ lines, written as we built)
 
 ### Cost Optimization
@@ -442,6 +445,6 @@ _Built while fighting Resistance, with GitHub Copilot CLI as accountability part
 
 **Note:** This submission document itself was written through Copilot CLI collaboration. I considered using external Copilot or Gemini (GPT-5.2 vs Claude Sonnet) for more polished writing, but chose to stay **100% CLI**—even for this document. Authenticity over polish. That's the whole point.
 
-**Status:** Shipped (imperfectly) | **Live:** pushok.life ✅
+**Status:** Shipped (imperfectly) | **Live:** pushok.life ✅ | **Demo:** [demo/demo-final.mp4](demo/demo-final.mp4)
 
-**Last Updated:** 2026-02-04
+**Last Updated:** 2026-02-08
