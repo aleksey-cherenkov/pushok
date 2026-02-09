@@ -23,6 +23,7 @@ export interface AspirationState {
 }
 
 export class Aspiration extends Aggregate {
+  protected aggregateType = 'Aspiration'; // Explicit type to survive minification
   private state: AspirationState | null = null;
 
   // Commands

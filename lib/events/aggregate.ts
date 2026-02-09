@@ -8,6 +8,7 @@ export abstract class Aggregate {
   protected id: string;
   protected version: number;
   protected uncommittedEvents: Event[];
+  protected abstract aggregateType: string; // Explicit type to avoid minification issues
 
   constructor(id?: string) {
     this.id = id || uuidv4();
@@ -53,7 +54,7 @@ export abstract class Aggregate {
     return {
       id: uuidv4(),
       aggregateId: this.id,
-      aggregateType: this.constructor.name,
+      aggregateType: this.aggregateType, // Use explicit property instead of constructor.name
       type,
       timestamp: Date.now(),
       version: this.version,

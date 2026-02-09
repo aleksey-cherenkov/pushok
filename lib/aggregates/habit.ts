@@ -27,6 +27,7 @@ export interface HabitState {
 }
 
 export class Habit extends Aggregate {
+  protected aggregateType = 'Habit'; // Explicit type to survive minification
   private state: HabitState | null = null;
 
   // Commands

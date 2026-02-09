@@ -22,6 +22,7 @@ export interface ActivityState {
 }
 
 export class Activity extends Aggregate {
+  protected aggregateType = 'Activity'; // Explicit type to survive minification
   private state: ActivityState | null = null;
 
   // Commands
