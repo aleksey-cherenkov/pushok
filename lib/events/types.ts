@@ -24,6 +24,7 @@ export type EventType =
   | 'PhaseUpdated'
   | 'PhaseStatusChanged'
   | 'PhasePhotoAdded'
+  | 'PhaseDeleted'
   | 'MomentCreated'
   | 'MomentUpdated'
   | 'MomentDeleted';
@@ -255,6 +256,14 @@ export interface PhasePhotoAddedEvent extends BaseEvent {
   };
 }
 
+export interface PhaseDeletedEvent extends BaseEvent {
+  type: 'PhaseDeleted';
+  data: {
+    phaseId: string;
+    deletedAt: number;
+  };
+}
+
 // Moment Events
 export interface MomentCreatedEvent extends BaseEvent {
   type: 'MomentCreated';
@@ -304,6 +313,7 @@ export type Event =
   | PhaseUpdatedEvent
   | PhaseStatusChangedEvent
   | PhasePhotoAddedEvent
+  | PhaseDeletedEvent
   | MomentCreatedEvent
   | MomentUpdatedEvent
   | MomentDeletedEvent;

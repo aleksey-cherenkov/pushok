@@ -128,12 +128,22 @@ export default function ProjectDetailPage() {
     await proj.load();
     
     const totalMinutes = (phaseTimeHours * 60) + phaseTimeMinutes;
-    
-    await proj.updatePhase(phaseId, { 
+
+    const updateData: any = {
       notes: phaseNotes,
       progress: phaseProgress,
       timeSpentMinutes: totalMinutes > 0 ? totalMinutes : undefined,
-    });
+    };
+
+    // Update name if it changed
+    if (phaseName && phaseName.trim() !== '') {
+      const currentPhase = project?.phases.find(p => p.id === phaseId);
+      if (currentPhase && phaseName !== currentPhase.name) {
+        updateData.name = phaseName;
+      }
+    }
+    
+    await proj.updatePhase(phaseId, updateData);
     
     await loadProject();
     setEditingPhase(null);
@@ -186,6 +196,25 @@ export default function ProjectDetailPage() {
     };
 
     input.click();
+  };
+
+  const handleDeletePhase = async (phaseId: string, phaseName: string) => {
+    if (!confirm(`Delete phase "${phaseName}"? This will remove all photos and data for this phase. This cannot be undone.`)) {
+      return;
+    }
+
+    scrollPositionRef.current = window.scrollY;
+    shouldRestoreScrollRef.current = true;
+
+    try {
+      const proj = new Project(projectId);
+      await proj.load();
+      await proj.deletePhase(phaseId);
+      await loadProject();
+    } catch (error) {
+      console.error('Error deleting phase:', error);
+      alert('Failed to delete phase. Please try again.');
+    }
   };
 
   const getStatusIcon = (status: PhaseStatus) => {
@@ -432,6 +461,16 @@ export default function ProjectDetailPage() {
                 {/* Edit Form */}
                 {editingPhase === phase.id ? (
                   <div className="space-y-4">
+                    <div>
+                      <Label className="text-sm font-medium">Phase Name</Label>
+                      <Input
+                        value={phaseName}
+                        onChange={(e) => setPhaseName(e.target.value)}
+                        placeholder="Phase name..."
+                        className="mt-1"
+                      />
+                    </div>
+
                     <div>
                       <Label className="text-sm font-medium">Notes</Label>
                       <Textarea

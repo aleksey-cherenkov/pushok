@@ -10,6 +10,7 @@ import type {
   PhaseUpdatedEvent,
   PhaseStatusChangedEvent,
   PhasePhotoAddedEvent,
+  PhaseDeletedEvent,
 } from '../events/types';
 
 export type PhaseStatus = 'not-started' | 'in-progress' | 'complete';
@@ -122,6 +123,11 @@ export class Project {
             });
           }
           this.state.updatedAt = e.data.addedAt;
+          break;
+
+        case 'PhaseDeleted':
+          this.state.phases = this.state.phases.filter((p) => p.id !== e.data.phaseId);
+          this.state.updatedAt = e.data.deletedAt;
           break;
       }
     }
@@ -252,6 +258,27 @@ export class Project {
         phaseId,
         status,
         changedAt: Date.now(),
+      },
+    };
+
+    await eventStore.append(event);
+    await this.load();
+  }
+
+  // Delete phase
+  async deletePhase(phaseId: string): Promise<void> {
+    const version = await eventStore.getLatestVersion(this.state.id);
+
+    const event: PhaseDeletedEvent = {
+      id: uuidv4(),
+      aggregateId: this.state.id,
+      aggregateType: 'project',
+      type: 'PhaseDeleted',
+      timestamp: Date.now(),
+      version: version + 1,
+      data: {
+        phaseId,
+        deletedAt: Date.now(),
       },
     };
 
