@@ -23,6 +23,7 @@ import {
 import { Project, type ProjectState, type Phase, type PhaseStatus } from '@/lib/aggregates/project';
 import { compressImage, formatFileSize, getBase64Size } from '@/lib/image-utils';
 import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 export default function ProjectDetailPage() {
   const router = useRouter();
@@ -38,6 +39,7 @@ export default function ProjectDetailPage() {
   const [projectDescription, setProjectDescription] = useState('');
   
   const [phaseName, setPhaseName] = useState('');
+  const [originalPhaseName, setOriginalPhaseName] = useState(''); // Track original for cancel
   const [phaseNotes, setPhaseNotes] = useState('');
   const [phaseProgress, setPhaseProgress] = useState(0);
   const [phaseTimeHours, setPhaseTimeHours] = useState(0);
@@ -405,7 +407,9 @@ export default function ProjectDetailPage() {
                   <div className="flex items-center gap-3 flex-1">
                     {getStatusIcon(phase.status)}
                     <div>
-                      <CardTitle className="text-lg">{phase.name}</CardTitle>
+                      <CardTitle className="text-lg">
+                        {editingPhase === phase.id ? phaseName : phase.name}
+                      </CardTitle>
                       <CardDescription className="text-sm">
                         {getStatusLabel(phase.status)}
                       </CardDescription>
@@ -453,6 +457,20 @@ export default function ProjectDetailPage() {
                         Complete
                       </Button>
                     )}
+                    
+                    {/* Delete Phase Button */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleDeletePhase(phase.id, phase.name);
+                      }}
+                      className="text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               </CardHeader>
@@ -528,7 +546,10 @@ export default function ProjectDetailPage() {
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => setEditingPhase(null)}
+                        onClick={() => {
+                          setPhaseName(originalPhaseName); // Revert to original name
+                          setEditingPhase(null);
+                        }}
                       >
                         <X className="h-4 w-4 mr-2" />
                         Cancel
@@ -546,6 +567,7 @@ export default function ProjectDetailPage() {
                         scrollPositionRef.current = window.scrollY;
                         shouldRestoreScrollRef.current = true;
                         setEditingPhase(phase.id);
+                        setPhaseName(phase.name);
                         setPhaseNotes(phase.notes || '');
                         setPhaseProgress(phase.progress || 0);
                         const totalMins = phase.timeSpentMinutes || 0;
@@ -568,6 +590,8 @@ export default function ProjectDetailPage() {
                         scrollPositionRef.current = window.scrollY;
                         shouldRestoreScrollRef.current = true;
                         setEditingPhase(phase.id);
+                        setPhaseName(phase.name);
+                        setOriginalPhaseName(phase.name); // Save original for cancel
                         setPhaseNotes(phase.notes || '');
                         setPhaseProgress(phase.progress || 0);
                         const totalMins = phase.timeSpentMinutes || 0;
